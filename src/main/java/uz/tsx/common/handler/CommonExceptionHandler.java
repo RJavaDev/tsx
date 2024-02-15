@@ -17,9 +17,9 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import uz.BTService.btservice.common.handler.pojo.FieldErrorResponse;
-import uz.BTService.btservice.common.handler.pojo.TraceableErrorResponse;
-import uz.BTService.btservice.exceptions.*;
+import uz.tsx.common.handler.pojo.FieldErrorResponse;
+import uz.tsx.common.handler.pojo.TraceableErrorResponse;
+import uz.tsx.exception.*;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Path;
@@ -152,48 +152,12 @@ public class CommonExceptionHandler {
                 .build();
     }
 
-    @ExceptionHandler(CategoryNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    FieldErrorResponse handle(CategoryNotFoundException ex) {
-        return FieldErrorResponse.builder()
-                .message(ex.getMessage())
-                .code("Category not found")
-                .build();
-    }
-
-    @ExceptionHandler(ProductNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    FieldErrorResponse handle(ProductNotFoundException ex) {
-        return FieldErrorResponse.builder()
-                .message(ex.getMessage())
-                .code("Product not found")
-                .build();
-    }
-
-    @ExceptionHandler(RegionNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    FieldErrorResponse handle(RegionNotFoundException ex) {
-        return FieldErrorResponse.builder()
-                .message(ex.getMessage())
-                .code("Region not found")
-                .build();
-    }
-
     @ExceptionHandler(FileNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     FieldErrorResponse handle(FileNotFoundException ex) {
         return FieldErrorResponse.builder()
                 .message(ex.getMessage())
                 .code("File not found")
-                .build();
-    }
-
-    @ExceptionHandler(OrderNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    FieldErrorResponse handle(OrderNotFoundException ex) {
-        return FieldErrorResponse.builder()
-                .message(ex.getMessage())
-                .code("Order not found")
                 .build();
     }
 
