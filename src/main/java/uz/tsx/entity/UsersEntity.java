@@ -1,4 +1,79 @@
 package uz.tsx.entity;
 
-public class UsersEntity {
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import uz.tsx.constants.TableNames;
+import uz.tsx.entity.base.BaseServerModifierEntity;
+import uz.tsx.entity.role.RoleEnum;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+@Getter
+@Setter
+@Entity
+@Table(name = TableNames.TSX_USER)
+public class UsersEntity extends BaseServerModifierEntity implements UserDetails {
+
+    @Column(unique = true, nullable = false)
+    private String gmail;
+
+    private String firstname;
+
+    private String lastname;
+
+    @OneToOne
+    private AttachEntity attach;
+
+    @Column(unique = true, nullable = false)
+    private String phoneNumber;
+
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private List<RoleEnum> roleEnumList;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<SimpleGrantedAuthority> roles = new ArrayList<>();
+        roleEnumList.forEach((rol) -> {
+            roles.add(new SimpleGrantedAuthority("ROLE_" + rol.name()));
+        });
+
+        return roles;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return gmail;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 }
