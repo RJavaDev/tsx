@@ -14,7 +14,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import uz.tsx.config.token.JwtAuthenticationFilter;
 
-
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -25,20 +24,19 @@ public class SecurityConfiguration {
     private final LogoutHandler logoutHandler;
 
     private static final String[] WHITE_LIST = new String[]{
-            "/**"
-//            "/api/v1/auth/**",
-//            "/v3/api-docs/**",
-//            "/swagger-ui/**",
-//            "/api/v1/category/get/**",
-//            "/api/v1/product/get/**",
-//            "/api/v1/technical-service/get/**",
-//            "/api/v1/banner/get/**",
-//            "/api/v1/attach/download/**",
-//            "/api/v1/region/get/**",
-//            "/api/v1/order-for-product/add",
-//            "/api/v1/order-for-service/add",
-//            "/api/v1/attach/upload",
-//            "/images/**"
+            "/api/v1/auth/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/api/v1/category/get/**",
+            "/api/v1/product/get/**",
+            "/api/v1/technical-service/get/**",
+            "/api/v1/banner/get/**",
+            "/api/v1/attach/download/**",
+            "/api/v1/region/get/**",
+            "/api/v1/order-for-product/add",
+            "/api/v1/order-for-service/add",
+            "/api/v1/attach/upload",
+            "/images/**"
     };
 
     @Bean

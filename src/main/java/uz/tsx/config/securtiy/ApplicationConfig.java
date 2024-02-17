@@ -11,13 +11,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import uz.tsx.exception.AuthenticationException;
-import uz.tsx.repository.UsersRepository;
+import uz.tsx.repository.UserRepository;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final UsersRepository repository;
+    private final UserRepository repository;
 
     @Bean
     public UserDetailsService userDetailsService() {

@@ -1,5 +1,6 @@
 package uz.tsx.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.tsx.constants.TableNames;
+import uz.tsx.dto.UserDto;
 import uz.tsx.entity.base.BaseServerModifierEntity;
 import uz.tsx.entity.role.RoleEnum;
 
@@ -18,10 +20,10 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = TableNames.TSX_USER)
-public class UsersEntity extends BaseServerModifierEntity implements UserDetails {
+public class UserEntity extends BaseServerModifierEntity implements UserDetails {
 
     @Column(unique = true, nullable = false)
-    private String gmail;
+    private String username;
 
     private String firstname;
 
@@ -54,26 +56,37 @@ public class UsersEntity extends BaseServerModifierEntity implements UserDetails
 
     @Override
     public String getUsername() {
-        return gmail;
+        return username;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
+
+    /************************************************************
+     * ******************** CONVERT TO DTO ***********************
+     * ***********************************************************/
+    @JsonIgnore
+    public UserDto toDto(String... ignoreProperties) {
+        return toDto(this, new UserDto(), ignoreProperties);
+    }
+
+
+
 }
