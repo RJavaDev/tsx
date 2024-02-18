@@ -2,6 +2,8 @@ package uz.tsx.controller.convert;
 
 import lombok.experimental.UtilityClass;
 import uz.tsx.dto.UserDto;
+import uz.tsx.dto.request.UserCreateRequestDto;
+import uz.tsx.dto.request.UserUpdateRequestDto;
 import uz.tsx.dto.response.AttachUrlResponse;
 import uz.tsx.entity.AttachEntity;
 import uz.tsx.entity.UserEntity;
@@ -85,4 +87,14 @@ public class UserConvert {
             dto.setAttach(attachUrlResponse);
         }
     }
+    public  UserEntity convertToEntity(UserUpdateRequestDto userUpdateRequestDto){
+        return userUpdateRequestDto.toEntity("regionId","attachId");
+    }
+    public UserEntity convertToEntity(UserCreateRequestDto userCreateRequestDto) {
+        return userIgnorePropertiesAdd(
+                userCreateRequestDto.toEntity("role"),
+                userCreateRequestDto.getAttachId(),
+                null);
+    }
+
 }
