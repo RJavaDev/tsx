@@ -19,21 +19,17 @@ public class UserCreateRequestDto extends BaseUserDto {
     @NotBlank(message = "firstname must not be null!!!")
     private String firstname;
 
+    private String lastname;
+
     @NotBlank(message = "phoneNumber must not be null!!!")
     @Schema(name = "phoneNumber", example = "+998901389918")
     private String phoneNumber;
-
-    private String lastname;
 
     @NotBlank(message = "username must not be null!!!")
     private String username;
 
     @NotBlank(message = "password must not be null!!!")
     private String password;
-
-    private Integer regionId;
-
-    private String attachId;
 
     public UserEntity toEntity(String... ignoreProperties) {
         return super.toEntity(this, new UserEntity(), ignoreProperties);

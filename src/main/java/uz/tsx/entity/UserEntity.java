@@ -22,9 +22,6 @@ import java.util.List;
 @Table(name = TableNames.TSX_USER)
 public class UserEntity extends BaseServerModifierEntity implements UserDetails {
 
-    @Column(unique = true, nullable = false)
-    private String username;
-
     private String firstname;
 
     private String lastname;
@@ -34,6 +31,9 @@ public class UserEntity extends BaseServerModifierEntity implements UserDetails 
 
     @Column(unique = true, nullable = false)
     private String phoneNumber;
+
+    @Column(unique = true, nullable = false)
+    private String username;
 
     private String password;
 

@@ -13,7 +13,7 @@ import uz.tsx.dto.request.LoginRequestDto;
 import uz.tsx.dto.request.UserCreateRequestDto;
 import uz.tsx.dto.response.TokenResponseDto;
 import uz.tsx.entity.UserEntity;
-import uz.tsx.service.impl.AuthenticationService;
+import uz.tsx.service.AuthenticationService;
 
 
 @RestController

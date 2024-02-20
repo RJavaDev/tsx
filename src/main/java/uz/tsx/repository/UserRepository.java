@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     @Query(value = "SELECT tsxu.* FROM tsx_user tsxu WHERE tsxu.username = :username AND tsxu.status <> 'DELETED'", nativeQuery = true)
-    Optional<UserEntity> findByGmail(@Param("username") String username);
+    Optional<UserEntity> getByUsername(@Param("username") String username);
 
     @Query(value = "SELECT * FROM tsx_user du WHERE du.username = :username OR du.phone_number = :phoneNumber", nativeQuery = true)
     List<UserEntity> findByUsernameOriginalDB(@Param("username") String username, @Param("phoneNumber") String phoneNumber);
@@ -22,7 +22,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     @Modifying
     @Query(value = "UPDATE tsx_user SET status = 'DELETED' WHERE id = :userId AND status <> 'DELETED' AND NOT 'SUPER_ADMIN' = ANY(role_enum_list)", nativeQuery = true)
-    Integer userDelete(@Param("userId") Integer userId);
+    void userDelete(@Param("userId") Integer userId);
 
 
 

@@ -18,9 +18,7 @@ import uz.tsx.dto.dtoUtil.HttpResponse;
 import uz.tsx.dto.request.UserUpdateRequestDto;
 import uz.tsx.entity.UserEntity;
 import uz.tsx.service.UserService;
-import uz.tsx.service.impl.UserServiceImpl;
 
-import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -70,11 +68,11 @@ public class UserController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("permitAll()")
     @Operation(summary = "This method for update", description = "This method updates the user's data")
-    @PatchMapping(value = "/update-my")
+    @PatchMapping(value = "/update-me")
     public HttpResponse<Object> updateMe(@RequestBody UserUpdateRequestDto userUpdate) {
 
         UserEntity updateUser = UserConvert.convertToEntity(userUpdate);
-        Boolean isUpdateUser = userService.updateUser(updateUser, userUpdate.getAttachId(), userUpdate.getRegionId());
+        Boolean isUpdateUser = userService.updateMe(updateUser, userUpdate.getAttachId());
 
         return HttpResponse.build()
                 .code(HttpResponse.Status.OK)
@@ -106,11 +104,11 @@ public class UserController {
     @DeleteMapping("/delete/{id}")
     public HttpResponse<Object> userDelete(@PathVariable Integer id) {
 
-        Boolean isDelete = userService.userDelete(id);
+        userService.userDelete(id);
         return HttpResponse.build()
                 .code(HttpResponse.Status.OK)
                 .success(true)
-                .body(isDelete)
+                .body(true)
                 .message("User deleted successfully");
     }
 

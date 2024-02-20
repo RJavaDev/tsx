@@ -5,10 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import uz.tsx.constants.EntityStatus;
 import uz.tsx.entity.*;
 import uz.tsx.exception.*;
-import uz.tsx.interfaces.UserInterface;
 import uz.tsx.repository.*;
 
 import java.util.List;
@@ -79,7 +77,7 @@ public class CommonSchemaValidator {
     }
 
 
-    public UserEntity validateUserUpdate(UserEntity userUpdate, UserEntity userOriginalDB, String attachId, Integer regionId) {
+    public UserEntity validateUserUpdate(UserEntity userUpdate, UserEntity userOriginalDB, String attachId) {
         if (Objects.nonNull(userUpdate)) {
 
             String firstname = userUpdate.getFirstname();

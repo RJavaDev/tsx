@@ -21,7 +21,7 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return gmail -> repository.findByGmail(gmail)
+        return gmail -> repository.getByUsername(gmail)
                 .orElseThrow(() -> new AuthenticationException(gmail+" user not found"));
     }
 

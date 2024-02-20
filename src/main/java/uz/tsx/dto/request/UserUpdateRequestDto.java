@@ -23,8 +23,6 @@ public class UserUpdateRequestDto extends BaseUserDto {
 
     private String attachId;
 
-    private Integer regionId;
-
     public UserEntity toEntity(String... ignoreProperties) {
         return super.toEntity(this, new UserEntity(), ignoreProperties);
     }

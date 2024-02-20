@@ -32,22 +32,24 @@ public class UserServiceImpl implements UserService {
     public Boolean updateUser(UserEntity userUpdate, String attachId, Integer regionId) {
         UserEntity userOriginalDB = SecurityUtils.getUser();
 
-        UserEntity userEntity = commonSchemaValidator.validateUserUpdate(userUpdate, userOriginalDB, attachId, regionId);
+        UserEntity userEntity = commonSchemaValidator.validateUserUpdate(userUpdate, userOriginalDB, attachId);
         userEntity.forUpdate();
         repository.save(userEntity);
         return true;
     }
 
-//    @Transactional
-//    public Boolean updateMe(UserEntity userUpdate, String attachId, Integer regionId) {
-//
-//        UserEntity userOriginalDB = SecurityUtils.getUser();
-//
-//        UserEntity userEntity = commonSchemaValidator.validateUserUpdate(userUpdate, userOriginalDB, attachId, regionId);
-//        userEntity.forUpdate();
-//        repository.save(userEntity);
-//        return true;
-//    }
+    @Override
+    @Transactional
+    public Boolean updateMe(UserEntity userUpdate, String attachId) {
+
+        UserEntity userOriginalDB = SecurityUtils.getUser();
+
+        UserEntity userEntity = commonSchemaValidator.validateUserUpdate(userUpdate, userOriginalDB, attachId);
+        userEntity.forUpdate();
+        repository.save(userEntity);
+        return true;
+    }
+
     @Override
     public Boolean updateUserById(UserEntity userUpdate, Integer id) {
 
@@ -59,27 +61,15 @@ public class UserServiceImpl implements UserService {
 
         return true;
     }
-//    @Transactional
-//    public Boolean updateUserById(UserEntity userUpdate, Integer id) {
-//
-//        UserEntity userOriginalDB = repository.findById(id).orElseThrow(() ->
-//                new UsernameNotFoundException("user username not found!")
-//        );
-//
-//        updateUserSave(userUpdate, userOriginalDB);
-//
-//        return true;
-//    }
 
     @Override
-    public Boolean userDelete(Integer id) {
-        Integer userDeleteIsSuccess = repository.userDelete(id);
-        return userDeleteIsSuccess > 0;
+    public void userDelete(Integer id) {
+        repository.userDelete(id);
     }
 
     @Override
     public UserEntity getUserById(Integer id) {
-        return   repository.findById(id).orElseThrow(() ->
+        return repository.findById(id).orElseThrow(() ->
                 new UsernameNotFoundException("user username not found!"));
     }
 
@@ -103,14 +93,5 @@ public class UserServiceImpl implements UserService {
         }
 
     }
-
-    public Sort orderSortField(String field) {
-        return Sort.by(Sort.Order.by(field));
-    }
-
-    public Pageable pageable(Sort sort, FilterForm filterForm) {
-        return PageRequest.of(filterForm.getStart() / filterForm.getLength(), filterForm.getLength(), sort);
-    }
-
 
 }

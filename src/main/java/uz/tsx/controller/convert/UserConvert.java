@@ -8,7 +8,6 @@ import uz.tsx.dto.response.AttachUrlResponse;
 import uz.tsx.entity.AttachEntity;
 import uz.tsx.entity.UserEntity;
 import uz.tsx.entity.role.RoleEnum;
-import uz.tsx.interfaces.UserInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.Objects;
 
 @UtilityClass
 public class UserConvert {
-
 
 
     public UserDto from(UserEntity user) {
@@ -39,32 +37,8 @@ public class UserConvert {
         return userEntityList.stream().map(UserConvert::from).toList();
     }
 
-    public UserDto from(UserInterface userInterface) {
-        UserDto dto = new UserDto();
-        dto.setId(userInterface.getId());
-        dto.setFirstname(userInterface.getFirstname());
-        dto.setCreatedBy(userInterface.getCreated_by());
-        dto.setUpdatedDate(userInterface.getUpdated_date());
-        dto.setCreatedDate(userInterface.getCreated_date());
-        dto.setModifiedBy(userInterface.getModified_by());
-        dto.setPhoneNumber(userInterface.getPhone_number());
-        dto.setUsername(userInterface.getUsername());
-
-        dto.setRoleEnumList(stringToRoleList(userInterface.getRole_enum_list()));
-        attachIdVerifyAndSet(userInterface.getAttach_id(), userInterface.getPath(), userInterface.getType(), dto);
-
-        dto.setStatus(userInterface.getStatus());
-        dto.setAddress(userInterface.getAddress());
-        return dto;
-    }
-
-    public List<UserDto> from(List<UserInterface> userInterfaceList) {
-        return userInterfaceList.stream().map(UserConvert::from).toList();
-    }
-
-    private UserEntity userIgnorePropertiesAdd(UserEntity user, String attachId, List<RoleEnum> role) {
+    private UserEntity userIgnorePropertiesAdd(UserEntity user, List<RoleEnum> role) {
             user.setRoleEnumList(setRoleEnum(role));
-
         return user;
     }
 
@@ -91,10 +65,7 @@ public class UserConvert {
         return userUpdateRequestDto.toEntity("regionId","attachId");
     }
     public UserEntity convertToEntity(UserCreateRequestDto userCreateRequestDto) {
-        return userIgnorePropertiesAdd(
-                userCreateRequestDto.toEntity("role"),
-                userCreateRequestDto.getAttachId(),
-                null);
+        return userIgnorePropertiesAdd(userCreateRequestDto.toEntity("role"), null);
     }
 
 }

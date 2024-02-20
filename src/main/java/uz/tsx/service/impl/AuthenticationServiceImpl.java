@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import uz.tsx.common.util.SecurityUtils;
 import uz.tsx.config.token.JwtService;
 import uz.tsx.controller.convert.TokenResponseConvert;
-import uz.tsx.controller.convert.UserConvert;
 import uz.tsx.dto.request.LoginRequestDto;
 import uz.tsx.dto.response.TokenResponseDto;
 import uz.tsx.entity.UserEntity;
@@ -14,15 +13,16 @@ import uz.tsx.entity.role.RoleEnum;
 import uz.tsx.exception.AuthenticationException;
 import uz.tsx.exception.UserDataException;
 import uz.tsx.exception.UserUnauthorizedAction;
-import uz.tsx.interfaces.UserInterface;
 import uz.tsx.repository.UserRepository;
+import uz.tsx.service.AuthenticationService;
 import uz.tsx.validation.CommonSchemaValidator;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
+public class AuthenticationServiceImpl implements AuthenticationService {
+
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -30,6 +30,7 @@ public class AuthenticationService {
     private final CommonSchemaValidator commonSchemaValidator;
 
 
+    @Override
     public TokenResponseDto register(UserEntity request) {
 
         UserEntity userEntity = saveUser(request);
@@ -39,6 +40,7 @@ public class AuthenticationService {
 
     }
 
+    @Override
     public TokenResponseDto authenticate(LoginRequestDto request) {
 
         UserEntity user = verifyUser(request.getUsername(),request.getPassword());
@@ -47,6 +49,7 @@ public class AuthenticationService {
         return TokenResponseConvert.from(jwt, user);
     }
 
+    @Override
     public UserEntity saveUser(UserEntity user) throws UserDataException {
 
         commonSchemaValidator.userPasswordAndPhoneNumberCheck(user.getUsername(), user.getPhoneNumber());
@@ -82,7 +85,7 @@ public class AuthenticationService {
     }
 
     private UserEntity verifyUser(String username, String password) {
-        UserEntity entity = repository.findByGmail(username).orElseThrow(
+        UserEntity entity = repository.getByUsername(username).orElseThrow(
                 () -> new AuthenticationException(username + " username not found!")
         );
 
