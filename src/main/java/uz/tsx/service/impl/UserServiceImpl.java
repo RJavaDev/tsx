@@ -28,15 +28,6 @@ public class UserServiceImpl implements UserService {
     private final CommonSchemaValidator commonSchemaValidator;
     private final Logger log = LoggerFactory.getLogger(getClass().getName());
 
-    @Override
-    public Boolean updateUser(UserEntity userUpdate, String attachId, Integer regionId) {
-        UserEntity userOriginalDB = SecurityUtils.getUser();
-
-        UserEntity userEntity = commonSchemaValidator.validateUserUpdate(userUpdate, userOriginalDB, attachId);
-        userEntity.forUpdate();
-        repository.save(userEntity);
-        return true;
-    }
 
     @Override
     @Transactional

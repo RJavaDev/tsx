@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
 
-    private Logger logger = LoggerFactory.getLogger(getClass().getName());
-
     @Override
     public void logout(
             HttpServletRequest request,
@@ -23,13 +21,10 @@ public class LogoutService implements LogoutHandler {
             Authentication authentication
     ) {
         final String authHeader = request.getHeader("Authorization");
-        final String jwt;
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return;
         }
-
-        jwt = authHeader.substring(7);
-        logger.atInfo().log(jwt);
 
         SecurityContextHolder.clearContext();
     }

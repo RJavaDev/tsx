@@ -10,5 +10,4 @@ public interface AuthenticationService {
 
     TokenResponseDto authenticate(LoginRequestDto request);
 
-    UserEntity saveUser(UserEntity user);
 }

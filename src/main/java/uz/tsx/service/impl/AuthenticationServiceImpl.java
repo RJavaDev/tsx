@@ -1,6 +1,7 @@
 package uz.tsx.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.tsx.common.util.SecurityUtils;
@@ -49,8 +50,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return TokenResponseConvert.from(jwt, user);
     }
 
-    @Override
-    public UserEntity saveUser(UserEntity user) throws UserDataException {
+    private UserEntity saveUser(@NotNull UserEntity user) throws UserDataException {
 
         commonSchemaValidator.userPasswordAndPhoneNumberCheck(user.getUsername(), user.getPhoneNumber());
 

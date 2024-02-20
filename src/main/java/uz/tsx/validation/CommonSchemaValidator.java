@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import uz.tsx.constants.EntityStatus;
 import uz.tsx.entity.*;
 import uz.tsx.exception.*;
 import uz.tsx.repository.*;
@@ -23,6 +24,9 @@ public class CommonSchemaValidator {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final CategoryRepository categoryRepository;
+
+
 
     private void throwIdIsEmpty(String attachId) {
         if (attachId.isEmpty()) {
@@ -32,9 +36,7 @@ public class CommonSchemaValidator {
 
     public AttachEntity validateAttach(String attachId) {
         if (StringUtils.isNotEmpty(attachId)) {
-            return attachRepository.findById(attachId).orElseThrow(() -> {
-                throw new FileNotFoundException(attachId + "-id not found!");
-            });
+            return attachRepository.findById(attachId).orElseThrow(() -> new FileNotFoundException(attachId + "-id not found!"));
         }
         return null;
     }
@@ -103,5 +105,25 @@ public class CommonSchemaValidator {
 
         }
         return userOriginalDB;
+    }
+
+    public void categoryStatusCheck(CategoryEntity getByCategoryNameOriginDB, CategoryEntity categoryentity) {
+
+        if (Objects.nonNull(getByCategoryNameOriginDB)) {
+
+            if (getByCategoryNameOriginDB.getStatus() == EntityStatus.DELETED) {
+                Integer parentIdDTO = categoryentity.getParentId();
+
+                if (Objects.nonNull(parentIdDTO)) {
+                    categoryRepository.findByCategoryId(parentIdDTO).orElseThrow(() -> {
+                        throw new CategoryNotFoundException(parentIdDTO + " parent id not found!");
+                    });
+                    getByCategoryNameOriginDB.setParentId(categoryentity.getParentId());
+                }
+                categoryentity.setId(getByCategoryNameOriginDB.getId());
+            } else {
+                throw new CategoryNotFoundException(categoryentity.getName() + " such a category exists!");
+            }
+        }
     }
 }
