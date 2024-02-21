@@ -6,9 +6,9 @@ public interface UserService {
 
     Boolean updateMe(UserEntity userUpdate, String attachId);
 
-    Boolean updateUserById(UserEntity userUpdate, Integer id);
+    Boolean updateById(UserEntity userUpdate, Integer id);
 
-    void userDelete(Integer id);
+    void delete(Integer id);
 
-    UserEntity getUserById(Integer id);
+    UserEntity getById(Integer id);
 }

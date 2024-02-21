@@ -28,7 +28,7 @@ import java.util.Objects;
 @Tag(name = "User Controller", description = "This Controller manages the user for Admin")
 public class UserController {
 
-    private final UserService userService;
+    private final UserService service;
 
 
     @SecurityRequirement(name = "Bearer Authentication")
@@ -37,7 +37,7 @@ public class UserController {
     @GetMapping(value = "/info/{id}")
     public HttpResponse<Object> getUserInformation(@PathVariable Integer id) {
 
-        UserDto userDto = UserConvert.from(userService.getUserById(id));
+        UserDto userDto = UserConvert.from(service.getById(id));
 
         return HttpResponse.build()
                 .code(HttpResponse.Status.OK)
@@ -72,7 +72,7 @@ public class UserController {
     public HttpResponse<Object> updateMe(@RequestBody UserUpdateRequestDto userUpdate) {
 
         UserEntity updateUser = UserConvert.convertToEntity(userUpdate);
-        Boolean isUpdateUser = userService.updateMe(updateUser, userUpdate.getAttachId());
+        Boolean isUpdateUser = service.updateMe(updateUser, userUpdate.getAttachId());
 
         return HttpResponse.build()
                 .code(HttpResponse.Status.OK)
@@ -88,7 +88,7 @@ public class UserController {
     public HttpResponse<Object> userUpdateId(@PathVariable Integer id, @RequestBody UserUpdateRequestDto userUpdate) {
 
         UserEntity updateUser = userUpdate.toEntity();
-        Boolean isUpdateUser = userService.updateUserById(updateUser, id);
+        Boolean isUpdateUser = service.updateById(updateUser, id);
 
         return HttpResponse.build()
                 .code(HttpResponse.Status.OK)
@@ -104,7 +104,7 @@ public class UserController {
     @DeleteMapping("/delete/{id}")
     public HttpResponse<Object> userDelete(@PathVariable Integer id) {
 
-        userService.userDelete(id);
+        service.delete(id);
         return HttpResponse.build()
                 .code(HttpResponse.Status.OK)
                 .success(true)

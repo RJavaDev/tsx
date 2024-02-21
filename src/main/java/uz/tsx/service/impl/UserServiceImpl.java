@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean updateUserById(UserEntity userUpdate, Integer id) {
+    public Boolean updateById(UserEntity userUpdate, Integer id) {
 
         UserEntity userOriginalDB = repository.findById(id).orElseThrow(() ->
                 new UsernameNotFoundException("user username not found!")
@@ -54,12 +54,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void userDelete(Integer id) {
+    public void delete(Integer id) {
         repository.userDelete(id);
     }
 
     @Override
-    public UserEntity getUserById(Integer id) {
+    public UserEntity getById(Integer id) {
         return repository.findById(id).orElseThrow(() ->
                 new UsernameNotFoundException("user username not found!"));
     }
