@@ -18,6 +18,8 @@ import uz.tsx.repository.UserRepository;
 import uz.tsx.service.UserService;
 import uz.tsx.validation.CommonSchemaValidator;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -52,17 +54,22 @@ public class UserServiceImpl implements UserService {
 
         return true;
     }
+    @Override
+    public UserEntity getById(Integer id) {
+        return repository.findById(id).orElseThrow(() ->
+                new UsernameNotFoundException("user username not found!"));
+    }
+
+    @Override
+    public List<UserEntity> getAll() {
+        return repository.findAll();
+    }
 
     @Override
     public void delete(Integer id) {
         repository.userDelete(id);
     }
 
-    @Override
-    public UserEntity getById(Integer id) {
-        return repository.findById(id).orElseThrow(() ->
-                new UsernameNotFoundException("user username not found!"));
-    }
 
     private void updateUserSave(UserEntity userUpdate, UserEntity userOriginalDB) {
         userVerifyAndSetProperty(userUpdate, userOriginalDB);

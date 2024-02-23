@@ -49,7 +49,7 @@ public class UserController {
 
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("permitAll()")
-    @Operation(summary = "Get My User Information", description = "Retrieve all the information about the current authenticated user.")
+    @Operation(summary = "Get My Information", description = "Retrieve all the information about the current authenticated user.")
     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = HttpResponse.class)))
     @GetMapping(value = "/get-me")
     public HttpResponse<Object> getMe() {

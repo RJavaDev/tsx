@@ -6,9 +6,11 @@ import uz.tsx.dto.CategoryDto;
 import uz.tsx.dto.request.CategoryCreateRequestDto;
 import uz.tsx.dto.request.CategoryUpdateRequestDto;
 import uz.tsx.dto.response.CategoryResponseDto;
+import uz.tsx.entity.AttachEntity;
 import uz.tsx.entity.CategoryEntity;
 
 import java.util.List;
+import java.util.Objects;
 
 @UtilityClass
 public class CategoryConvert {
@@ -35,7 +37,10 @@ public class CategoryConvert {
     public CategoryDto fromTree(CategoryEntity category){
 
         CategoryDto dto = category.toDto("children");
-        dto.setAttach(AttachConvert.convertToAttachUrlDto(category.getAttach()));
+        AttachEntity attachId = category.getAttach();
+        if(Objects.nonNull(attachId)){
+            dto.setAttach(AttachConvert.convertToAttachUrlDto(category.getAttach()));
+        }
         dto.setChildren(fromTree(category.getChildren()));
 
         return dto;
@@ -44,14 +49,20 @@ public class CategoryConvert {
     public CategoryResponseDto fromOpenData(CategoryEntity category){
         CategoryResponseDto categoryResponseDto = fromOpenDataNoChild(category);
         categoryResponseDto.setChild(fromOpenData(category.getChildren()));
-        categoryResponseDto.setAttach(AttachConvert.convertToAttachUrlDto(category.getAttach()));
+        AttachEntity attachId = category.getAttach();
+        if(Objects.nonNull(attachId)){
+            categoryResponseDto.setAttach(AttachConvert.convertToAttachUrlDto(category.getAttach()));
+        }
         return categoryResponseDto;
     }
 
     public CategoryDto fromNoTree(CategoryEntity category){
 
         CategoryDto categoryDto = category.toDto("children");
-        categoryDto.setAttach(AttachConvert.convertToAttachUrlDto(category.getAttach()));
+        AttachEntity attachId = category.getAttach();
+        if(Objects.nonNull(attachId)){
+            categoryDto.setAttach(AttachConvert.convertToAttachUrlDto(attachId));
+        }
 
         return categoryDto;
     }
@@ -61,7 +72,10 @@ public class CategoryConvert {
         CategoryResponseDto categoryResponseDto = new CategoryResponseDto();
         categoryResponseDto.setName(category.getName());
         categoryResponseDto.setParentId(category.getParentId());
-        categoryResponseDto.setAttach(AttachConvert.convertToAttachUrlDto(category.getAttach()));
+        AttachEntity attachId = category.getAttach();
+        if(Objects.nonNull(attachId)){
+            categoryResponseDto.setAttach(AttachConvert.convertToAttachUrlDto(category.getAttach()));
+        }
         return categoryResponseDto;
 
     }
