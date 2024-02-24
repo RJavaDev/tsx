@@ -27,7 +27,7 @@ public class RegionController {
     private final RegionService regionService;
 
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "This method for post", description = "This method Region add")
     @PostMapping("/add")
     public HttpResponse<Object> addRegion(@RequestBody RegionCreateRequestDto regionDto) {
@@ -100,7 +100,7 @@ public class RegionController {
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "This method for Post", description = "This method user update")
     @PatchMapping("/update/{id}")
     public HttpResponse<Object> update(@RequestBody RegionUpdateRequestDto regionDto, @PathVariable Integer id) {
@@ -117,7 +117,7 @@ public class RegionController {
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "This method for Delete", description = "This method user delete")
     @DeleteMapping("/delete/{id}")
     public HttpResponse<Object> deleteRegion(@PathVariable Integer id) {

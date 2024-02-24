@@ -79,7 +79,7 @@ public class AttachConvert {
     public AttachUrlResponse convertToAttachUrlDto(String attachId, String path, String type) {
 
         AttachUrlResponse url = new AttachUrlResponse();
-        url.setId(attachId);
+
         url.setUrl(ATTACH_PATH + path + "/" + attachId + "." + type);
 
         return url;
@@ -88,7 +88,7 @@ public class AttachConvert {
     public AttachUrlResponse convertToAttachUrlDto(AttachEntity attach) {
 
         AttachUrlResponse url = new AttachUrlResponse();
-        url.setId(attach.getId());
+
         url.setUrl(ATTACH_PATH + attach.getPath() + "/" + attach.getId() + "." + attach.getType());
 
         return url;

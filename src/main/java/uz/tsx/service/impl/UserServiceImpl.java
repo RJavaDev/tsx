@@ -28,8 +28,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
 
     private final CommonSchemaValidator commonSchemaValidator;
-    private final Logger log = LoggerFactory.getLogger(getClass().getName());
-
 
     @Override
     @Transactional
@@ -72,9 +70,8 @@ public class UserServiceImpl implements UserService {
 
 
     private void updateUserSave(UserEntity userUpdate, UserEntity userOriginalDB) {
-        userVerifyAndSetProperty(userUpdate, userOriginalDB);
 
-        log.atInfo().log("user update");
+        userVerifyAndSetProperty(userUpdate, userOriginalDB);
 
         userOriginalDB.forUpdate(SecurityUtils.getUserId());
 

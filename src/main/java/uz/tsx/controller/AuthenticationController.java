@@ -24,7 +24,6 @@ public class AuthenticationController {
 
     private final AuthenticationService service;
 
-
     @Operation(summary = "User Registration", description = "This method is used for user registration")
     @PostMapping("/register")
     public HttpResponse<Object> register(@RequestBody UserCreateRequestDto userDto) {

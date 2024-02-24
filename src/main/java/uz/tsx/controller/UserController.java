@@ -29,10 +29,9 @@ import java.util.Objects;
 public class UserController {
 
     private final UserService service;
-
-
+    
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "This method for get", description = "This method is used to get how many points the admin user has scored")
     @GetMapping(value = "/info/{id}")
     public HttpResponse<Object> getUserInformation(@PathVariable Integer id) {
@@ -82,7 +81,7 @@ public class UserController {
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "This method for update by id", description = "This method updates the user's data")
     @PutMapping("/update/{id}")
     public HttpResponse<Object> userUpdateId(@PathVariable Integer id, @RequestBody UserUpdateRequestDto userUpdate) {
@@ -100,7 +99,7 @@ public class UserController {
 
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "This user for delete", description = "This method is designed to delete a user by ID")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public HttpResponse<Object> userDelete(@PathVariable Integer id) {
 

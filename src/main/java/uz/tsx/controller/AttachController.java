@@ -43,7 +43,7 @@ public class AttachController {
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','CONTEND_MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN','CONTEND_MANAGER')")
     @Operation(summary = "Upload Images List", description = "This method is used to upload an images List")
     @PostMapping("/uploads")
     public HttpResponse<Object> uploadAttachList(@RequestParam List<MultipartFile> files){
@@ -80,7 +80,7 @@ public class AttachController {
 
 
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasAnyRole('ADMIN','CONTEND_MANAGER','SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','CONTEND_MANAGER')")
     @Operation(summary = "Delete Attachment by ID", description = "This method is used to delete an attachment by its fileName")
     @DeleteMapping("/delete/{fileName}")
     public ResponseEntity<?> deleteById(@PathVariable("fileName") String fileName) {
