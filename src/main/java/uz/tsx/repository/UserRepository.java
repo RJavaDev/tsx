@@ -20,8 +20,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     List<UserEntity> findByUsernameOriginalDB(@Param("username") String username, @Param("phoneNumber") String phoneNumber);
 
 
-    @Modifying
-    @Query(value = "UPDATE tsx_user SET status = 'DELETED' WHERE id = :userId AND status <> 'DELETED' AND NOT 'SUPER_ADMIN' = ANY(role_enum_list)", nativeQuery = true)
+
+    @Query(value = "UPDATE tsx_user SET status = 'DELETED' WHERE id = :userId AND status <> 'DELETED' ", nativeQuery = true)
     void userDelete(@Param("userId") Integer userId);
 
 

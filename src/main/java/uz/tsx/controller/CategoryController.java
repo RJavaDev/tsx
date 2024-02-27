@@ -28,7 +28,7 @@ public class CategoryController {
     private final CategoryService service;
 
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "Add Category", description = "This method adds a new category. If no parentId is provided, the added category will be considered as a parent category.")
     @PostMapping("/add")
     public HttpResponse<Object> addCategory(@RequestBody @Validated CategoryCreateRequestDto categoryDto) {
@@ -104,7 +104,7 @@ public class CategoryController {
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "Update Category by ID", description = "This method updates a category based on the provided ID.")
     @PatchMapping("/update/{id}")
     public HttpResponse<Object> update(@RequestBody CategoryUpdateRequestDto categoryDto, @PathVariable Integer id) {
@@ -120,7 +120,7 @@ public class CategoryController {
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "Delete Category by ID", description = "This method deletes a category by its ID. If the category is a parent, its children are automatically deleted.")
     @DeleteMapping("/delete/{id}")
     public HttpResponse<Object> deleteCategory(@PathVariable Integer id) {

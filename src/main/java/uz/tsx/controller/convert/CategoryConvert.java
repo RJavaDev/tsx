@@ -6,6 +6,7 @@ import uz.tsx.dto.CategoryDto;
 import uz.tsx.dto.request.CategoryCreateRequestDto;
 import uz.tsx.dto.request.CategoryUpdateRequestDto;
 import uz.tsx.dto.response.CategoryResponseDto;
+import uz.tsx.entity.AttachEntity;
 import uz.tsx.entity.CategoryEntity;
 
 import java.util.List;
