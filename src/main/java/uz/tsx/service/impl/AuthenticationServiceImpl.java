@@ -78,7 +78,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private boolean userRoleAdminVerify(List<RoleEnum> roleEnumList) {
         for (RoleEnum e : roleEnumList) {
-            if (e == RoleEnum.SUPER_ADMIN)
+            if (e == RoleEnum.ADMIN)
                 return true;
         }
         return false;

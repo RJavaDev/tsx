@@ -25,7 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CommonSchemaValidator commonSchemaValidator;
 
     @Override
-    public boolean addCategory(CategoryEntity category, String attachId) {
+    public boolean add(CategoryEntity category, String attachId) {
         Integer userId = SecurityUtils.getUserId();
 
         CategoryEntity getByCategoryNameOriginDB = repository.findByCategoryName(category.getName());
@@ -41,7 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryEntity getCategoryById(Integer id) {
+    public CategoryEntity getById(Integer id) {
         if (id == null) return null;
 
         return repository.findByCategoryId(id).orElseThrow(
@@ -52,7 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryEntity getCategoryByIdTree(Integer id) {
+    public CategoryEntity getByIdTree(Integer id) {
         if (id == null) return null;
         return repository.findById(id).orElseThrow(
                 () -> {
@@ -62,18 +62,18 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryEntity> getAllCategory() {
+    public List<CategoryEntity> getAll() {
         return repository.findAllCategory();
     }
 
     @Override
-    public List<CategoryEntity> getAllCategoryTree() {
+    public List<CategoryEntity> getAllTree() {
         return repository.getCategoryTree();
     }
 
 
     @Override
-    public boolean updateCategory(CategoryEntity newUpdateObject, Integer categoryId, String attachId) {
+    public boolean update(CategoryEntity newUpdateObject, Integer categoryId, String attachId) {
         CategoryEntity entity = childIdAndParentIdVerify(newUpdateObject, categoryId);
         entity.setParentId(newUpdateObject.getParentId());
 
@@ -91,6 +91,7 @@ public class CategoryServiceImpl implements CategoryService {
         return true;
     }
 
+    @Override
     @Transactional
     public void delete(Integer id) {
         if (id != null) {

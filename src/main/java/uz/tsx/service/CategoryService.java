@@ -4,19 +4,13 @@ import uz.tsx.entity.CategoryEntity;
 
 import java.util.List;
 
-public interface CategoryService {
+public interface CategoryService extends BaseInterface<CategoryEntity>{
 
-    boolean addCategory(CategoryEntity category, String attachId);
+    boolean add(CategoryEntity category, String attachId);
 
-    CategoryEntity getCategoryById(Integer id);
+    CategoryEntity getByIdTree(Integer id);
 
-    CategoryEntity getCategoryByIdTree(Integer id);
+    List<CategoryEntity> getAllTree();
 
-    List<CategoryEntity> getAllCategory();
-
-    List<CategoryEntity> getAllCategoryTree();
-
-    boolean updateCategory(CategoryEntity newUpdateObject, Integer categoryId, String attachId);
-
-    void delete(Integer id);
+    boolean update(CategoryEntity newUpdateObject, Integer categoryId, String attachId);
 }
