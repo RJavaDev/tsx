@@ -28,9 +28,8 @@ public class CategoryServiceImpl implements CategoryService {
     public boolean add(CategoryEntity category, String attachId) {
         Integer userId = SecurityUtils.getUserId();
 
-        CategoryEntity getByCategoryNameOriginDB = repository.findByCategoryName(category.getName());
+        commonSchemaValidator.categoryStatusCheck(category, attachId);
 
-        commonSchemaValidator.categoryStatusCheck(getByCategoryNameOriginDB, category);
         AttachEntity attach = commonSchemaValidator.validateAttach(attachId);
 
         category.setAttach(attach);
@@ -42,23 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryEntity getById(Integer id) {
-        if (id == null) return null;
-
-        return repository.findByCategoryId(id).orElseThrow(
-                () -> {
-                    throw new CategoryNotFoundException(id + "-id not found!!!");
-                }
-        );
-    }
-
-    @Override
-    public CategoryEntity getByIdTree(Integer id) {
-        if (id == null) return null;
-        return repository.findById(id).orElseThrow(
-                () -> {
-                    throw new CategoryNotFoundException(id + "-id not found");
-                }
-        );
+        return commonSchemaValidator.validateGetCategory(id);
     }
 
     @Override

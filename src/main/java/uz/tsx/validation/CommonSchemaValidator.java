@@ -107,7 +107,8 @@ public class CommonSchemaValidator {
         return userOriginalDB;
     }
 
-    public void categoryStatusCheck(CategoryEntity getByCategoryNameOriginDB, CategoryEntity categoryentity) {
+    public void categoryStatusCheck(CategoryEntity categoryentity, String attachId) {
+        CategoryEntity getByCategoryNameOriginDB = categoryRepository.findByCategoryName(categoryentity.getName());
 
         if (Objects.nonNull(getByCategoryNameOriginDB)) {
 
@@ -115,9 +116,7 @@ public class CommonSchemaValidator {
                 Integer parentIdDTO = categoryentity.getParentId();
 
                 if (Objects.nonNull(parentIdDTO)) {
-                    categoryRepository.findByCategoryId(parentIdDTO).orElseThrow(() -> {
-                        throw new CategoryNotFoundException(parentIdDTO + " parent id not found!");
-                    });
+                    categoryRepository.findByCategoryId(parentIdDTO).orElseThrow(() -> new CategoryNotFoundException(parentIdDTO + " parent id not found!"));
                     getByCategoryNameOriginDB.setParentId(categoryentity.getParentId());
                 }
                 categoryentity.setId(getByCategoryNameOriginDB.getId());
@@ -125,5 +124,31 @@ public class CommonSchemaValidator {
                 throw new CategoryNotFoundException(categoryentity.getName() + " such a category exists!");
             }
         }
+        categoryAttachId(categoryentity.getParentId(), attachId);
+    }
+
+    public void categoryAttachId(Integer parentId, String attachId) {
+
+        if(Objects.nonNull(parentId) && Objects.nonNull(attachId)){
+            throw new CategoryNotFoundException("image and parent id cannot be together!");
+        }
+
+        if(Objects.isNull(attachId) && Objects.isNull(parentId)){
+            throw new CategoryNotFoundException("imageId and parentId must not be null together!");
+        }
+    }
+
+    public void validateCategory(Integer categoryId){
+        categoryRepository.findByCategoryId(categoryId).orElseThrow(()-> new CategoryNotFoundException(categoryId + "- id not found!"));
+    }
+
+    public CategoryEntity validateGetCategory(Integer id){
+        if (Objects.isNull(id)) throw new CategoryNotFoundException("category id cannot be null");
+        return categoryRepository.findByCategoryId(id).orElseThrow(()-> new CategoryNotFoundException(id + "- id not found!"));
+    }
+
+    public CategoryEntity validateGetParentCategory(Integer id){
+        if (Objects.isNull(id)) return null;
+        return categoryRepository.findByCategoryId(id).orElseThrow(()-> new CategoryNotFoundException(id + "- id not found!"));
     }
 }

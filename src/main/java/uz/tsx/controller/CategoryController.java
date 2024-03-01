@@ -49,7 +49,7 @@ public class CategoryController {
     @GetMapping("/get/tree/{id}")
     public HttpResponse<Object> getCategoryIdTree(@PathVariable Integer id) {
 
-        CategoryEntity category = service.getByIdTree(id);
+        CategoryEntity category = service.getById(id);
         CategoryDto dto = CategoryConvert.fromTree(category);
 
         return HttpResponse.build()

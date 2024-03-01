@@ -15,6 +15,5 @@ public class CategoryCreateRequestDto extends BaseParentAndChildDto {
     @NotBlank(message = "category name should not be empty")
     private String name;
 
-//    @NotBlank(message = "category attachId should not be empty")
     private String attachId;
 }

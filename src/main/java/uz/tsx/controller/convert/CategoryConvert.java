@@ -81,11 +81,13 @@ public class CategoryConvert {
     }
 
     public List<CategoryResponseDto> fromOpenData(List<CategoryEntity> categoryList){
-        return categoryList.stream().map(CategoryConvert::fromOpenData).toList();
+        return categoryList.stream().map(CategoryConvert::fromOpenData)
+                .toList();
     }
 
     public List<CategoryDto> fromTree(List<CategoryEntity> categoryList){
-        return categoryList.stream().map(CategoryConvert::fromTree).toList();
+        return categoryList.stream().map(CategoryConvert::fromTree)
+                .filter(p -> p.getStatus() != EntityStatus.DELETED).toList();
     }
 
     public List<CategoryResponseDto> fromOpenDataNoChild(List<CategoryEntity> categoryList){
