@@ -63,15 +63,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     private void userForCreate(UserEntity user) {
-        var userEntity = SecurityUtils.getUser();
-        if (userEntity != null) {
 
+        var userEntity = SecurityUtils.getUser();
+
+        if (userEntity != null) {
             if (userRoleAdminVerify(userEntity.getRoleEnumList())) {
                 user.forCreate(userEntity.getId());
             } else {
                 throw new UserUnauthorizedAction(userEntity.getId() + " User Unauthorized action!!!");
             }
-
         } else
             user.forCreate();
     }
