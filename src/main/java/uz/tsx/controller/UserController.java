@@ -118,8 +118,8 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = HttpResponse.class)))
     @DeleteMapping(value = "/deleteMe")
     public HttpResponse<Object>deleteMe(){
-        UserEntity user = SecurityUtils.getUser();
-       service.delete(user.getId());
+
+       service.delete(SecurityUtils.getUserId());
 
         return HttpResponse.build()
                 .code(HttpResponse.Status.OK)

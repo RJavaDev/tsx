@@ -34,7 +34,7 @@ public class CategoryController {
     public HttpResponse<Object> addCategory(@RequestBody @Validated CategoryCreateRequestDto categoryDto) {
 
         CategoryEntity category = CategoryConvert.convertToEntity(categoryDto);
-        boolean categorySave = service.addCategory(category, categoryDto.getAttachId());
+        boolean categorySave = service.add(category, categoryDto.getAttachId());
 
         return HttpResponse.build()
                 .code(HttpResponse.Status.OK)
@@ -49,7 +49,7 @@ public class CategoryController {
     @GetMapping("/get/tree/{id}")
     public HttpResponse<Object> getCategoryIdTree(@PathVariable Integer id) {
 
-        CategoryEntity category = service.getCategoryByIdTree(id);
+        CategoryEntity category = service.getByIdTree(id);
         CategoryDto dto = CategoryConvert.fromTree(category);
 
         return HttpResponse.build()
@@ -64,7 +64,7 @@ public class CategoryController {
     @GetMapping("/get/{id}")
     public HttpResponse<Object> getCategoryId(@PathVariable Integer id) {
 
-        CategoryEntity category = service.getCategoryById(id);
+        CategoryEntity category = service.getById(id);
         CategoryDto categoryDto = CategoryConvert.fromNoTree(category);
 
         return HttpResponse.build()
@@ -79,7 +79,7 @@ public class CategoryController {
     @GetMapping("/get/all")
     public HttpResponse<Object> getAllCategory() {
 
-        List<CategoryEntity> allCategory = service.getAllCategory();
+        List<CategoryEntity> allCategory = service.getAll();
         List<CategoryDto> categoryNoTreeList = CategoryConvert.fromNoTree(allCategory);
 
         return HttpResponse.build()
@@ -93,7 +93,7 @@ public class CategoryController {
     @GetMapping("/get/all-tree")
     public HttpResponse<Object> getAllTreeCategory() {
 
-        List<CategoryEntity> allCategoryTree = service.getAllCategoryTree();
+        List<CategoryEntity> allCategoryTree = service.getAllTree();
         List<CategoryDto> categoryTreeList = CategoryConvert.fromTree(allCategoryTree);
 
         return HttpResponse.build()
@@ -110,7 +110,7 @@ public class CategoryController {
     public HttpResponse<Object> update(@RequestBody CategoryUpdateRequestDto categoryDto, @PathVariable Integer id) {
 
         CategoryEntity category = CategoryConvert.convertToEntity(categoryDto);
-        boolean isUpdate = service.updateCategory(category, id, categoryDto.getAttachId());
+        boolean isUpdate = service.update(category, id, categoryDto.getAttachId());
 
         return HttpResponse.build()
                 .code(HttpResponse.Status.OK)

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.tsx.common.util.SecurityUtils;
 import uz.tsx.dto.dtoUtil.FilterForm;
 import uz.tsx.entity.UserEntity;
+import uz.tsx.exception.CategoryNotFoundException;
 import uz.tsx.repository.UserRepository;
 import uz.tsx.service.UserService;
 import uz.tsx.validation.CommonSchemaValidator;
@@ -64,6 +65,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
         repository.userDelete(id);
     }
