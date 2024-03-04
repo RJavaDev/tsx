@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,6 +15,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import uz.tsx.config.token.JwtAuthenticationFilter;
+
+import java.util.Properties;
 
 @Configuration
 @EnableWebSecurity
@@ -36,7 +40,8 @@ public class SecurityConfiguration {
             "/api/v1/order-for-product/add",
             "/api/v1/order-for-service/add",
             "/api/v1/attach/upload",
-            "/images/**"
+            "/images/**",
+            "/api/v1/user/email"
     };
 
     @Bean
@@ -64,5 +69,19 @@ public class SecurityConfiguration {
                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
 
         return http.build();
+    }
+    @Bean
+    public JavaMailSender javaMailSender(){
+        JavaMailSenderImpl javaMailSender=new JavaMailSenderImpl();
+        javaMailSender.setHost("smtp.gmail.com");
+        javaMailSender.setPort(587);
+        javaMailSender.setUsername("beksad89@gmail.com");
+        javaMailSender.setPassword("ewyk hesp eswz cmlv");
+        Properties properties=javaMailSender.getJavaMailProperties();
+        properties.put("mail.transport.protocol","smtp");
+        properties.put("mail.smtp.auth","true");
+        properties.put("mail.smtp.starttls.enable","true");
+        properties.put("mail.debug","true");
+        return javaMailSender;
     }
 }

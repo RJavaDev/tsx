@@ -12,6 +12,7 @@ import uz.tsx.repository.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class CommonSchemaValidator {
 
     private final CategoryRepository categoryRepository;
 
-
+    private final EmailRepository emailRepository;
 
     private void throwIdIsEmpty(String attachId) {
         if (attachId.isEmpty()) {
@@ -150,5 +151,14 @@ public class CommonSchemaValidator {
     public CategoryEntity validateGetParentCategory(Integer id){
         if (Objects.isNull(id)) return null;
         return categoryRepository.findByCategoryId(id).orElseThrow(()-> new CategoryNotFoundException(id + "- id not found!"));
+    }
+    public void validateEmail(String email){
+        if (Objects.isNull(email)){
+            throw new NotFoundException ("must not be null!");
+        }
+        Optional<EmailEntity> byEmail = emailRepository.getEmail(email);
+        if (byEmail.isPresent()){
+            throw new IllegalArgumentException(String.format("email %s already exist", email));
+        }
     }
 }

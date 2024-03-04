@@ -10,13 +10,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import uz.tsx.controller.convert.EmailConvert;
 import uz.tsx.controller.convert.SecurityUtils;
 import uz.tsx.controller.convert.UserConvert;
 import uz.tsx.dto.UserDto;
 import uz.tsx.dto.dtoUtil.HttpResponse;
+import uz.tsx.dto.request.EmailCreateRequestDto;
 import uz.tsx.dto.request.UserUpdateRequestDto;
+import uz.tsx.entity.EmailEntity;
 import uz.tsx.entity.UserEntity;
+import uz.tsx.service.EmailService;
 import uz.tsx.service.UserService;
 
 import java.util.Objects;
@@ -29,6 +34,7 @@ import java.util.Objects;
 public class UserController {
 
     private final UserService service;
+    private final EmailService emailService;
 
 
     @SecurityRequirement(name = "Bearer Authentication")
@@ -127,6 +133,20 @@ public class UserController {
                 .body(true)
                 .message(HttpStatus.OK.name());
     }
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(summary = "Forgot password!", description = "Forgot password!")
+    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = HttpResponse.class)))
+    @PostMapping(value = "/email")
+    public HttpResponse<Object>email(@RequestBody @Validated EmailCreateRequestDto dto){
+        EmailEntity email = EmailConvert.convertToEntity(dto);
+        boolean email1 = emailService.add(email);
+        return HttpResponse.build()
+                .code(HttpResponse.Status.OK)
+                .success(true)
+                .body(email1)
+                .message(HttpStatus.OK.name());
+    }
+
 
 
 }

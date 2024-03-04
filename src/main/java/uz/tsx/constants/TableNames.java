@@ -6,4 +6,5 @@ public interface TableNames {
     String PRODUCT = "tsx_product";
     String ATTACH = "tsx_attach";
     String REGION = "tsx_region";
+    String EMAIL = "tsx_email";
 }
