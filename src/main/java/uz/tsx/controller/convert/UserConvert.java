@@ -58,6 +58,10 @@ public class UserConvert {
         return userEntityList.stream().map(UserConvert::from).toList();
     }
 
+    public List<UserDto> from(List<UserInterface> userEntityList) {
+        return userEntityList.stream().map(UserConvert::from).toList();
+    }
+
     private UserEntity userIgnorePropertiesAdd(UserEntity user, List<RoleEnum> role) {
             user.setRoleEnumList(setRoleEnum(role));
         return user;

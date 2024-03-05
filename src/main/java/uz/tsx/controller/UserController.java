@@ -20,6 +20,7 @@ import uz.tsx.entity.UserEntity;
 import uz.tsx.interfaces.UserInterface;
 import uz.tsx.service.UserService;
 
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -68,13 +69,30 @@ public class UserController {
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "This method for get", description = "This method provides information about all users to the administrator")
+    @GetMapping(value = "/get/all")
+    public HttpResponse<Object> getUserAll() {
+
+        List<UserInterface> userInformation = service.getAll();
+        List<UserDto> userDto = UserConvert.from(userInformation);
+
+        return HttpResponse.build()
+                .code(HttpResponse.Status.OK)
+                .success(true)
+                .body(userDto)
+                .message(HttpResponse.Status.OK.name());
+
+    }
+
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("permitAll()")
     @Operation(summary = "This method for update", description = "This method updates the user's data")
     @PatchMapping(value = "/update-me")
     public HttpResponse<Object> updateMe(@RequestBody UserUpdateRequestDto userUpdate) {
 
         UserEntity updateUser = UserConvert.convertToEntity(userUpdate);
-        Boolean isUpdateUser = service.updateMe(updateUser, userUpdate.getAttachId());
+        Boolean isUpdateUser = service.updateMe(updateUser, userUpdate.getAttachId(), userUpdate.getRegionId());
 
         return HttpResponse.build()
                 .code(HttpResponse.Status.OK)

@@ -5,7 +5,7 @@ import uz.tsx.interfaces.UserInterface;
 
 public interface UserService extends BaseInterface<UserInterface>{
 
-    Boolean updateMe(UserEntity userUpdate, String attachId);
+    Boolean updateMe(UserEntity userUpdate, String attachId, Integer regionId);
 
     Boolean updateById(UserEntity userUpdate, Integer id);
 }

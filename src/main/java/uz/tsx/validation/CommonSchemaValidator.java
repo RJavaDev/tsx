@@ -22,6 +22,7 @@ public class CommonSchemaValidator {
 
     private final UserRepository userRepository;
 
+    private final RegionRepository regionRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -85,7 +86,7 @@ public class CommonSchemaValidator {
     }
 
 
-    public UserEntity validateUserUpdate(UserEntity userUpdate, UserEntity userOriginalDB, String attachId) {
+    public UserEntity validateUserUpdate(UserEntity userUpdate, UserEntity userOriginalDB, String attachId, Integer regionId) {
         if (Objects.nonNull(userUpdate)) {
 
             String firstname = userUpdate.getFirstname();
@@ -108,9 +109,16 @@ public class CommonSchemaValidator {
             if (StringUtils.isNotEmpty(attachId)) {
                 userOriginalDB.setAttach(validateAttach(attachId));
             }
+            if(Objects.nonNull(regionId)){
+                userOriginalDB.setRegion(validateRegion(regionId));
+            }
 
         }
         return userOriginalDB;
+    }
+
+    public RegionEntity validateRegion(Integer regionId) {
+        return regionRepository.findByRegionId(regionId).orElseThrow(()-> new RegionNotFoundException(regionId + " - region id not found!"));
     }
 
     public void categoryStatusCheck(CategoryEntity categoryentity, String attachId) {

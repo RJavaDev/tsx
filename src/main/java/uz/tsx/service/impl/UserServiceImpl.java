@@ -26,11 +26,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Boolean updateMe(UserEntity userUpdate, String attachId) {
+    public Boolean updateMe(UserEntity userUpdate, String attachId, Integer regionId) {
 
         UserEntity userOriginalDB = SecurityUtils.getUser();
 
-        UserEntity userEntity = commonSchemaValidator.validateUserUpdate(userUpdate, userOriginalDB, attachId);
+        UserEntity userEntity = commonSchemaValidator.validateUserUpdate(userUpdate, userOriginalDB, attachId, regionId);
         userEntity.forUpdate();
         repository.save(userEntity);
         return true;
