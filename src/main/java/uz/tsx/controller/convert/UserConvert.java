@@ -8,6 +8,7 @@ import uz.tsx.dto.response.AttachUrlResponse;
 import uz.tsx.entity.AttachEntity;
 import uz.tsx.entity.UserEntity;
 import uz.tsx.entity.role.RoleEnum;
+import uz.tsx.interfaces.UserInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,26 @@ public class UserConvert {
         userDto.setFirstname(fullName);
         userDto.setPhoneNumber(phoneNumber);
         return userDto;
+    }
+
+    public UserDto from(UserInterface userInterface){
+        UserDto dto = new UserDto();
+        dto.setId(userInterface.getId());
+        dto.setFirstname(userInterface.getFirstname());
+        dto.setLastname(userInterface.getLastname());
+        dto.setCreatedBy(userInterface.getCreated_by());
+        dto.setUpdatedDate(userInterface.getUpdated_date());
+        dto.setCreatedDate(userInterface.getCreated_date());
+        dto.setModifiedBy(userInterface.getModified_by());
+        dto.setPhoneNumber(userInterface.getPhone_number());
+        dto.setUsername(userInterface.getUsername());
+
+        dto.setRoleEnumList(stringToRoleList(userInterface.getRole_enum_list()));
+        dto.setAttach(AttachConvert.convertToAttachUrlDto(userInterface.getAttach_id(), userInterface.getPath(), userInterface.getType()));
+
+        dto.setStatus(userInterface.getStatus());
+        dto.setAddress(userInterface.getAddress());
+        return dto;
     }
 
     public List<UserDto> fromEntity(List<UserEntity> userEntityList) {

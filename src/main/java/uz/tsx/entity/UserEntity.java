@@ -1,6 +1,7 @@
 package uz.tsx.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,6 +37,10 @@ public class UserEntity extends BaseServerModifierEntity implements UserDetails 
     private String username;
 
     private String password;
+
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private RegionEntity region;
 
     @Enumerated(EnumType.STRING)
     private List<RoleEnum> roleEnumList;

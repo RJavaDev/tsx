@@ -17,6 +17,7 @@ import uz.tsx.dto.UserDto;
 import uz.tsx.dto.dtoUtil.HttpResponse;
 import uz.tsx.dto.request.UserUpdateRequestDto;
 import uz.tsx.entity.UserEntity;
+import uz.tsx.interfaces.UserInterface;
 import uz.tsx.service.UserService;
 
 import java.util.Objects;
@@ -37,7 +38,8 @@ public class UserController {
     @GetMapping(value = "/info/{id}")
     public HttpResponse<Object> getUserInformation(@PathVariable Integer id) {
 
-        UserDto userDto = UserConvert.from(service.getById(id));
+        UserInterface userInformation = service.getById(id);
+        UserDto userDto = UserConvert.from(userInformation);
 
         return HttpResponse.build()
                 .code(HttpResponse.Status.OK)

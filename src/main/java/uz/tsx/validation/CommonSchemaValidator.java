@@ -8,6 +8,7 @@ import org.springframework.util.CollectionUtils;
 import uz.tsx.constants.EntityStatus;
 import uz.tsx.entity.*;
 import uz.tsx.exception.*;
+import uz.tsx.interfaces.UserInterface;
 import uz.tsx.repository.*;
 
 import java.util.List;
@@ -76,6 +77,11 @@ public class CommonSchemaValidator {
                 }
             });
         }
+    }
+
+    public UserInterface validateUser(Integer userId) {
+        return userRepository.getUserInformation(userId).orElseThrow(() -> new UsernameNotFoundException(userId + " user id not found!")
+        );
     }
 
 
