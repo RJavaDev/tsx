@@ -21,9 +21,11 @@ import uz.tsx.dto.request.EmailCreateRequestDto;
 import uz.tsx.dto.request.UserUpdateRequestDto;
 import uz.tsx.entity.EmailEntity;
 import uz.tsx.entity.UserEntity;
+import uz.tsx.interfaces.UserInterface;
 import uz.tsx.service.EmailService;
 import uz.tsx.service.UserService;
 
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -43,7 +45,8 @@ public class UserController {
     @GetMapping(value = "/info/{id}")
     public HttpResponse<Object> getUserInformation(@PathVariable Integer id) {
 
-        UserDto userDto = UserConvert.from(service.getById(id));
+        UserInterface userInformation = service.getById(id);
+        UserDto userDto = UserConvert.from(userInformation);
 
         return HttpResponse.build()
                 .code(HttpResponse.Status.OK)
@@ -69,6 +72,23 @@ public class UserController {
                 .success(true)
                 .body(meInformation)
                 .message(HttpStatus.OK.name());
+    }
+
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "This method for get", description = "This method provides information about all users to the administrator")
+    @GetMapping(value = "/get/all")
+    public HttpResponse<Object> getUserAll() {
+
+        List<UserInterface> userInformation = service.getAll();
+        List<UserDto> userDto = UserConvert.from(userInformation);
+
+        return HttpResponse.build()
+                .code(HttpResponse.Status.OK)
+                .success(true)
+                .body(userDto)
+                .message(HttpResponse.Status.OK.name());
+
     }
 
     @SecurityRequirement(name = "Bearer Authentication")

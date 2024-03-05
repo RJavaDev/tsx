@@ -2,19 +2,13 @@ package uz.tsx.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.tsx.common.util.SecurityUtils;
-import uz.tsx.dto.dtoUtil.FilterForm;
 import uz.tsx.entity.UserEntity;
-import uz.tsx.exception.CategoryNotFoundException;
+import uz.tsx.interfaces.UserInterface;
 import uz.tsx.repository.UserRepository;
 import uz.tsx.service.UserService;
 import uz.tsx.validation.CommonSchemaValidator;
@@ -32,11 +26,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Boolean updateMe(UserEntity userUpdate, String attachId) {
+    public Boolean updateMe(UserEntity userUpdate, String attachId, Integer regionId) {
 
         UserEntity userOriginalDB = SecurityUtils.getUser();
 
-        UserEntity userEntity = commonSchemaValidator.validateUserUpdate(userUpdate, userOriginalDB, attachId);
+        UserEntity userEntity = commonSchemaValidator.validateUserUpdate(userUpdate, userOriginalDB, attachId, regionId);
         userEntity.forUpdate();
         repository.save(userEntity);
         return true;
@@ -54,14 +48,13 @@ public class UserServiceImpl implements UserService {
         return true;
     }
     @Override
-    public UserEntity getById(Integer id) {
-        return repository.findById(id).orElseThrow(() ->
-                new UsernameNotFoundException("user username not found!"));
+    public UserInterface getById(Integer id) {
+        return commonSchemaValidator.validateUser(id);
     }
 
     @Override
-    public List<UserEntity> getAll() {
-        return repository.findAll();
+    public List<UserInterface> getAll() {
+        return repository.getAllUser();
     }
 
     @Override
