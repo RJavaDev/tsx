@@ -16,7 +16,11 @@ import java.util.List;
 @AllArgsConstructor
 public class RegionDto extends BaseServerModifierDto {
     @NotBlank(message = "name must not be empty")
-    private String name;
+    private String name_uz;
+    @NotBlank(message = "name must not be empty")
+    private String name_en;
+    @NotBlank(message = "name must not be empty")
+    private String name_ru;
 
     private Integer parentId;
 

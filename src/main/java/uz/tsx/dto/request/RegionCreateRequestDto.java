@@ -11,5 +11,9 @@ import javax.validation.constraints.NotEmpty;
 public class RegionCreateRequestDto extends BaseParentAndChildDto {
 
     @NotEmpty(message = "Region name should not be empty")
-    private String name;
+    private String name_uz;
+    @NotEmpty(message = "Region name should not be empty")
+    private String name_ru;
+    @NotEmpty(message = "Region name should not be empty")
+    private String name_en;
 }

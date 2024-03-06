@@ -19,7 +19,9 @@ public class CategoryConvert {
 
         CategoryEntity category = new CategoryEntity();
 
-        category.setName(categoryDto.getName());
+        category.setName_en(categoryDto.getName_en());
+        category.setName_ru(categoryDto.getName_ru());
+        category.setName_uz(categoryDto.getName_uz());
         category.setParentId(categoryDto.getParentId());
         return category;
     }
@@ -28,8 +30,9 @@ public class CategoryConvert {
     public CategoryEntity convertToEntity(CategoryUpdateRequestDto categoryDto){
 
         CategoryEntity category = new CategoryEntity();
-
-        category.setName(categoryDto.getName());
+        category.setName_uz(categoryDto.getName_uz());
+        category.setName_ru(categoryDto.getName_ru());
+        category.setName_en(categoryDto.getName_en());
         category.setParentId(categoryDto.getParentId());
         return category;
     }
@@ -70,7 +73,9 @@ public class CategoryConvert {
     public CategoryResponseDto fromOpenDataNoChild(CategoryEntity category){
 
         CategoryResponseDto categoryResponseDto = new CategoryResponseDto();
-        categoryResponseDto.setName(category.getName());
+        categoryResponseDto.setName_en(category.getName_en());
+        categoryResponseDto.setName_uz(category.getName_uz());
+        categoryResponseDto.setName_ru(category.getName_ru());
         categoryResponseDto.setParentId(category.getParentId());
         AttachEntity attachId = category.getAttach();
         if(Objects.nonNull(attachId)){

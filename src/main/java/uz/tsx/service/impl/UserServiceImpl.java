@@ -48,6 +48,7 @@ public class UserServiceImpl implements UserService {
         return true;
     }
     @Override
+    @Transactional
     public UserInterface getById(Integer id) {
         return commonSchemaValidator.validateUser(id);
     }

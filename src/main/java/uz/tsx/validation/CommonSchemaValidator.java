@@ -121,7 +121,7 @@ public class CommonSchemaValidator {
     }
 
     public void categoryStatusCheck(CategoryEntity categoryentity, String attachId) {
-        CategoryEntity getByCategoryNameOriginDB = categoryRepository.findByCategoryName(categoryentity.getName());
+        CategoryEntity getByCategoryNameOriginDB = categoryRepository.findByCategoryName(categoryentity.getName_en());
 
         if (Objects.nonNull(getByCategoryNameOriginDB)) {
 
@@ -134,7 +134,7 @@ public class CommonSchemaValidator {
                 }
                 categoryentity.setId(getByCategoryNameOriginDB.getId());
             } else {
-                throw new CategoryNotFoundException(categoryentity.getName() + " such a category exists!");
+                throw new CategoryNotFoundException(categoryentity.getName_en() + " such a category exists!");
             }
         }
         categoryAttachId(categoryentity.getParentId(), attachId);

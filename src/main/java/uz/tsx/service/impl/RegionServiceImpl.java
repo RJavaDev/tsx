@@ -23,7 +23,8 @@ public class RegionServiceImpl implements RegionService {
     @Override
     public boolean add(RegionEntity regionEntity) {
         Integer userId = SecurityUtils.getUserId();
-        RegionEntity byCreatedByName = repository.findByRegionName(regionEntity.getName());
+
+        RegionEntity byCreatedByName = repository.findByRegionName(regionEntity.getName_en());
         if (byCreatedByName != null) {
              regionStatusCheckAndSave(byCreatedByName, regionEntity, userId);
              return true;
@@ -67,10 +68,16 @@ public class RegionServiceImpl implements RegionService {
         RegionEntity entity = childIdAndParentIdVerify(newUpdateObject,regionId);
 
         entity.setParentId(newUpdateObject.getParentId());
-        String updateObjectName = newUpdateObject.getName();
-        if(!updateObjectName.isEmpty()){
-            deletedObjectOriginDataBase(updateObjectName);
-            entity.setName(updateObjectName);
+
+        String nameEn = newUpdateObject.getName_en();
+        String nameUz = newUpdateObject.getName_uz();
+        String nameRu = newUpdateObject.getName_ru();
+
+        if(!nameEn.isEmpty()){
+            deletedObjectOriginDataBase(nameEn);
+            entity.setName_en(nameEn);
+            entity.setName_ru(nameRu);
+            entity.setName_uz(nameUz);
         }
         entity.forUpdate(SecurityUtils.getUserId());
 
@@ -91,8 +98,9 @@ public class RegionServiceImpl implements RegionService {
     private void regionStatusCheckAndSave(RegionEntity byCreatedByName, RegionEntity regionEntity, Integer userId) {
 
         if (byCreatedByName.getStatus() == EntityStatus.DELETED) {
-
-            byCreatedByName.setName(regionEntity.getName());
+            byCreatedByName.setName_ru(regionEntity.getName_ru());
+            byCreatedByName.setName_en(regionEntity.getName_en());
+            byCreatedByName.setName_uz(regionEntity.getName_uz());
 
             if (regionEntity.getParentId() != null) {
                 repository.findByRegionId(byCreatedByName.getParentId()).orElseThrow(() -> {
@@ -105,7 +113,8 @@ public class RegionServiceImpl implements RegionService {
             byCreatedByName.forCreate(userId);
             repository.save(byCreatedByName);
         } else {
-            throw new RegionNotFoundException(regionEntity.getName() + " such a region exists!");
+            throw new RegionNotFoundException(regionEntity.getName_en() + " such a region exists!");
+
         }
     }
 

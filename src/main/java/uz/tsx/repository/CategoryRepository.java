@@ -28,7 +28,7 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Intege
             ")UPDATE tsx_category SET status = 'DELETED' WHERE id IN(SELECT id FROM sub_category)", nativeQuery = true)
     void categoryDelete(@Param("categoryId") Integer categoryId);
 
-    @Query(value = "SELECT btsc.* FROM tsx_category btsc WHERE btsc.name=:categoryName",nativeQuery = true)
+    @Query(value = "SELECT btsc.* FROM tsx_category btsc WHERE btsc.name_en=:categoryName",nativeQuery = true)
     CategoryEntity findByCategoryName(@Param("categoryName")String categoryName);
 
     @Query(value = "SELECT btsc.* FROM tsx_category btsc WHERE (btsc.id=:parentId OR btsc.id=:childId) AND btsc.status <> 'DELETED'", nativeQuery = true)

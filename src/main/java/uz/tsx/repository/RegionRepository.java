@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface RegionRepository extends JpaRepository<RegionEntity,Integer> {
 
-    @Query(value = "SELECT tsxr.* FROM tsx_region tsxr WHERE tsxr.name=:regionName",nativeQuery = true)
+    @Query(value = "SELECT tsxr.* FROM tsx_region tsxr WHERE tsxr.name_en=:regionName",nativeQuery = true)
     RegionEntity findByRegionName(@Param("regionName")String regionName);
 
     @Query(value = "SELECT tsxr.* FROM tsx_region tsxr WHERE tsxr.id=:regionId AND tsxr.status <> 'DELETED'", nativeQuery = true)

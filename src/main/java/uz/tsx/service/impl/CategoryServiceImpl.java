@@ -59,12 +59,18 @@ public class CategoryServiceImpl implements CategoryService {
     public boolean update(CategoryEntity newUpdateObject, Integer categoryId, String attachId) {
         CategoryEntity entity = childIdAndParentIdVerify(newUpdateObject, categoryId);
         entity.setParentId(newUpdateObject.getParentId());
+        String nameRu = newUpdateObject.getName_ru();
+        String nameEn = newUpdateObject.getName_en();
+        String nameUz = newUpdateObject.getName_uz();
 
-        String updateObjectName = newUpdateObject.getName();
-        if (!updateObjectName.isEmpty()) {
-            deletedObjectOriginDataBase(updateObjectName);
-            entity.setName(updateObjectName);
+        if (!nameEn.isEmpty()) {
+            deletedObjectOriginDataBase(nameEn);
+            entity.setName_en(nameEn);
+            entity.setName_ru(nameRu);
+            entity.setName_uz(nameUz);
         }
+
+
 
         AttachEntity attach = commonSchemaValidator.validateAttach(attachId);
         entity.setAttach(attach);

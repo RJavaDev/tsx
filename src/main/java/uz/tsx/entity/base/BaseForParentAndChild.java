@@ -12,7 +12,11 @@ import lombok.Setter;
 public class BaseForParentAndChild extends BaseServerModifierEntity{
 
     @Column(unique = true, nullable = false)
-    private String name;
+    private String name_uz;
+    @Column(unique = true, nullable = false)
+    private String name_ru;
+    @Column(unique = true, nullable = false)
+    private String name_en;
 
     @Column(name = "parentId")
     private Integer parentId;

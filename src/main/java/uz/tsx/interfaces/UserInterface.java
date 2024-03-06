@@ -32,7 +32,9 @@ public interface UserInterface {
 
     Integer getRegion_id();
 
-    String getAddress();
+    String getAddress_ru();
+    String getAddress_uz();
+    String getAddress_en();
 
     String getAttach_id();
 

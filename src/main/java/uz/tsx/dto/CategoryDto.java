@@ -8,6 +8,7 @@ import uz.tsx.dto.base.BaseServerModifierDto;
 import uz.tsx.dto.response.AttachUrlResponse;
 import uz.tsx.entity.CategoryEntity;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Getter
@@ -16,8 +17,12 @@ import java.util.List;
 @AllArgsConstructor
 public class CategoryDto extends BaseServerModifierDto {
 
-
-    private String name;
+    @NotBlank(message = "name must not be empty")
+    private String name_uz;
+    @NotBlank(message = "name must not be empty")
+    private String name_ru;
+    @NotBlank(message = "name must not be empty")
+    private String name_en;
 
     private Integer parentId;
 

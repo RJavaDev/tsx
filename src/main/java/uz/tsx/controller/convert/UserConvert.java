@@ -50,7 +50,9 @@ public class UserConvert {
         dto.setAttach(AttachConvert.convertToAttachUrlDto(userInterface.getAttach_id(), userInterface.getPath(), userInterface.getType()));
 
         dto.setStatus(userInterface.getStatus());
-        dto.setAddress(userInterface.getAddress());
+        dto.setAddress_ru(userInterface.getAddress_ru());
+        dto.setAddress_uz(userInterface.getAddress_uz());
+        dto.setAddress_en(userInterface.getAddress_en());
         return dto;
     }
 

@@ -8,5 +8,7 @@ import uz.tsx.dto.base.BaseParentAndChildDto;
 @Setter
 public class RegionUpdateRequestDto extends BaseParentAndChildDto {
 
-    private String name;
+    private String name_uz;
+    private String name_ru;
+    private String name_en;
 }

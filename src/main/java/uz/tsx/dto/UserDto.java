@@ -25,7 +25,9 @@ public class UserDto extends BaseServerModifierDto {
 
     private String username;
 
-    private String address;
+    private String address_ru;
+    private String address_uz;
+    private String address_en;
 
     private AttachUrlResponse attach;
 

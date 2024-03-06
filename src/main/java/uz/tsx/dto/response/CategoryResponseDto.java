@@ -9,7 +9,9 @@ import java.util.List;
 @Setter
 public class CategoryResponseDto {
 
-    private String name;
+    private String name_uz;
+    private String name_ru;
+    private String name_en;
 
     private Integer parentId;
 
