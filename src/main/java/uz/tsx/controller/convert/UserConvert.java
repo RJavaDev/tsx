@@ -1,6 +1,7 @@
 package uz.tsx.controller.convert;
 
 import lombok.experimental.UtilityClass;
+import uz.tsx.constants.Characters;
 import uz.tsx.dto.UserDto;
 import uz.tsx.dto.request.UserCreateRequestDto;
 import uz.tsx.dto.request.UserUpdateRequestDto;
@@ -50,9 +51,15 @@ public class UserConvert {
         dto.setAttach(AttachConvert.convertToAttachUrlDto(userInterface.getAttach_id(), userInterface.getPath(), userInterface.getType()));
 
         dto.setStatus(userInterface.getStatus());
-        dto.setAddress_ru(userInterface.getAddress_ru());
-        dto.setAddress_uz(userInterface.getAddress_uz());
-        dto.setAddress_en(userInterface.getAddress_en());
+        String userRegion = userInterface.getAddress();
+
+        if(!Objects.equals(userRegion, Characters.USER_ADDRESS_CHECK)){
+            String[] address = userRegion.split("\\|");
+            dto.setAddress_en(address[0]);
+            dto.setAddress_ru(address[1]);
+            dto.setAddress_uz(address[2]);
+        }
+
         return dto;
     }
 
