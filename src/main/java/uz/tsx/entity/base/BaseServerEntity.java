@@ -13,7 +13,7 @@ import uz.tsx.dto.base.BaseServerDto;
 public class BaseServerEntity extends BaseObject{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "status", length = 32, columnDefinition = "varchar(32) default 'CREATED'")
     @Enumerated(value = EnumType.STRING)
@@ -28,7 +28,7 @@ public class BaseServerEntity extends BaseObject{
     }
 
     @Override
-    public Integer getUniqueId() {
+    public Long getUniqueId() {
         return getId();
     }
 }

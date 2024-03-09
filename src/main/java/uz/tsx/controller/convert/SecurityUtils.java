@@ -29,7 +29,7 @@ public class SecurityUtils {
         return null;
     }
 
-    public static Integer getUserId(){
+    public static Long getUserId(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(authentication instanceof UsernamePasswordAuthenticationToken token) {

@@ -19,7 +19,7 @@ public class BaseForParentAndChild extends BaseServerModifierEntity{
     private String name_en;
 
     @Column(name = "parentId")
-    private Integer parentId;
+    private Long parentId;
 
 
 }

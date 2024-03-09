@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface BaseInterface <R>{
 
-    R getById(Integer id);
+    R getById(Long id);
 
     List<R> getAll();
 
-    void delete(Integer id);
+    void delete(Long id);
 }

@@ -22,7 +22,7 @@ public class RegionDto extends BaseServerModifierDto {
     @NotBlank(message = "name must not be empty")
     private String name_ru;
 
-    private Integer parentId;
+    private Long parentId;
 
     private List<RegionDto> children;
 

@@ -25,7 +25,7 @@ public class EmailServiceImpl implements EmailService {
     private final EmailRepository repository;
     private final CommonSchemaValidator commonSchemaValidator;
     @Override
-    public EmailEntity getById(Integer id) {
+    public EmailEntity getById(Long id) {
         return null;
     }
 
@@ -35,7 +35,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
 
     }
 

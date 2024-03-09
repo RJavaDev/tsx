@@ -8,10 +8,10 @@ public interface RegionService extends BaseInterface<RegionEntity>{
 
     boolean add(RegionEntity regionEntity);
 
-    RegionEntity getByIdTree(Integer id);
+    RegionEntity getByIdTree(Long id);
 
     List<RegionEntity> getAllTree();
 
-    boolean update(RegionEntity newUpdateObject, Integer regionId);
+    boolean update(RegionEntity newUpdateObject, Long regionId);
 
 }

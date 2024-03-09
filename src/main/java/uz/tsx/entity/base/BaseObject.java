@@ -3,7 +3,7 @@ package uz.tsx.entity.base;
 import java.util.Objects;
 
 public abstract class BaseObject {
-    public abstract Integer getUniqueId();
+    public abstract Long getUniqueId();
 
     @Override
     public int hashCode() {

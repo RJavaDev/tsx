@@ -10,7 +10,7 @@ import uz.tsx.entity.EmailEntity;
 import java.util.List;
 import java.util.Optional;
 
-public interface EmailRepository extends JpaRepository<EmailEntity, Integer> {
+public interface EmailRepository extends JpaRepository<EmailEntity, Long> {
     @Transactional
     @Query(value = "SELECT * FROM tsx_email  ",nativeQuery = true)
     List<EmailEntity>getAll();

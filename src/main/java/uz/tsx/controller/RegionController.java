@@ -45,7 +45,7 @@ public class RegionController {
 
     @Operation(summary = "This method for getId", description = "This method Region getId")
     @GetMapping("/get/tree/{id}")
-    public HttpResponse<Object> getRegionIdTree(@PathVariable Integer id) {
+    public HttpResponse<Object> getRegionIdTree(@PathVariable Long id) {
 
         RegionEntity region = regionService.getByIdTree(id);
         RegionDto fromTree = RegionConvert.fromTree(region);
@@ -60,7 +60,7 @@ public class RegionController {
 
     @Operation(summary = "This method for getId", description = "This method Region getId")
     @GetMapping("/get/{id}")
-    public HttpResponse<Object> getRegionId(@PathVariable Integer id) {
+    public HttpResponse<Object> getRegionId(@PathVariable Long id) {
 
         RegionEntity region = regionService.getById(id);
         RegionDto responseRegionDto = RegionConvert.fromNoTree(region);
@@ -103,7 +103,7 @@ public class RegionController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "This method for Post", description = "This method user update")
     @PatchMapping("/update/{id}")
-    public HttpResponse<Object> update(@RequestBody RegionUpdateRequestDto regionDto, @PathVariable Integer id) {
+    public HttpResponse<Object> update(@RequestBody RegionUpdateRequestDto regionDto, @PathVariable Long id) {
 
         RegionEntity regionEntity = RegionConvert.convertToEntity(regionDto);
         boolean isUpdate = regionService.update(regionEntity, id);
@@ -120,7 +120,7 @@ public class RegionController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "This method for Delete", description = "This method user delete")
     @DeleteMapping("/delete/{id}")
-    public HttpResponse<Object> deleteRegion(@PathVariable Integer id) {
+    public HttpResponse<Object> deleteRegion(@PathVariable Long id) {
 
         regionService.delete(id);
 

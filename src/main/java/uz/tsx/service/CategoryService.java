@@ -10,5 +10,5 @@ public interface CategoryService extends BaseInterface<CategoryEntity>{
 
     List<CategoryEntity> getAllTree();
 
-    boolean update(CategoryEntity newUpdateObject, Integer categoryId, String attachId);
+    boolean update(CategoryEntity newUpdateObject, Long categoryId, String attachId);
 }

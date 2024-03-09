@@ -16,9 +16,9 @@ public class BaseServerModifierDto extends BaseServerDto{
 
     private LocalDateTime updatedDate;
 
-    private Integer createdBy;
+    private Long createdBy;
 
-    private Integer modifiedBy;
+    private Long modifiedBy;
 
     public <DTO extends BaseServerModifierDto, ENTITY extends BaseServerModifierEntity> ENTITY toEntity(DTO dto, ENTITY entity, String... ignoreProperties){
         BeanUtils.copyProperties(dto, entity, ignoreProperties);

@@ -47,7 +47,7 @@ public class CategoryController {
 
     @Operation(summary = "Get Category Tree", description = "This method retrieves the category along with its descendants in a tree structure based on the provided ID.")
     @GetMapping("/get/tree/{id}")
-    public HttpResponse<Object> getCategoryIdTree(@PathVariable Integer id) {
+    public HttpResponse<Object> getCategoryIdTree(@PathVariable Long id) {
 
         CategoryEntity category = service.getById(id);
         CategoryDto dto = CategoryConvert.fromTree(category);
@@ -62,7 +62,7 @@ public class CategoryController {
 
     @Operation(summary = "Get Category by ID", description = "This method retrieves a category based on the provided ID without any tree structure.")
     @GetMapping("/get/{id}")
-    public HttpResponse<Object> getCategoryId(@PathVariable Integer id) {
+    public HttpResponse<Object> getCategoryId(@PathVariable Long id) {
 
         CategoryEntity category = service.getById(id);
         CategoryDto categoryDto = CategoryConvert.fromNoTree(category);
@@ -107,7 +107,7 @@ public class CategoryController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "Update Category by ID", description = "This method updates a category based on the provided ID.")
     @PatchMapping("/update/{id}")
-    public HttpResponse<Object> update(@RequestBody CategoryUpdateRequestDto categoryDto, @PathVariable Integer id) {
+    public HttpResponse<Object> update(@RequestBody CategoryUpdateRequestDto categoryDto, @PathVariable Long id) {
 
         CategoryEntity category = CategoryConvert.convertToEntity(categoryDto);
         boolean isUpdate = service.update(category, id, categoryDto.getAttachId());
@@ -123,7 +123,7 @@ public class CategoryController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "Delete Category by ID", description = "This method deletes a category by its ID. If the category is a parent, its children are automatically deleted.")
     @DeleteMapping("/delete/{id}")
-    public HttpResponse<Object> deleteCategory(@PathVariable Integer id) {
+    public HttpResponse<Object> deleteCategory(@PathVariable Long id) {
 
         service.delete(id);
 

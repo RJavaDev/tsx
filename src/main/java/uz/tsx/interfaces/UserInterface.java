@@ -6,15 +6,15 @@ import java.time.LocalDateTime;
 
 public interface UserInterface {
 
-    Integer getId();
+    Long getId();
 
     EntityStatus getStatus();
 
-    Integer getCreated_by();
+    Long getCreated_by();
 
     LocalDateTime getCreated_date();
 
-    Integer getModified_by();
+    Long getModified_by();
 
     LocalDateTime getUpdated_date();
 

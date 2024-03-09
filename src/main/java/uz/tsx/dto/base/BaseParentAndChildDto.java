@@ -8,5 +8,5 @@ import lombok.Setter;
 @Setter
 public abstract class BaseParentAndChildDto {
 
-    private Integer parentId;
+    private Long parentId;
 }

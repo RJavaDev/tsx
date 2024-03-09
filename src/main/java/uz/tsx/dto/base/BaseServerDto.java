@@ -11,6 +11,6 @@ import uz.tsx.constants.EntityStatus;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BaseServerDto {
-    private Integer id;
+    private Long id;
     private EntityStatus status;
 }

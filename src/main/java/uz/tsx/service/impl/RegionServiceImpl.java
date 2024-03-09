@@ -22,7 +22,7 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public boolean add(RegionEntity regionEntity) {
-        Integer userId = SecurityUtils.getUserId();
+        Long userId = SecurityUtils.getUserId();
 
         RegionEntity byCreatedByName = repository.findByRegionName(regionEntity.getName_en());
         if (byCreatedByName != null) {
@@ -35,7 +35,7 @@ public class RegionServiceImpl implements RegionService {
     }
 
     @Override
-    public RegionEntity getById(Integer id) {
+    public RegionEntity getById(Long id) {
         if (id == null) return null;
 
         return repository.getRegionId(id).orElseThrow(
@@ -45,7 +45,7 @@ public class RegionServiceImpl implements RegionService {
     }
 
     @Override
-    public RegionEntity getByIdTree(Integer id) {
+    public RegionEntity getByIdTree(Long id) {
         if (id == null) return null;
 
         return repository.findById(id).orElseThrow(
@@ -63,7 +63,7 @@ public class RegionServiceImpl implements RegionService {
         return repository.getRegionAllTree();}
 
     @Override
-    public boolean update(RegionEntity newUpdateObject, Integer regionId) {
+    public boolean update(RegionEntity newUpdateObject, Long regionId) {
 
         RegionEntity entity = childIdAndParentIdVerify(newUpdateObject,regionId);
 
@@ -87,7 +87,7 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     @Transactional
-    public void delete(Integer id) {
+    public void delete(Long id) {
         if (id != null) {
             repository.findByRegionId(id).orElseThrow(
                     () -> new RegionNotFoundException(id + " id not found!!!"));
@@ -95,7 +95,7 @@ public class RegionServiceImpl implements RegionService {
         repository.regionDelete(id);
     }
 
-    private void regionStatusCheckAndSave(RegionEntity byCreatedByName, RegionEntity regionEntity, Integer userId) {
+    private void regionStatusCheckAndSave(RegionEntity byCreatedByName, RegionEntity regionEntity, Long userId) {
 
         if (byCreatedByName.getStatus() == EntityStatus.DELETED) {
             byCreatedByName.setName_ru(regionEntity.getName_ru());
@@ -118,7 +118,7 @@ public class RegionServiceImpl implements RegionService {
         }
     }
 
-    private RegionEntity childIdAndParentIdVerify(RegionEntity region, Integer regionId) {
+    private RegionEntity childIdAndParentIdVerify(RegionEntity region, Long regionId) {
 
         RegionEntity entity = null;
         if (region.getParentId() != null) {
@@ -132,7 +132,7 @@ public class RegionServiceImpl implements RegionService {
         return entity;
     }
 
-    private RegionEntity parentIdVerify(RegionEntity region, Integer regionId) {
+    private RegionEntity parentIdVerify(RegionEntity region, Long regionId) {
 
         RegionEntity entity = null;
         List<RegionEntity> parentAndChild = repository.getRegionIdParentAndChild(regionId, region.getParentId());

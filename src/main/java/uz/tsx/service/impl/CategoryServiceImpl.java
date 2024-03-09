@@ -26,7 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public boolean add(CategoryEntity category, String attachId) {
-        Integer userId = SecurityUtils.getUserId();
+        Long userId = SecurityUtils.getUserId();
 
         commonSchemaValidator.categoryStatusCheck(category, attachId);
 
@@ -40,7 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryEntity getById(Integer id) {
+    public CategoryEntity getById(Long id) {
         return commonSchemaValidator.validateGetCategory(id);
     }
 
@@ -56,7 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     @Override
-    public boolean update(CategoryEntity newUpdateObject, Integer categoryId, String attachId) {
+    public boolean update(CategoryEntity newUpdateObject, Long categoryId, String attachId) {
         CategoryEntity entity = childIdAndParentIdVerify(newUpdateObject, categoryId);
         entity.setParentId(newUpdateObject.getParentId());
         String nameRu = newUpdateObject.getName_ru();
@@ -82,7 +82,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public void delete(Integer id) {
+    public void delete(Long id) {
         if (id != null) {
             repository.findByCategoryId(id).orElseThrow(
                     () -> new CategoryNotFoundException(id + " id not found!!!"));
@@ -92,7 +92,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 
 
-    private CategoryEntity childIdAndParentIdVerify(CategoryEntity category, Integer categoryId) {
+    private CategoryEntity childIdAndParentIdVerify(CategoryEntity category, Long categoryId) {
 
         CategoryEntity entity = null;
         if (category.getParentId() != null) {
@@ -106,7 +106,7 @@ public class CategoryServiceImpl implements CategoryService {
         return entity;
     }
 
-    private CategoryEntity parentIdVerify(CategoryEntity category, Integer categoryId) {
+    private CategoryEntity parentIdVerify(CategoryEntity category, Long categoryId) {
 
         CategoryEntity entity = null;
         List<CategoryEntity> parentAndChild = repository.getCategoryIdParentAndChild(categoryId, category.getParentId());

@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean updateById(UserEntity userUpdate, Integer id) {
+    public Boolean updateById(UserEntity userUpdate, Long id) {
 
         UserEntity userOriginalDB = repository.findById(id).orElseThrow(() ->
                 new UsernameNotFoundException("user username not found!")
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     @Transactional
-    public UserInterface getById(Integer id) {
+    public UserInterface getById(Long id) {
         return commonSchemaValidator.validateUser(id);
     }
 
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void delete(Integer id) {
+    public void delete(Long id) {
         repository.userDelete(id);
     }
 

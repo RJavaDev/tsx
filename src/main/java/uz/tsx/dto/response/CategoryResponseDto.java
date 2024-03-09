@@ -13,7 +13,7 @@ public class CategoryResponseDto {
     private String name_ru;
     private String name_en;
 
-    private Integer parentId;
+    private Long parentId;
 
     private List<CategoryResponseDto> child;
 
