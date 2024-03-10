@@ -9,6 +9,7 @@ import uz.tsx.exception.OriginalFileNameNullException;
 import java.io.File;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @UtilityClass
@@ -18,6 +19,8 @@ public class AttachConvert {
     private static final String ATTACH_UPLOAD_FOLDER = "src/main/resources/images/";
 
     private static final String ATTACH_PATH = "http://localhost:8080/images/";
+
+    private static final String DEFAULT_USER_IMAGE = "user/user.jpg";
 
     public List<AttachResponseDto> from(List<AttachEntity> categoryList) {
         return categoryList.stream().map(AttachConvert::from).toList();
@@ -76,6 +79,22 @@ public class AttachConvert {
         return fileName.substring(lastIndex + 1);
     }
 
+    public AttachUrlResponse convertToAttachUrlDtoForUser(AttachEntity attach){
+        if(Objects.isNull(attach)){
+            return convertToAttachUrlDto(DEFAULT_USER_IMAGE);
+        }else {
+            return convertToAttachUrlDto(attach);
+        }
+    }
+
+    public AttachUrlResponse convertToAttachUrlDtoForUser(String attachId, String path, String type){
+        if (Objects.nonNull(attachId)){
+            return convertToAttachUrlDto(attachId, path, type);
+        }else {
+            return convertToAttachUrlDto(DEFAULT_USER_IMAGE);
+        }
+    }
+
     public AttachUrlResponse convertToAttachUrlDto(String attachId, String path, String type) {
 
         AttachUrlResponse url = new AttachUrlResponse();
@@ -93,7 +112,17 @@ public class AttachConvert {
 
         return url;
     }
+
     public List<AttachUrlResponse> convertToAttachUrlDto(List<AttachEntity> attachList){
         return attachList.stream().map(AttachConvert::convertToAttachUrlDto).toList();
+    }
+
+
+    private AttachUrlResponse convertToAttachUrlDto(String defaultURL){
+        AttachUrlResponse url = new AttachUrlResponse();
+
+        url.setUrl(ATTACH_PATH + defaultURL);
+
+        return url;
     }
 }

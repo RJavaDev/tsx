@@ -15,9 +15,7 @@ public class UserUpdateRequestDto extends BaseUserDto {
 
     private String lastname;
 
-    private String phoneNumber;
-
-    private String username;
+    private String emailOrPhone;
 
     private String password;
 

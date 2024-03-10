@@ -21,17 +21,16 @@ public class UserConvert {
 
     public UserDto from(UserEntity user) {
         UserDto userDto = user.toDto("password", "birtDate");
-        AttachEntity attach = user.getAttach();
-        if(Objects.nonNull(attach)){
-            userDto.setAttach(AttachConvert.convertToAttachUrlDto(attach));
-        }
+
+        userDto.setAttach(AttachConvert.convertToAttachUrlDtoForUser(user.getAttach()));
+
         return userDto;
     }
 
-    public UserDto from(String fullName, String phoneNumber){
+    public UserDto from(String fullName, String emailOrPhone){
         UserDto userDto = new UserDto();
         userDto.setFirstname(fullName);
-        userDto.setPhoneNumber(phoneNumber);
+        userDto.setEmailOrPhone(emailOrPhone);
         return userDto;
     }
 
@@ -44,11 +43,10 @@ public class UserConvert {
         dto.setUpdatedDate(userInterface.getUpdated_date());
         dto.setCreatedDate(userInterface.getCreated_date());
         dto.setModifiedBy(userInterface.getModified_by());
-        dto.setPhoneNumber(userInterface.getPhone_number());
-        dto.setUsername(userInterface.getUsername());
+        dto.setEmailOrPhone(userInterface.getEmail_or_phone());
 
         dto.setRoleEnumList(stringToRoleList(userInterface.getRole_enum_list()));
-        dto.setAttach(AttachConvert.convertToAttachUrlDto(userInterface.getAttach_id(), userInterface.getPath(), userInterface.getType()));
+        dto.setAttach(AttachConvert.convertToAttachUrlDtoForUser(userInterface.getAttach_id(), userInterface.getPath(), userInterface.getType()));
 
         dto.setStatus(userInterface.getStatus());
         String userRegion = userInterface.getAddress();

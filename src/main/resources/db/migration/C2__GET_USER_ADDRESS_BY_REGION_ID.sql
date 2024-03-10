@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION get_region_address(regionId INTEGER)
+CREATE OR REPLACE FUNCTION get_region_address(regionId BIGINT)
     RETURNS TEXT
     LANGUAGE SQL AS
 $$

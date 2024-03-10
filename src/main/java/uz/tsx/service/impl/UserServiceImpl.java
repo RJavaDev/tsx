@@ -75,12 +75,17 @@ public class UserServiceImpl implements UserService {
     }
 
     private void userVerifyAndSetProperty(UserEntity userUpdate, UserEntity userOriginalDB) {
-        if (!StringUtils.isEmpty(userUpdate.getFirstname())) userOriginalDB.setFirstname(userUpdate.getFirstname());
-        if (!StringUtils.isEmpty(userUpdate.getUsername())) userOriginalDB.setUsername(userUpdate.getUsername());
-        if (!StringUtils.isEmpty(userUpdate.getPhoneNumber()))
-            userOriginalDB.setPhoneNumber(userUpdate.getPhoneNumber());
-        if (!StringUtils.isEmpty(userUpdate.getPassword())) {
-            userOriginalDB.setPassword(passwordEncoder.encode(userUpdate.getPassword()));
+
+        String firstname = userUpdate.getFirstname();
+        String username = userUpdate.getUsername();
+        String password = userUpdate.getPassword();
+
+        if (!StringUtils.isEmpty(firstname)) userOriginalDB.setFirstname(firstname);
+
+        if (!StringUtils.isEmpty(username)) userOriginalDB.setEmailOrPhone(username);
+
+        if (!StringUtils.isEmpty(password)) {
+            userOriginalDB.setPassword(passwordEncoder.encode(password));
         }
 
     }

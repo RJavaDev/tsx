@@ -66,16 +66,13 @@ public class CommonSchemaValidator {
         return null;
     }
 
-    public void userPasswordAndPhoneNumberCheck(String username, String phoneNumber) {
-        List<UserEntity> user = userRepository.findByUsernameOriginalDB(username, phoneNumber);
+    public void userPasswordAndPhoneNumberCheck(String username) {
+        List<UserEntity> user = userRepository.findByUsernameOriginalDB(username);
         if (!CollectionUtils.isEmpty(user)) {
 
             user.forEach((u) -> {
                 if (u.getUsername().equals(username)) {
                     throw new UserConflictData(username + " there is a user with this username");
-                }
-                if (u.getPhoneNumber().equals(phoneNumber)) {
-                    throw new UserConflictData(phoneNumber + " there is a user with this phone number");
                 }
             });
         }
@@ -86,6 +83,11 @@ public class CommonSchemaValidator {
         );
     }
 
+    public UserInterface validateUser(String username) {
+        return userRepository.getUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username + " username id not found!")
+        );
+    }
+
 
     public UserEntity validateUserUpdate(UserEntity userUpdate, UserEntity userOriginalDB, String attachId) {
         if (Objects.nonNull(userUpdate)) {
@@ -93,19 +95,15 @@ public class CommonSchemaValidator {
             String firstname = userUpdate.getFirstname();
             String username = userUpdate.getUsername();
             String password = userUpdate.getPassword();
-            String phoneNumber = userUpdate.getPhoneNumber();
 
             if (StringUtils.isNotEmpty(firstname)) {
                 userOriginalDB.setFirstname(firstname);
             }
             if (StringUtils.isNotEmpty(username)) {
-                userOriginalDB.setUsername(username);
+                userOriginalDB.setEmailOrPhone(username);
             }
             if (StringUtils.isNoneEmpty(password)){
                 userOriginalDB.setPassword(passwordEncoder.encode(password));
-            }
-            if (StringUtils.isNotEmpty(phoneNumber)) {
-                userOriginalDB.setPhoneNumber(phoneNumber);
             }
             if (StringUtils.isNotEmpty(attachId)) {
                 userOriginalDB.setAttach(validateAttach(attachId));

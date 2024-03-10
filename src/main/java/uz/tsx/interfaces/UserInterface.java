@@ -24,11 +24,9 @@ public interface UserInterface {
 
     String getPassword();
 
-    String getPhone_number();
-
     String getRole_enum_list();
 
-    String getUsername();
+    String getEmail_or_phone();
 
     Integer getRegion_id();
 

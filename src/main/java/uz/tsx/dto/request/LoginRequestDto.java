@@ -13,8 +13,8 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class LoginRequestDto {
 
-  @NotBlank(message = "username must not be empty")
-  private String username;
+  @NotBlank(message = "emailOrPhone must not be empty")
+  private String emailOrPhone;
   @NotBlank(message = "password must not be empty")
   String password;
 }

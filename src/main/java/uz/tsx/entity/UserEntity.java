@@ -31,10 +31,7 @@ public class UserEntity extends BaseServerModifierEntity implements UserDetails 
     private AttachEntity attach;
 
     @Column(unique = true, nullable = false)
-    private String phoneNumber;
-
-    @Column(unique = true, nullable = false)
-    private String username;
+    private String emailOrPhone;
 
     private String password;
 
@@ -42,8 +39,11 @@ public class UserEntity extends BaseServerModifierEntity implements UserDetails 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private RegionEntity region;
 
+
     @Enumerated(EnumType.STRING)
     private List<RoleEnum> roleEnumList;
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> roles = new ArrayList<>();
@@ -59,9 +59,8 @@ public class UserEntity extends BaseServerModifierEntity implements UserDetails 
         return password;
     }
 
-    @Override
     public String getUsername() {
-        return username;
+        return emailOrPhone;
     }
 
     @Override
@@ -83,6 +82,7 @@ public class UserEntity extends BaseServerModifierEntity implements UserDetails 
     public boolean isEnabled() {
         return true;
     }
+
 
     /************************************************************
      * ******************** CONVERT TO DTO ***********************

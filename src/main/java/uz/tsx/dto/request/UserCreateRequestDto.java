@@ -21,12 +21,9 @@ public class UserCreateRequestDto extends BaseUserDto {
 
     private String lastname;
 
-    @NotBlank(message = "phoneNumber must not be null!!!")
-    @Schema(name = "phoneNumber", example = "+998901389918")
-    private String phoneNumber;
-
-    @NotBlank(message = "username must not be null!!!")
-    private String username;
+    @NotBlank(message = "emailOrPhone must not be null!!!")
+    @Schema(name = "emailOrPhone", example = "example@gmail.com OR +998901389918")
+    private String emailOrPhone;
 
     @NotBlank(message = "password must not be null!!!")
     private String password;

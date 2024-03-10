@@ -14,6 +14,7 @@ import uz.tsx.entity.role.RoleEnum;
 import uz.tsx.exception.AuthenticationException;
 import uz.tsx.exception.UserDataException;
 import uz.tsx.exception.UserUnauthorizedAction;
+import uz.tsx.interfaces.UserInterface;
 import uz.tsx.repository.UserRepository;
 import uz.tsx.service.AuthenticationService;
 import uz.tsx.validation.CommonSchemaValidator;
@@ -44,15 +45,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public TokenResponseDto authenticate(LoginRequestDto request) {
 
-        UserEntity user = verifyUser(request.getUsername(),request.getPassword());
+        UserEntity user = verifyUser(request.getEmailOrPhone(),request.getPassword());
         String jwt = jwtService.generateToken(user);
+        UserInterface userDB = commonSchemaValidator.validateUser(request.getEmailOrPhone());
 
-        return TokenResponseConvert.from(jwt, user);
+        return TokenResponseConvert.from(jwt, userDB);
     }
 
     private UserEntity saveUser(@NotNull UserEntity user) throws UserDataException {
 
-        commonSchemaValidator.userPasswordAndPhoneNumberCheck(user.getUsername(), user.getPhoneNumber());
+        commonSchemaValidator.userPasswordAndPhoneNumberCheck(user.getUsername());
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
