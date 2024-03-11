@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uz.tsx.dto.base.BaseServerModifierDto;
+import uz.tsx.dto.base.BaseDto;
 import uz.tsx.dto.response.AttachUrlResponse;
 import uz.tsx.entity.UserEntity;
 import uz.tsx.entity.role.RoleEnum;
@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto extends BaseServerModifierDto {
+public class UserDto extends BaseDto {
 
     private String firstname;
 

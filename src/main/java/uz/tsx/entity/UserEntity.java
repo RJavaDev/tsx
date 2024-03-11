@@ -10,7 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.tsx.constants.TableNames;
 import uz.tsx.dto.UserDto;
-import uz.tsx.entity.base.BaseServerModifierEntity;
+import uz.tsx.entity.base.BaseEntity;
 import uz.tsx.entity.role.RoleEnum;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = TableNames.TSX_USER)
-public class UserEntity extends BaseServerModifierEntity implements UserDetails {
+public class UserEntity extends BaseEntity implements UserDetails {
 
     private String firstname;
 

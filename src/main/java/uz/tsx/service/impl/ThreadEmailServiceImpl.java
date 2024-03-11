@@ -11,9 +11,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ThreadEmailServiceImpl extends Thread{
     private final EmailRepository repository;
+
+    private final static long THREAD_SLEEP_TIME = 500000;
     public void  run(){
         try{
-            Thread.sleep(500000);
+            Thread.sleep(THREAD_SLEEP_TIME);
             List<EmailEntity> all = repository.getAll();
             if (!all.isEmpty()){
                 for (EmailEntity email:all){

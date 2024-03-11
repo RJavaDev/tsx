@@ -7,11 +7,12 @@ import lombok.Setter;
 import uz.tsx.constants.TableNames;
 import uz.tsx.entity.base.BaseEntity;
 
+@Entity
 @Getter
 @Setter
-@Entity
-@Table(name = TableNames.EMAIL)
-public class EmailEntity extends BaseEntity {
-    private String email;
-    private Integer cod;
+@Table(name = TableNames.CURRENCY)
+public class CurrencyEntity extends BaseEntity {
+    private String name;    // O'zbek so'mi, USA dollar
+
+    private String code;   // uzs, usd
 }
