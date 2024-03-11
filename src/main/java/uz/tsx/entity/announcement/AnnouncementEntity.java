@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 import uz.tsx.constants.TableNames;
+import uz.tsx.dto.AnnounceAdditionInfoDto;
 import uz.tsx.dto.AnnounceOptionDto;
 import uz.tsx.entity.AttachEntity;
 import uz.tsx.entity.CategoryEntity;
@@ -50,6 +51,10 @@ public class AnnouncementEntity extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contact_info_id", insertable = false, updatable = false)
     private AnnouncementContactEntity contactInfo;
+
+    @Type(JsonType.class)
+    @Column(columnDefinition = "jsonb", name = "additional_infos")
+    private Set<AnnounceAdditionInfoDto> additionalInfos;
 
     @Type(JsonType.class)
     @Column(columnDefinition = "jsonb", name = "additional_options")

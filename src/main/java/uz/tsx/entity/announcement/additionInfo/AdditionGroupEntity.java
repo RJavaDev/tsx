@@ -1,10 +1,9 @@
 package uz.tsx.entity.announcement.additionInfo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import uz.tsx.entity.CategoryEntity;
 import uz.tsx.entity.base.BaseEntity;
 
 @Entity
@@ -34,4 +33,11 @@ public class AdditionGroupEntity extends BaseEntity {
     private String stringValue;
 
     private AdditionType type;
+
+    @Column(name = "category_id")
+    private Integer categoryId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", insertable = false, updatable = false)
+    private CategoryEntity category;
 }
