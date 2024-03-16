@@ -1,13 +1,13 @@
 package uz.tsx.entity.announcement.additionInfo;
 
 public enum AdditionType {
-    COMBOBOX,
+    COMBOBOX,           // 0
 
-    INTEGER,
+    INTEGER,            // 1
 
-    FLOAT,
+    FLOAT,              // 2
 
-    STRING,
+    STRING,             // 3
 
-    COLOR
+    COLOR               // 4
 }

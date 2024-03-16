@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @Table(name = TableNames.ANNOUNCEMENT_PRICE)
 public class AnnouncementPriceEntity extends BaseEntity {
     @Column(name = "currency_id")
-    private Integer currencyId;
+    private Long currencyId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "currency_id", insertable = false, updatable = false)

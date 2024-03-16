@@ -26,6 +26,8 @@ public class CategoryDto extends BaseDto {
 
     private Integer parentId;
 
+    private CategoryDto parent;
+
     private List<CategoryDto> children;
 
     private AttachUrlResponse attach;

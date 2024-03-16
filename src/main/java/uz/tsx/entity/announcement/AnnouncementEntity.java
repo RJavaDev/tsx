@@ -5,13 +5,17 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
+import org.springframework.beans.BeanUtils;
 import uz.tsx.constants.TableNames;
-import uz.tsx.dto.AnnounceAdditionInfoDto;
-import uz.tsx.dto.AnnounceOptionDto;
+import uz.tsx.dto.announcement.AnnounceAdditionInfoDto;
+import uz.tsx.dto.announcement.AnnounceOptionDto;
+import uz.tsx.dto.announcement.AnnouncementDto;
+import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
 import uz.tsx.entity.AttachEntity;
 import uz.tsx.entity.CategoryEntity;
 import uz.tsx.entity.base.BaseEntity;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -23,7 +27,7 @@ public class AnnouncementEntity extends BaseEntity {
     private String title;
 
     @Column(name = "category_id", nullable = false)
-    private Integer categoryId;
+    private Long categoryId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
@@ -39,14 +43,14 @@ public class AnnouncementEntity extends BaseEntity {
     private String description;
 
     @Column(name = "price_tag_id")
-    private Integer priceTagId;
+    private Long priceTagId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "price_tag_id", insertable = false, updatable = false)
     private AnnouncementPriceEntity priceTag;
 
     @Column(name = "contact_info_id")
-    private Integer contactInfoId;
+    private Long contactInfoId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contact_info_id", insertable = false, updatable = false)
@@ -59,4 +63,24 @@ public class AnnouncementEntity extends BaseEntity {
     @Type(JsonType.class)
     @Column(columnDefinition = "jsonb", name = "additional_options")
     private Set<AnnounceOptionDto> additionalOptions;
+
+    public AnnouncementDto toDto(String... ignoreProperties) {
+        AnnouncementDto dto = new AnnouncementDto();
+        super.toDto(this, dto, ignoreProperties);
+
+        if(getAdditionalInfos() != null) {
+            Set<AnnouncementInfoSelector> additionalInfos = new HashSet<>();
+
+            for(AnnounceAdditionInfoDto infoDto : getAdditionalInfos()) {
+                AnnouncementInfoSelector sInfoDto = new AnnouncementInfoSelector();
+                BeanUtils.copyProperties(infoDto, sInfoDto);
+                additionalInfos.add(sInfoDto);
+            }
+
+            dto.setAdditionalInfos(additionalInfos);
+        }
+
+
+        return dto;
+    }
 }

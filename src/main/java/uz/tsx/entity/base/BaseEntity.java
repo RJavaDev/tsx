@@ -14,9 +14,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @MappedSuperclass
-//@TypeDefs({
-//        @TypeDef(name = "json", typeClass = JsonStringType.class),
-//        @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)})
 public class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

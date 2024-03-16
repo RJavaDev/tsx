@@ -2,9 +2,11 @@ package uz.tsx.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,7 +44,6 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private List<RoleEnum> roleEnumList;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -13,7 +13,7 @@ import uz.tsx.entity.CategoryEntity;
 public class OptionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String name_uz;
 
@@ -22,14 +22,14 @@ public class OptionEntity {
     private String name_en;
 
     @Column(name = "group_id")
-    private Integer optionGroupId;
+    private Long optionGroupId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id", insertable = false, updatable = false)
     private OptionGroupEntity optionGroup;
 
     @Column(name = "category_id")
-    private Integer categoryId;
+    private Long categoryId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", insertable = false, updatable = false)

@@ -1,8 +1,11 @@
 package uz.tsx.interfaces;
 
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import org.hibernate.annotations.Type;
 import uz.tsx.constants.EntityStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface UserInterface {
 

@@ -9,7 +9,7 @@ import uz.tsx.entity.base.BaseEntity;
 @Getter
 @Setter
 @Table(name = "tsx_add_value")
-public class AdditionComboValue extends BaseEntity {
+public class AdditionComboValueEntity extends BaseEntity {
     @Column(name = "name_uz")
     private String nameUz;
 
@@ -20,7 +20,7 @@ public class AdditionComboValue extends BaseEntity {
     private String nameEn;
 
     @Column(name = "group_id")
-    private Integer groupId;
+    private Long groupId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id", insertable = false, updatable = false)

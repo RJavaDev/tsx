@@ -1,4 +1,4 @@
-package uz.tsx.dto;
+package uz.tsx.dto.announcement;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AnnounceOptionDto {
-    private Integer optionId;
+    private Long optionId;
 
-    private Integer optionGroupId;
+    private Long optionGroupId;
 }

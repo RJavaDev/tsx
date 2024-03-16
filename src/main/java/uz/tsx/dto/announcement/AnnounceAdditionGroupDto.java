@@ -1,7 +1,8 @@
-package uz.tsx.dto;
+package uz.tsx.dto.announcement;
 
 import lombok.Getter;
 import lombok.Setter;
+import uz.tsx.dto.CategoryDto;
 import uz.tsx.dto.base.BaseDto;
 import uz.tsx.entity.announcement.additionInfo.AdditionType;
 
@@ -14,17 +15,9 @@ public class AnnounceAdditionGroupDto extends BaseDto {
 
     private String nameEn;
 
-    private Integer intValue;
-
-    private Float floatValue;
-
-    private String colorValue;
-
-    private String stringValue;
-
     private AdditionType type;
 
-    private Integer categoryId;
+    private Long categoryId;
 
     private CategoryDto category;
 
