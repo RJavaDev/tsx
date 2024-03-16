@@ -1,9 +1,6 @@
 package uz.tsx.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uz.tsx.dto.announcement.AnnouncementDto;
 import uz.tsx.dto.dtoUtil.HttpResponse;
 import uz.tsx.service.AnnouncementService;
@@ -26,7 +23,7 @@ public class AnnouncementController {
     }
 
     @PostMapping("/create")
-    public HttpResponse<AnnouncementDto> createAnnouncement(AnnouncementDto dto) {
+    public HttpResponse<AnnouncementDto> createAnnouncement(@RequestBody AnnouncementDto dto) {
         return HttpResponse.build(true, "OK", announcementService.createNewAnnouncement(dto));
     }
 

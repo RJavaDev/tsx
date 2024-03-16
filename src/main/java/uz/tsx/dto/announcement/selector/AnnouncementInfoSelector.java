@@ -2,6 +2,7 @@ package uz.tsx.dto.announcement.selector;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.BeanUtils;
 import uz.tsx.dto.announcement.additionInfo.AnnounceAdditionGroupDto;
 import uz.tsx.dto.announcement.additionInfo.AnnounceAdditionInfoDto;
 import uz.tsx.entity.announcement.additionInfo.AdditionType;
@@ -23,5 +24,11 @@ public class AnnouncementInfoSelector extends AnnounceAdditionInfoDto {
         }
 
         return url;
+    }
+
+    public AnnounceAdditionInfoDto toDto() {
+        AnnounceAdditionInfoDto infoDto = new AnnounceAdditionInfoDto();
+        BeanUtils.copyProperties(this, infoDto);
+        return infoDto;
     }
 }

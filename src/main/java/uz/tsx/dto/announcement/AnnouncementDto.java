@@ -2,13 +2,11 @@ package uz.tsx.dto.announcement;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.collections4.MapUtils;
 import uz.tsx.dto.CategoryDto;
 import uz.tsx.dto.announcement.selector.AnnounceOptionSelector;
 import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
 import uz.tsx.dto.base.BaseDto;
 
-import java.sql.Array;
 import java.util.*;
 
 @Getter
