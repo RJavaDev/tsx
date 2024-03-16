@@ -5,12 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import uz.tsx.constants.TableNames;
 import uz.tsx.entity.CategoryEntity;
+import uz.tsx.entity.base.BaseEntity;
 
 @Entity
 @Getter
 @Setter
 @Table(name = TableNames.OPTION)
-public class OptionEntity {
+public class OptionEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

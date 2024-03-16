@@ -3,6 +3,7 @@ package uz.tsx.entity.announcement.additionInfo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import uz.tsx.dto.announcement.additionInfo.AdditionComboValueDto;
 import uz.tsx.entity.base.BaseEntity;
 
 @Entity
@@ -25,4 +26,10 @@ public class AdditionComboValueEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id", insertable = false, updatable = false)
     private AdditionGroupEntity group;
+
+    public AdditionComboValueDto toDto(String... ignoreProperties) {
+        AdditionComboValueDto dto = new AdditionComboValueDto();
+        super.toDto(this, dto, ignoreProperties);
+        return dto;
+    }
 }

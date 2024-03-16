@@ -7,9 +7,10 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.springframework.beans.BeanUtils;
 import uz.tsx.constants.TableNames;
-import uz.tsx.dto.announcement.AnnounceAdditionInfoDto;
-import uz.tsx.dto.announcement.AnnounceOptionDto;
+import uz.tsx.dto.announcement.additionInfo.AnnounceAdditionInfoDto;
+import uz.tsx.dto.announcement.option.AnnounceOptionDto;
 import uz.tsx.dto.announcement.AnnouncementDto;
+import uz.tsx.dto.announcement.selector.AnnounceOptionSelector;
 import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
 import uz.tsx.entity.AttachEntity;
 import uz.tsx.entity.CategoryEntity;
@@ -80,6 +81,17 @@ public class AnnouncementEntity extends BaseEntity {
             dto.setAdditionalInfos(additionalInfos);
         }
 
+        if(getAdditionalOptions() != null) {
+            Set<AnnounceOptionSelector> additionalOptions = new HashSet<>();
+
+            for(AnnounceOptionDto optionDto : getAdditionalOptions()) {
+                AnnounceOptionSelector sOptionDto = new AnnounceOptionSelector();
+                BeanUtils.copyProperties(optionDto, sOptionDto);
+                additionalOptions.add(sOptionDto);
+            }
+
+            dto.setAdditionalOptions(additionalOptions);
+        }
 
         return dto;
     }

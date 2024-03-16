@@ -5,7 +5,7 @@ import uz.tsx.entity.announcement.AnnouncementEntity;
 
 import java.util.List;
 
-public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity, Integer> {
+public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity, Long> {
     List<AnnouncementEntity> findAllBy();
 
 }

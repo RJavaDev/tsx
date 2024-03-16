@@ -1,4 +1,4 @@
-package uz.tsx.dto.announcement;
+package uz.tsx.dto.announcement.option;
 
 import lombok.Getter;
 import lombok.Setter;
