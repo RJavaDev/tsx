@@ -5,13 +5,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.tsx.common.util.SecurityUtils;
 import uz.tsx.constants.EntityStatus;
+import uz.tsx.dto.CategoryDto;
 import uz.tsx.entity.AttachEntity;
 import uz.tsx.entity.CategoryEntity;
 import uz.tsx.exception.CategoryNotFoundException;
 import uz.tsx.repository.CategoryRepository;
 import uz.tsx.service.CategoryService;
 import uz.tsx.validation.CommonSchemaValidator;
+import uz.tsx.validation.Validation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -88,6 +91,23 @@ public class CategoryServiceImpl implements CategoryService {
                     () -> new CategoryNotFoundException(id + " id not found!!!"));
         }
         repository.categoryDelete(id);
+    }
+
+    @Override
+    public CategoryDto findTreeFromBottom(Long childId) {
+        if(!Validation.checkId(childId)) return null;
+
+        List<CategoryEntity> cEntities = repository.getCategoriesByChildToAncestors(childId);
+        CategoryDto dto = new CategoryDto();
+        CategoryDto temp = dto;
+
+        for(CategoryEntity entity : cEntities) {
+            entity.toDto(entity, temp);
+            temp.setParent(new CategoryDto());
+            temp = temp.getParent();
+        }
+
+        return dto;
     }
 
 

@@ -36,4 +36,13 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
 
     @Query(value = "SELECT btsc.* FROM tsx_category btsc WHERE btsc.parent_id IS NULL", nativeQuery = true)
     List<CategoryEntity> getCategoryTree();
+
+    @Query(value = "with recursive sub_category as (\n" +
+                   "    select * from tsx_category where id = :id\n" +
+                   "    union all\n" +
+                   "    select parent.* from tsx_category parent\n" +
+                   "    inner join sub_category child on child.parent_id = parent.id\n" +
+                   "    )\n" +
+                   "select * from sub_category order by id desc", nativeQuery = true)
+    List<CategoryEntity> getCategoriesByChildToAncestors(@Param("id") Long childId);
 }

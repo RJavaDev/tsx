@@ -134,4 +134,10 @@ public class CategoryController {
                 .message(HttpResponse.Status.OK.name());
 
     }
+
+    @SecurityRequirement(name = "Bearer Authentication")
+    @GetMapping("/tree/top/ancestors")
+    public HttpResponse<CategoryDto> findTreeFromBottom(@RequestParam("childId") Long childId) {
+        return HttpResponse.build(false, "OK", service.findTreeFromBottom(childId));
+    }
 }

@@ -22,6 +22,8 @@ import uz.tsx.repository.OptionRepository;
 import uz.tsx.service.AnnouncementContactService;
 import uz.tsx.service.AnnouncementPriceService;
 import uz.tsx.service.AnnouncementService;
+import uz.tsx.service.CategoryService;
+import uz.tsx.validation.Validation;
 
 import java.util.*;
 
@@ -34,6 +36,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     private final OptionRepository optionRepository;
     private final AnnouncementContactService announcementContactService;
     private final AnnouncementPriceService announcementPriceService;
+    private final CategoryService categoryService;
 
     @Override
     public List<AnnouncementDto> findAllAnnouncements() {
@@ -58,6 +61,32 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         Map<Long, OptionDto> optionIdToValueMap = findAdditionOptions(optionIds);
         fillAnnounceAdditionOptions(announcementDtos, optionIdToValueMap);
         return announcementDtos;
+    }
+    @Override
+    public AnnouncementDto findAnnouncementByIdAbout(Long announceId) {
+        if(!Validation.checkId(announceId)) return null;
+
+        Optional<AnnouncementEntity> entityOpt = announcementRepository.findById(announceId);
+        AnnouncementDto announcementDto = entityOpt.map(AnnouncementEntity::toDto).
+                orElseThrow(() -> new IllegalStateException("Announce is not found"));
+        announcementDto.setCategory(categoryService.findTreeFromBottom(announcementDto.getCategoryId()));
+
+        List<Long> groupIds = new ArrayList<>();
+        List<Long> optionIds = new ArrayList<>();
+        if(announcementDto.getAdditionalInfos() != null) {
+            announcementDto.getAdditionalInfos().forEach(additionGroup -> groupIds.add(additionGroup.getAdditionGroupId()));
+        }
+
+        if(announcementDto.getAdditionalOptions() != null) {
+            announcementDto.getAdditionalOptions().forEach(additionOption -> optionIds.add(additionOption.getOptionId()));
+        }
+
+        Map<Long, AnnounceAdditionGroupDto> groupIdToValueMap = findAdditionInfoGroups(groupIds);
+        fillAnnounceAdditionGroup(Collections.singletonList(announcementDto), groupIdToValueMap);
+
+        Map<Long, OptionDto> optionIdToValueMap = findAdditionOptions(optionIds);
+        fillAnnounceAdditionOptions(Collections.singletonList(announcementDto), optionIdToValueMap);
+        return announcementDto;
     }
 
 
@@ -125,6 +154,8 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
         AnnouncementEntity entity = new AnnouncementEntity();
         BeanUtils.copyProperties(dto, entity);
+        entity.setPriceTagId(createdPriceTag.getId());
+        entity.setContactInfoId(createdContactInfo.getId());
         entity.forCreate();
 
         if(dto.getAdditionalInfos() != null) {

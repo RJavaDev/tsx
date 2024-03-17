@@ -22,9 +22,14 @@ public class AnnouncementController {
         return announcementService.findAllAnnouncements();
     }
 
+    @GetMapping("/find/{id}/about")
+    public AnnouncementDto findByIdAbout(@PathVariable("id") Long announcementId) {
+        return announcementService.findAnnouncementByIdAbout(announcementId);
+    }
+
     @PostMapping("/create")
     public HttpResponse<AnnouncementDto> createAnnouncement(@RequestBody AnnouncementDto dto) {
-        return HttpResponse.build(true, "OK", announcementService.createNewAnnouncement(dto));
+        return HttpResponse.build(true, "OK", announcementService.createNewAnnouncement(dto), HttpResponse.Status.OK.ordinal());
     }
 
 }
