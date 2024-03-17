@@ -24,7 +24,7 @@ public class CategoryDto extends BaseDto {
     @NotBlank(message = "name must not be empty")
     private String name_en;
 
-    private Integer parentId;
+    private Long parentId;
 
     private CategoryDto parent;
 

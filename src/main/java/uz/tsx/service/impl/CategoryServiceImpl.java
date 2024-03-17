@@ -103,8 +103,10 @@ public class CategoryServiceImpl implements CategoryService {
 
         for(CategoryEntity entity : cEntities) {
             entity.toDto(entity, temp);
-            temp.setParent(new CategoryDto());
-            temp = temp.getParent();
+            if(entity.getParentId() != null) {
+                temp.setParent(new CategoryDto());
+                temp = temp.getParent();
+            }
         }
 
         return dto;

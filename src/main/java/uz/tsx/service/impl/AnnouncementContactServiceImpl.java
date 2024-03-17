@@ -8,6 +8,9 @@ import uz.tsx.dto.announcement.AnnouncementContactDto;
 import uz.tsx.entity.announcement.AnnouncementContactEntity;
 import uz.tsx.repository.AnnouncementContactRepository;
 import uz.tsx.service.AnnouncementContactService;
+import uz.tsx.validation.Validation;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,5 +30,21 @@ public class AnnouncementContactServiceImpl implements AnnouncementContactServic
         announcementContactRepository.save(entity);
 
         return entity.toDto(entity, new AnnouncementContactDto());
+    }
+
+    @Override
+    public AnnouncementContactDto getById(Long id) {
+        if(!Validation.checkId(id)) return null;
+        return announcementContactRepository.findById(id).map(entity -> entity.toDto(entity, new AnnouncementContactDto())).orElse(null);
+    }
+
+    @Override
+    public List<AnnouncementContactDto> getAll() {
+        return null;
+    }
+
+    @Override
+    public void delete(Long id) {
+
     }
 }

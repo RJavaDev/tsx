@@ -2,8 +2,12 @@ package uz.tsx.service.impl;
 
 import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import uz.tsx.dto.CurrencyDto;
 import uz.tsx.dto.announcement.AnnouncementContactDto;
 import uz.tsx.dto.announcement.AnnouncementDto;
 import uz.tsx.dto.announcement.AnnouncementPriceDto;
@@ -13,9 +17,11 @@ import uz.tsx.dto.announcement.option.AnnounceOptionDto;
 import uz.tsx.dto.announcement.option.OptionDto;
 import uz.tsx.dto.announcement.selector.AnnounceOptionSelector;
 import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
+import uz.tsx.dto.dtoUtil.DataTable;
 import uz.tsx.entity.announcement.AnnouncementEntity;
 import uz.tsx.entity.announcement.additionInfo.AdditionGroupEntity;
 import uz.tsx.entity.announcement.option.OptionEntity;
+import uz.tsx.interfaces.AnnouncementInterface;
 import uz.tsx.repository.AnnounceAdditionGroupRepository;
 import uz.tsx.repository.AnnouncementRepository;
 import uz.tsx.repository.OptionRepository;
@@ -69,7 +75,10 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         Optional<AnnouncementEntity> entityOpt = announcementRepository.findById(announceId);
         AnnouncementDto announcementDto = entityOpt.map(AnnouncementEntity::toDto).
                 orElseThrow(() -> new IllegalStateException("Announce is not found"));
+
         announcementDto.setCategory(categoryService.findTreeFromBottom(announcementDto.getCategoryId()));
+        announcementDto.setPriceTag(announcementPriceService.getById(announcementDto.getPriceTagId()));
+        announcementDto.setContactInfo(announcementContactService.getById(announcementDto.getContactInfoId()));
 
         List<Long> groupIds = new ArrayList<>();
         List<Long> optionIds = new ArrayList<>();
@@ -180,5 +189,64 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         createdAnnounce.setPriceTag(createdPriceTag);
 
         return createdAnnounce;
+    }
+
+    @Override
+    public DataTable<AnnouncementDto> table1(Map<String, Object> filter) {
+        Integer page = 1;
+        Integer size = 20;
+
+        if(filter != null) {
+            page = MapUtils.getInteger(filter, "page", 1);
+            size = MapUtils.getInteger(filter, "size", 20);
+        }
+
+        Page<AnnouncementEntity> pageAnnouncement = announcementRepository.findPage(PageRequest.of(page - 1, size));
+        List<AnnouncementDto> dtos = pageAnnouncement.stream().map(AnnouncementEntity::toDto).toList();
+
+        DataTable<AnnouncementDto> datatable = new DataTable<>();
+        datatable.setTotal((int) pageAnnouncement.getTotalElements());
+        datatable.setRows(dtos);
+
+        return datatable;
+    }
+
+    @Override
+    public DataTable<AnnouncementDto> table2(Map<String, Object> filter) {
+        Integer page = 1;
+        Integer size = 20;
+
+        if(filter != null) {
+            page = MapUtils.getInteger(filter, "page", 1);
+            size = MapUtils.getInteger(filter, "size", 20);
+        }
+
+        Page<AnnouncementInterface> pageAnnouncement = announcementRepository.findPageInterface(PageRequest.of(page - 1, size));
+        List<AnnouncementDto> dtos = pageAnnouncement.stream().map(aInterface -> {
+            AnnouncementDto dto = new AnnouncementDto();
+            AnnouncementPriceDto priceDto = new AnnouncementPriceDto();
+            AnnouncementContactDto contactDto = new AnnouncementContactDto();
+            BeanUtils.copyProperties(aInterface, dto);
+            BeanUtils.copyProperties(aInterface, priceDto, "id");
+            BeanUtils.copyProperties(aInterface, contactDto, "id");
+
+            if(Validation.checkId(aInterface.getCurrencyId())) {
+                CurrencyDto cDto = new CurrencyDto();
+                cDto.setId(aInterface.getCurrencyId());
+                cDto.setCode(aInterface.getCurrencyCode());
+                priceDto.setCurrencyId(aInterface.getCurrencyId());
+                priceDto.setCurrency(cDto);
+            }
+
+            dto.setPriceTag(priceDto);
+            dto.setContactInfo(contactDto);
+            return dto;
+        }).toList();
+
+        DataTable<AnnouncementDto> datatable = new DataTable<>();
+        datatable.setTotal((int) pageAnnouncement.getTotalElements());
+        datatable.setRows(dtos);
+
+        return datatable;
     }
 }

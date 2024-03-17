@@ -19,4 +19,6 @@ public class AnnouncementContactEntity extends BaseEntity {
     private String phone;
 
     private String gmail;
+
+    private String address;
 }
