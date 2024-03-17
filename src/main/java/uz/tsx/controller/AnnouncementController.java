@@ -1,6 +1,7 @@
 package uz.tsx.controller;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import uz.tsx.dto.announcement.AnnouncementDto;
 import uz.tsx.dto.dtoUtil.DataTable;
 import uz.tsx.dto.dtoUtil.HttpResponse;
@@ -18,6 +19,12 @@ public class AnnouncementController {
 
     public AnnouncementController(AnnouncementService announcementService) {
         this.announcementService = announcementService;
+    }
+
+    @PostMapping("/save/images")
+    public HttpResponse<AnnouncementDto> saveImages(@RequestParam("announceId") Long announceId,
+                                           @RequestParam("images") MultipartFile[] images) {
+        return HttpResponse.build(true, "OK", announcementService.saveAnnounceImages(announceId, images));
     }
 
     @GetMapping("/all/about")

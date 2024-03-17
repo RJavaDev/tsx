@@ -14,7 +14,6 @@ import uz.tsx.service.CategoryService;
 import uz.tsx.validation.CommonSchemaValidator;
 import uz.tsx.validation.Validation;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 

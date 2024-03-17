@@ -18,7 +18,9 @@ public class AnnouncementDto extends BaseDto {
 
     private CategoryDto category;
 
-    private String attachPhotosUrl;
+    private List<String> attachPhotosUrl;
+
+    private List<String> attachMiniPhotosUrl;
 
     private String description;
 

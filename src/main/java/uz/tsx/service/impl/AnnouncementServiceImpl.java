@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import uz.tsx.dto.CurrencyDto;
 import uz.tsx.dto.announcement.AnnouncementContactDto;
 import uz.tsx.dto.announcement.AnnouncementDto;
@@ -18,6 +19,7 @@ import uz.tsx.dto.announcement.option.OptionDto;
 import uz.tsx.dto.announcement.selector.AnnounceOptionSelector;
 import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
 import uz.tsx.dto.dtoUtil.DataTable;
+import uz.tsx.entity.AttachEntity;
 import uz.tsx.entity.announcement.AnnouncementEntity;
 import uz.tsx.entity.announcement.additionInfo.AdditionGroupEntity;
 import uz.tsx.entity.announcement.option.OptionEntity;
@@ -25,10 +27,7 @@ import uz.tsx.interfaces.AnnouncementInterface;
 import uz.tsx.repository.AnnounceAdditionGroupRepository;
 import uz.tsx.repository.AnnouncementRepository;
 import uz.tsx.repository.OptionRepository;
-import uz.tsx.service.AnnouncementContactService;
-import uz.tsx.service.AnnouncementPriceService;
-import uz.tsx.service.AnnouncementService;
-import uz.tsx.service.CategoryService;
+import uz.tsx.service.*;
 import uz.tsx.validation.Validation;
 
 import java.util.*;
@@ -43,6 +42,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     private final AnnouncementContactService announcementContactService;
     private final AnnouncementPriceService announcementPriceService;
     private final CategoryService categoryService;
+    private final AttachService attachService;
 
     @Override
     public List<AnnouncementDto> findAllAnnouncements() {
@@ -248,5 +248,29 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         datatable.setRows(dtos);
 
         return datatable;
+    }
+
+    @Override
+    public AnnouncementDto saveAnnounceImages(Long announceId, MultipartFile[] imgFiles) {
+        if(!Validation.checkId(announceId) || imgFiles == null)
+            throw new IllegalStateException("Bad request");
+
+        AnnouncementEntity entity = announcementRepository.findById(announceId).
+                orElseThrow(() -> new IllegalStateException("Announce is not found"));
+
+        AnnouncementDto dto = entity.toDto();
+        dto.setAttachPhotosUrl(new ArrayList<>());
+        dto.setAttachMiniPhotosUrl(new ArrayList<>());
+
+        List<AttachEntity> attachEntities = attachService.saveImgFiles(imgFiles);
+        entity.setAttachPhotos(attachEntities);
+        announcementRepository.save(entity);
+
+        attachEntities.forEach(aEntity -> {
+            dto.getAttachPhotosUrl().add("/attach/file/" + aEntity.getOriginName());
+            dto.getAttachMiniPhotosUrl().add("/attach/file/" + aEntity.getMiniName());
+        });
+
+        return dto;
     }
 }
