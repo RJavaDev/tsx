@@ -8,7 +8,7 @@ import org.springframework.util.CollectionUtils;
 import uz.tsx.constants.EntityStatus;
 import uz.tsx.entity.*;
 import uz.tsx.exception.*;
-import uz.tsx.interfaces.UserInterface;
+import uz.tsx.exception.interfaces.UserInterface;
 import uz.tsx.repository.*;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class CommonSchemaValidator {
 
     private final CategoryRepository categoryRepository;
 
-    private final EmailRepository emailRepository;
+
 
     private void throwIdIsEmpty(String attachId) {
         if (attachId.isEmpty()) {
@@ -162,13 +162,5 @@ public class CommonSchemaValidator {
         if (Objects.isNull(id)) return null;
         return categoryRepository.findByCategoryId(id).orElseThrow(()-> new CategoryNotFoundException(id + "- id not found!"));
     }
-    public void validateEmail(String email){
-        if (Objects.isNull(email)){
-            throw new NotFoundException ("must not be null!");
-        }
-        Optional<EmailEntity> byEmail = emailRepository.getEmail(email);
-        if (byEmail.isPresent()){
-            throw new IllegalArgumentException(String.format("email %s already exist", email));
-        }
-    }
+
 }

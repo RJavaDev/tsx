@@ -6,10 +6,9 @@ import uz.tsx.dto.UserDto;
 import uz.tsx.dto.request.UserCreateRequestDto;
 import uz.tsx.dto.request.UserUpdateRequestDto;
 import uz.tsx.dto.response.AttachUrlResponse;
-import uz.tsx.entity.AttachEntity;
 import uz.tsx.entity.UserEntity;
 import uz.tsx.entity.role.RoleEnum;
-import uz.tsx.interfaces.UserInterface;
+import uz.tsx.exception.interfaces.UserInterface;
 
 import java.util.ArrayList;
 import java.util.List;

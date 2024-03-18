@@ -1,7 +1,7 @@
 package uz.tsx.service;
 
 import uz.tsx.entity.UserEntity;
-import uz.tsx.interfaces.UserInterface;
+import uz.tsx.exception.interfaces.UserInterface;
 
 public interface UserService extends BaseInterface<UserInterface>{
 
