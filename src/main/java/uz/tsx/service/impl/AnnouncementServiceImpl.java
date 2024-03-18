@@ -80,6 +80,12 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         announcementDto.setPriceTag(announcementPriceService.getById(announcementDto.getPriceTagId()));
         announcementDto.setContactInfo(announcementContactService.getById(announcementDto.getContactInfoId()));
 
+        List<String> attachImages = announcementRepository.getAttachImages(entityOpt.get().getId());
+        attachImages.forEach(originName -> {
+            announcementDto.getAttachPhotosUrl().add("/attach/file/" + originName);
+            announcementDto.getAttachMiniPhotosUrl().add("/attach/file/" + attachService.getMinAttachImgName(originName));
+        });
+
         List<Long> groupIds = new ArrayList<>();
         List<Long> optionIds = new ArrayList<>();
         if(announcementDto.getAdditionalInfos() != null) {
@@ -259,9 +265,6 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                 orElseThrow(() -> new IllegalStateException("Announce is not found"));
 
         AnnouncementDto dto = entity.toDto();
-        dto.setAttachPhotosUrl(new ArrayList<>());
-        dto.setAttachMiniPhotosUrl(new ArrayList<>());
-
         List<AttachEntity> attachEntities = attachService.saveImgFiles(imgFiles);
         entity.setAttachPhotos(attachEntities);
         announcementRepository.save(entity);

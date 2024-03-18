@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import uz.tsx.entity.announcement.AnnouncementEntity;
 import uz.tsx.interfaces.AnnouncementInterface;
 
@@ -25,4 +26,10 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             countQuery = "select count(*) from tsx_announcement where status <> 'DELETED'",
             nativeQuery = true)
     Page<AnnouncementInterface> findPageInterface(Pageable pageable);
+
+    @Query(value = "select at.origin_name\n" +
+                   "from announcement_attach aa \n" +
+                   "left join tsx_attach at on at.id = aa.attach_id\n" +
+                   "where aa.announcement_id = :announce_id", nativeQuery = true)
+    List<String> getAttachImages(@Param("announce_id") Long announceId);
 }

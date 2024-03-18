@@ -18,9 +18,9 @@ public class AnnouncementDto extends BaseDto {
 
     private CategoryDto category;
 
-    private List<String> attachPhotosUrl;
+    private List<String> attachPhotosUrl = new ArrayList<>();
 
-    private List<String> attachMiniPhotosUrl;
+    private List<String> attachMiniPhotosUrl = new ArrayList<>();
 
     private String description;
 

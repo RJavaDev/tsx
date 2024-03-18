@@ -152,6 +152,7 @@ public class AttachServiceImpl implements AttachService {
         }
     }
 
+    @Override
     public String getMinAttachImgName(String originName) {
         return new StringBuilder(originName).insert(originName.lastIndexOf("."), SUFFIX_MINI_IMG).toString();
     }
