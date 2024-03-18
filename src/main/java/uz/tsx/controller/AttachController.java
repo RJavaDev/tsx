@@ -2,7 +2,10 @@ package uz.tsx.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.activation.MimetypesFileTypeMap;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +22,11 @@ import uz.tsx.dto.response.AttachDownloadDTO;
 import uz.tsx.dto.response.AttachResponseDto;
 import uz.tsx.service.AttachService;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.List;
 
 @RestController
@@ -28,6 +36,11 @@ import java.util.List;
 public class AttachController {
 
     private final AttachService service;
+
+
+    @Value("${attach.upload.folder}")
+    private String ATTACH_UPLOAD_FOLDER;
+
 
     @Operation(summary = "Upload Image", description = "This method is used to upload an image")
     @PostMapping("/upload")
@@ -86,6 +99,26 @@ public class AttachController {
     public ResponseEntity<?> deleteById(@PathVariable("fileName") String fileName) {
         String result = service.deleteById(fileName);
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/file/{filename}")
+    public void file(HttpServletResponse response,
+                     @PathVariable("filename") String fileName) throws FileNotFoundException {
+
+        File file = new File(ATTACH_UPLOAD_FOLDER, fileName);
+        if(!file.exists()) throw new FileNotFoundException();
+
+        /*Finding MIME type for explicitly setting MIME */
+        String mimeType = new MimetypesFileTypeMap().getContentType(file);
+        response.setContentType(mimeType);
+
+        //Browser tries to open it
+        response.addHeader("Content-Disposition", "attachment;filename=" + fileName);
+
+        try{
+            OutputStream outputStream = response.getOutputStream();
+            outputStream.write(Files.readAllBytes(file.toPath()));
+        } catch(IOException ignore){}
     }
 
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.BeanUtils;
 import uz.tsx.constants.EntityStatus;
 import uz.tsx.constants.TableNames;
 import uz.tsx.dto.CategoryDto;
@@ -19,7 +20,6 @@ import java.util.stream.Collectors;
 @Table(name = TableNames.CATEGORY)
 public class CategoryEntity extends BaseForParentAndChild {
 
-
     @OneToOne(cascade = CascadeType.ALL)
     private AttachEntity attach;
 
@@ -34,7 +34,8 @@ public class CategoryEntity extends BaseForParentAndChild {
 
     @JsonIgnore
     public CategoryDto getDto(boolean withChildren) {
-        CategoryDto dto = entityToDto(this, new CategoryDto());
+        CategoryDto dto = new CategoryDto();
+        BeanUtils.copyProperties(this, dto);
         if (this.getChildren() != null && withChildren) {
             dto.setChildren(
                     this.getChildren().stream()

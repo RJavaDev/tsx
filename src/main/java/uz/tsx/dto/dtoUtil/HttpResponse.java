@@ -1,9 +1,14 @@
 package uz.tsx.dto.dtoUtil;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+@Getter
+@Setter
 public class HttpResponse<T> {
     private boolean success;
     private String message;
@@ -49,31 +54,31 @@ public class HttpResponse<T> {
     }
 
     public static <T> HttpResponse<T> build() {
-        return new HttpResponse();
+        return new HttpResponse<>();
     }
 
     public static <T> HttpResponse<T> build(boolean success) {
-        return new HttpResponse(success);
+        return new HttpResponse<>(success);
     }
 
     public static <T> HttpResponse<T> build(boolean success, ResourceBundle bundle) {
-        return new HttpResponse(success, bundle);
+        return new HttpResponse<>(success, bundle);
     }
 
     public static <T> HttpResponse<T> build(boolean success, ResourceBundle bundle, String messageFormat) {
-        return new HttpResponse(success, bundle, messageFormat);
+        return new HttpResponse<>(success, bundle, messageFormat);
     }
 
     public static <T> HttpResponse<T> build(boolean success, String message) {
-        return new HttpResponse(success, message);
+        return new HttpResponse<>(success, message);
     }
 
     public static <T> HttpResponse<T> build(boolean success, String message, T body) {
-        return new HttpResponse(success, message, body);
+        return new HttpResponse<>(success, message, body);
     }
 
     public static <T> HttpResponse<T> build(boolean success, String message, T body, int code) {
-        return new HttpResponse(success, message, body, code);
+        return new HttpResponse<>(success, message, body, code);
     }
 
     public HttpResponse<T> success(boolean success) {
@@ -110,45 +115,13 @@ public class HttpResponse<T> {
     }
 
     public static Map<Object, Object> objToMap(Object... objects) {
-        Map<Object, Object> map = new HashMap();
+        Map<Object, Object> map = new HashMap<>();
 
         for(int i = 1; i <= objects.length / 2; ++i) {
             map.put(objects[2 * i - 2], objects[2 * i - 1]);
         }
 
         return map;
-    }
-
-    public boolean isSuccess() {
-        return this.success;
-    }
-
-    public String getMessage() {
-        return this.message;
-    }
-
-    public T getBody() {
-        return this.body;
-    }
-
-    public int getCode() {
-        return this.code;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public void setBody(T body) {
-        this.body = body;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
     }
 
     private ResourceBundle getBundle() {
@@ -166,7 +139,8 @@ public class HttpResponse<T> {
         this.messageFormat = messageFormat;
     }
 
-    public static enum Status {
+    @Getter
+    public enum Status {
         OK(200, "OK"),
         BAD_REQUEST(400, "Bad Request"),
         NOT_FOUND(404, "Not Found"),
@@ -185,13 +159,6 @@ public class HttpResponse<T> {
             this.text = text;
         }
 
-        public int getCode() {
-            return this.code;
-        }
-
-        public String getText() {
-            return this.text;
-        }
     }
 
 }

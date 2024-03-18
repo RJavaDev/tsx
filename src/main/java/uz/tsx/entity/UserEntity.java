@@ -2,15 +2,17 @@ package uz.tsx.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.tsx.constants.TableNames;
 import uz.tsx.dto.UserDto;
-import uz.tsx.entity.base.BaseServerModifierEntity;
+import uz.tsx.entity.base.BaseEntity;
 import uz.tsx.entity.role.RoleEnum;
 
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = TableNames.TSX_USER)
-public class UserEntity extends BaseServerModifierEntity implements UserDetails {
+public class UserEntity extends BaseEntity implements UserDetails {
 
     private String firstname;
 
@@ -42,7 +44,6 @@ public class UserEntity extends BaseServerModifierEntity implements UserDetails 
 
     @Enumerated(EnumType.STRING)
     private List<RoleEnum> roleEnumList;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

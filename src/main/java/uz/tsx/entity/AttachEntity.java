@@ -19,8 +19,13 @@ public class AttachEntity {
     @Id
     @GenericGenerator(name = "attach_uuid", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
+
     @Column(name = "origin_name")
     private String originName;
+
+    @Column(name = "mini_name")
+    private String miniName;
+
     @Column
     private Long size;
 

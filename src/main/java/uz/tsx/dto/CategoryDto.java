@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uz.tsx.dto.base.BaseServerModifierDto;
+import uz.tsx.dto.base.BaseDto;
 import uz.tsx.dto.response.AttachUrlResponse;
 import uz.tsx.entity.CategoryEntity;
 
@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryDto extends BaseServerModifierDto {
+public class CategoryDto extends BaseDto {
 
     @NotBlank(message = "name must not be empty")
     private String name_uz;
@@ -24,7 +24,9 @@ public class CategoryDto extends BaseServerModifierDto {
     @NotBlank(message = "name must not be empty")
     private String name_en;
 
-    private Integer parentId;
+    private Long parentId;
+
+    private CategoryDto parent;
 
     private List<CategoryDto> children;
 

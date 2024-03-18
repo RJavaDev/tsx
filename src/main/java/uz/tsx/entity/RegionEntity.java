@@ -22,7 +22,7 @@ public class RegionEntity extends BaseForParentAndChild {
     List<RegionEntity> children = new ArrayList<>();
 
     @JsonIgnore
-    public RegionDto toDto(String... ignoreProperties){
+    public RegionDto toDto(String... ignoreProperties) {
         return toDto(this, new RegionDto(), ignoreProperties);
     }
 }

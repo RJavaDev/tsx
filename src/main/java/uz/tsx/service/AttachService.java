@@ -9,6 +9,7 @@ import uz.tsx.entity.AttachEntity;
 import java.util.List;
 
 public interface AttachService {
+    String SUFFIX_MINI_IMG = "_h48";
 
     AttachEntity saveAttach(MultipartFile file);
 
@@ -19,4 +20,8 @@ public interface AttachService {
     Page<AttachResponseDto> getWithPage(Integer page, Integer size);
 
     String deleteById(String fileName);
+
+    List<AttachEntity> saveImgFiles(MultipartFile[] files);
+
+    String getMinAttachImgName(String originName);
 }

@@ -1,6 +1,7 @@
 package uz.tsx.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -24,9 +25,8 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.nio.file.StandardCopyOption;
+import java.util.*;
 
 
 @Service
@@ -34,7 +34,7 @@ import java.util.Optional;
 public class AttachServiceImpl implements AttachService {
 
     @Value("${attach.upload.folder}")
-    private String attachUploadFolder;
+    private String ATTACH_UPLOAD_FOLDER;
 
 
     private final AttachRepository repository;
@@ -64,7 +64,7 @@ public class AttachServiceImpl implements AttachService {
         try {
             AttachEntity entity = getAttach(fileName);
 
-            File file = new File(attachUploadFolder + entity.getPath() + "/" + fileName);
+            File file = new File(ATTACH_UPLOAD_FOLDER + entity.getPath() + "/" + fileName);
 
             File dir = file.getParentFile();
             File rFile = new File(dir, entity.getId() + "." + entity.getType());
@@ -98,7 +98,7 @@ public class AttachServiceImpl implements AttachService {
     public String deleteById(String fileName) {
         try {
             AttachEntity entity = getAttach(fileName);
-            Path file = Paths.get(attachUploadFolder + entity.getPath() + "/" + fileName + "." + entity.getType());
+            Path file = Paths.get(ATTACH_UPLOAD_FOLDER + entity.getPath() + "/" + fileName + "." + entity.getType());
 
             Files.delete(file);
             repository.delete(entity);
@@ -123,7 +123,7 @@ public class AttachServiceImpl implements AttachService {
         try {
 
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(attachUploadFolder + pathFolder + "/" + fileName + "." + extension);
+            Path path = Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder + "/" + fileName + "." + extension);
             File newFile = Files.write(path, bytes).toFile();
             contentCheck(extension, newFile);
 
@@ -150,6 +150,38 @@ public class AttachServiceImpl implements AttachService {
         } catch (EncoderException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public String getMinAttachImgName(String originName) {
+        return new StringBuilder(originName).insert(originName.lastIndexOf("."), SUFFIX_MINI_IMG).toString();
+    }
+
+
+    @Override
+    public List<AttachEntity> saveImgFiles(MultipartFile[] files) {                      // save files and return attaches
+        List<AttachEntity> attachEntities = new ArrayList<>();
+        for (MultipartFile file : files) {
+            AttachEntity attach = AttachConvert.generateAttachEntity(file.getOriginalFilename(), file.getSize(), file.getContentType());
+            attachEntities.add(attach);
+
+            try {
+                String newFileName = UUID.randomUUID() + "_" + Objects.requireNonNull(file.getOriginalFilename()).replaceAll("[+]", " ");
+                Files.copy(file.getInputStream(), Paths.get(ATTACH_UPLOAD_FOLDER).resolve(newFileName), StandardCopyOption.REPLACE_EXISTING);
+                attach.setOriginName(newFileName);
+
+                if (Objects.requireNonNull(file.getContentType()).startsWith("image")) {
+                    String newImgHeight48File = new StringBuilder(newFileName).insert(newFileName.lastIndexOf("."), SUFFIX_MINI_IMG).toString();
+                    Thumbnails.of(file.getInputStream()).height(48).toFile(Paths.get(ATTACH_UPLOAD_FOLDER).resolve(newImgHeight48File).toAbsolutePath().toString());
+                    attach.setMiniName(newImgHeight48File);
+                }
+
+            } catch (IOException ignore) {}
+
+            repository.save(attach);
+        }
+
+        return attachEntities;
     }
 
 }

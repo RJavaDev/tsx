@@ -78,6 +78,9 @@ public class UserConvert {
     }
 
     private List<RoleEnum> stringToRoleList(String roles) {
+        if(roles.startsWith("{") && roles.endsWith("}"))
+            roles = roles.substring(1, roles.length() - 1);
+
         String[] split = roles.split(",");
         List<RoleEnum> roleEnums = new ArrayList<>();
         for (String s : split) {
