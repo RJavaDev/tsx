@@ -14,7 +14,7 @@ import uz.tsx.entity.role.RoleEnum;
 import uz.tsx.exception.AuthenticationException;
 import uz.tsx.exception.UserDataException;
 import uz.tsx.exception.UserUnauthorizedAction;
-import uz.tsx.interfaces.UserInterface;
+import uz.tsx.exception.interfaces.UserInterface;
 import uz.tsx.repository.UserRepository;
 import uz.tsx.service.AuthenticationService;
 import uz.tsx.validation.CommonSchemaValidator;

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.tsx.common.util.SecurityUtils;
 import uz.tsx.entity.UserEntity;
-import uz.tsx.interfaces.UserInterface;
+import uz.tsx.exception.interfaces.UserInterface;
 import uz.tsx.repository.UserRepository;
 import uz.tsx.service.UserService;
 import uz.tsx.validation.CommonSchemaValidator;

@@ -5,9 +5,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import uz.tsx.entity.UserEntity;
-import uz.tsx.interfaces.UserInterface;
+import uz.tsx.exception.interfaces.UserInterface;
 
 import java.util.List;
 import java.util.Optional;
