@@ -20,7 +20,7 @@ public class SMSController {
 
     private final UserService userService;
 
-    @Operation(summary = "This method for get", description = "This method is used to get how many points the admin user has scored")
+    @Operation(summary = "This method for get", description = "This send sms email or phone")
     @GetMapping(value = "/send-sms")
     public HttpResponse<Object> sendSms() {
 
@@ -34,7 +34,7 @@ public class SMSController {
 
     }
 
-    @Operation(summary = "This method for get", description = "This method is used to get how many points the admin user has scored")
+    @Operation(summary = "This method for get", description = "This is method to activate the user by sms code")
     @GetMapping(value = "/activate/{smsCode}")
     public HttpResponse<Object> isValidSMSCode(@PathVariable String smsCode) {
 
