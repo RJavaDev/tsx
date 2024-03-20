@@ -1,4 +1,4 @@
-package uz.tsx.service.smsUtil.util;
+package uz.tsx.SMS;
 
 public interface SMSConstant {
     String CLIENT_ID = "4116";

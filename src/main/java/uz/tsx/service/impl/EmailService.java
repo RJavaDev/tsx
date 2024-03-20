@@ -5,30 +5,24 @@ import org.springframework.mail.SimpleMailMessage;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import uz.tsx.validation.CommonSchemaValidator;
-
-
-import java.util.List;
 
 
 @Service
 @RequiredArgsConstructor
-public class EmailServiceImpl {
+public class EmailService {
 
     private final JavaMailSender javaMailSender;
 
-    public boolean sendMessage(String emailAddress, int code) {
+    public void sendMessage(String emailAddress, String code) {
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
             simpleMailMessage.setFrom("tsx@gmail.com");
             simpleMailMessage.setTo(emailAddress);
             simpleMailMessage.setSubject("tsx@gmail.com");
-            simpleMailMessage.setText(String.valueOf(code));
+            simpleMailMessage.setText(code);
             javaMailSender.send(simpleMailMessage);
-            return true;
         } catch (Exception e) {
-            return false;
+            e.printStackTrace();
         }
     }
 }

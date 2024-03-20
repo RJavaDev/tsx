@@ -1,8 +1,8 @@
-package uz.tsx.service.smsUtil.util;
+package uz.tsx.SMS.model;
 
 
 import lombok.Data;
-import uz.tsx.service.smsUtil.util.SMSConstant;
+import uz.tsx.SMS.SMSConstant;
 
 @Data
 public class SMSModel {

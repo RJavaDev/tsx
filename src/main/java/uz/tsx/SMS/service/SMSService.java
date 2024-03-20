@@ -1,9 +1,8 @@
-package uz.tsx.service.smsUtil.util;
+package uz.tsx.SMS.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ClientRequest;
@@ -11,13 +10,15 @@ import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
-import uz.tsx.service.smsUtil.util.*;
+import uz.tsx.SMS.SMSConstant;
+import uz.tsx.SMS.model.EskizLoginDto;
+import uz.tsx.SMS.model.EskizToken;
+import uz.tsx.SMS.model.SMSModel;
 
 @Service
-@RequiredArgsConstructor
 public class SMSService {
 
-    public void login(){
+    private void login(){
 
         EskizLoginDto loginModel = new EskizLoginDto();
 
@@ -45,10 +46,10 @@ public class SMSService {
         System.out.println(response);
     }
 
-    public String sendSMS(SMSDto smsDto) {
+    public String sendSMS(String phoneNumber, String code) {
         WebClient.Builder client = WebClient.builder();
 
-        SMSModel smsModel = new SMSModel(smsDto.getPhone(), smsDto.getText());
+        SMSModel smsModel = new SMSModel(phoneNumber, code);
 
         String headerToken = EskizToken.getToken();
         String res=null;
@@ -68,7 +69,7 @@ public class SMSService {
                 }catch (Exception t){
                     System.out.println("send email message tsx admin ");
                 }
-                sendSMS(smsDto);
+                sendSMS(phoneNumber, code);
             }
             System.out.println(e.getMessage());
             System.out.println(e);

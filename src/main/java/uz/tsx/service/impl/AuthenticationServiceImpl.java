@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.tsx.common.util.SecurityUtils;
 import uz.tsx.config.token.JwtService;
+import uz.tsx.constants.EntityStatus;
 import uz.tsx.controller.convert.TokenResponseConvert;
 import uz.tsx.dto.request.LoginRequestDto;
 import uz.tsx.dto.response.TokenResponseDto;
@@ -59,6 +60,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userForCreate(user);
+
+        user.setStatus(EntityStatus.PASSIVE);
 
         return repository.save(user);
 

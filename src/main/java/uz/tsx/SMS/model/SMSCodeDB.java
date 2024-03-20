@@ -1,4 +1,4 @@
-package uz.tsx.service.smsUtil.util;
+package uz.tsx.SMS.model;
 
 import lombok.experimental.UtilityClass;
 
@@ -11,7 +11,7 @@ public class SMSCodeDB {
     private static final Map<String, String> smsCode = new HashMap<>();
 
     public void save(String username, String token){
-        smsCode.put(username, token);
+       smsCode.put(username, token);
     }
 
     public String getToken(String username){

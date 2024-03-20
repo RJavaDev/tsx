@@ -1,4 +1,4 @@
-package uz.tsx.service.smsUtil.util;
+package uz.tsx.SMS.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

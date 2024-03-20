@@ -1,4 +1,4 @@
-package uz.tsx.service.smsUtil.util;
+package uz.tsx.SMS.model;
 
 import lombok.Data;
 
