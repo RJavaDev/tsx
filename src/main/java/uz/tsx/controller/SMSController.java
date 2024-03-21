@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 import uz.tsx.dto.dtoUtil.HttpResponse;
+import uz.tsx.dto.request.SMSCodeDto;
 import uz.tsx.service.UserService;
 import uz.tsx.SMS.service.SMSCodeService;
 
@@ -35,10 +36,10 @@ public class SMSController {
     }
 
     @Operation(summary = "This method for get", description = "This is method to activate the user by sms code")
-    @GetMapping(value = "/activate/{smsCode}")
-    public HttpResponse<Object> isValidSMSCode(@PathVariable String smsCode) {
+    @PostMapping(value = "/activate")
+    public HttpResponse<Object> isValidSMSCode(@RequestBody SMSCodeDto smsCode) {
 
-        boolean valid = smsCodeService.isValid(smsCode);
+        boolean valid = smsCodeService.isValid(smsCode.getSmsCode());
 
         if (valid) {
             userService.userActive();
