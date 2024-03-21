@@ -83,6 +83,12 @@ public class CommonSchemaValidator {
         );
     }
 
+    public UserEntity validateUserEntity(String username) {
+        return userRepository.getByUsername(username).orElseThrow(
+                () -> new AuthenticationException(username + " username not found!")
+        );
+    }
+
     public UserInterface validateUser(String username) {
         return userRepository.getUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username + " username id not found!")
         );
