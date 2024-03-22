@@ -3,6 +3,7 @@ package uz.tsx.controller;
 import org.springframework.web.bind.annotation.*;
 import uz.tsx.dto.announcement.additionInfo.AdditionComboValueDto;
 import uz.tsx.dto.announcement.additionInfo.AnnounceAdditionGroupDto;
+import uz.tsx.dto.dtoUtil.ApiResponse;
 import uz.tsx.dto.dtoUtil.HttpResponse;
 import uz.tsx.service.AnnounceAdditionGroupService;
 
@@ -19,7 +20,7 @@ public class TsxAddGroupController {
     }
 
     @GetMapping("/find/{id}")
-    public HttpResponse<AnnounceAdditionGroupDto> findById(@PathVariable("id") Long id) {
+    public ApiResponse<AnnounceAdditionGroupDto> findById(@PathVariable("id") Long id) {
         return null;
     }
 

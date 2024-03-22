@@ -4,8 +4,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uz.tsx.dto.announcement.option.OptionDto;
-import uz.tsx.dto.dtoUtil.HttpResponse;
+import uz.tsx.dto.dtoUtil.ApiResponse;
+import uz.tsx.dto.dtoUtil.ResponseCode;
+import uz.tsx.dto.dtoUtil.ResponseMessage;
 import uz.tsx.service.OptionService;
 
 import java.util.List;
@@ -21,7 +22,10 @@ public class OptionController {
     }
 
     @GetMapping("/list")
-    public HttpResponse<List<OptionDto>> getOptionsByGroup(@RequestParam(value = "groupId", required = false) Long groupId) {
-        return HttpResponse.build(true, "OK", optionService.findOptionsByGroupId(groupId));
+    public ApiResponse<Object> getOptionsByGroup(@RequestParam(value = "groupId", required = false) Long groupId) {
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
+                .body(optionService.findOptionsByGroupId(groupId))
+                .message(ResponseMessage.OK);
     }
 }
