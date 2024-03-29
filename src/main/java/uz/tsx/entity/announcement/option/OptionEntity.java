@@ -16,11 +16,14 @@ public class OptionEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name_uz;
+    @Column(name = "name_uz")
+    private String nameUz;
 
-    private String name_ru;
+    @Column(name = "name_ru")
+    private String nameRu;
 
-    private String name_en;
+    @Column(name = "name_eu")
+    private String nameEn;
 
     @Column(name = "group_id")
     private Long optionGroupId;

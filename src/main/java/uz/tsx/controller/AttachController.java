@@ -21,6 +21,8 @@ import uz.tsx.dto.dtoUtil.ApiResponse;
 import uz.tsx.dto.dtoUtil.ResponseCode;
 import uz.tsx.dto.response.AttachDownloadDTO;
 import uz.tsx.dto.response.AttachResponseDto;
+import uz.tsx.dto.response.AttachUrlResponse;
+import uz.tsx.entity.AttachEntity;
 import uz.tsx.service.AttachService;
 
 import java.io.File;
@@ -41,6 +43,11 @@ public class AttachController {
 
     @Value("${attach.upload.folder}")
     private String ATTACH_UPLOAD_FOLDER;
+
+    @PostMapping("/img-upl")
+    public List<AttachUrlResponse> upload(@RequestParam MultipartFile[] files){
+        return AttachConvert.convertToAttachUrlDto(service.saveFile(files));
+    }
 
 
     @Operation(summary = "Upload Image", description = "This method is used to upload an image")

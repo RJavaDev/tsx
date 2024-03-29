@@ -8,5 +8,6 @@ import lombok.Setter;
 @Getter
 public class AttachUrlResponse {
 
-   private String url;
+   private String originFile;
+   private String minFile;
 }

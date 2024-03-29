@@ -8,11 +8,11 @@ import uz.tsx.dto.base.BaseDto;
 @Getter
 @Setter
 public class OptionDto extends BaseDto {
-    private String name_uz;
+    private String nameUz;
 
-    private String name_ru;
+    private String nameRu;
 
-    private String name_en;
+    private String nameEn;
 
     private Long optionGroupId;
 

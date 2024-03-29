@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import uz.tsx.constants.EntityStatus;
 import uz.tsx.entity.*;
+import uz.tsx.entity.announcement.option.OptionGroupEntity;
 import uz.tsx.exception.*;
 import uz.tsx.exception.interfaces.UserInterface;
 import uz.tsx.repository.*;
@@ -28,6 +29,8 @@ public class CommonSchemaValidator {
     private final PasswordEncoder passwordEncoder;
 
     private final CategoryRepository categoryRepository;
+
+    private final OptionGroupRepository optionGroupRepository;
 
 
 
@@ -125,7 +128,7 @@ public class CommonSchemaValidator {
     }
 
     public void categoryStatusCheck(CategoryEntity categoryentity, String attachId) {
-        CategoryEntity getByCategoryNameOriginDB = categoryRepository.findByCategoryName(categoryentity.getName_en());
+        CategoryEntity getByCategoryNameOriginDB = categoryRepository.findByCategoryName(categoryentity.getNameEn());
 
         if (Objects.nonNull(getByCategoryNameOriginDB)) {
 
@@ -138,7 +141,7 @@ public class CommonSchemaValidator {
                 }
                 categoryentity.setId(getByCategoryNameOriginDB.getId());
             } else {
-                throw new CategoryNotFoundException(categoryentity.getName_en() + " such a category exists!");
+                throw new CategoryNotFoundException(categoryentity.getNameEn() + " such a category exists!");
             }
         }
         categoryAttachId(categoryentity.getParentId(), attachId);
@@ -167,6 +170,10 @@ public class CommonSchemaValidator {
     public CategoryEntity validateGetParentCategory(Long id){
         if (Objects.isNull(id)) return null;
         return categoryRepository.findByCategoryId(id).orElseThrow(()-> new CategoryNotFoundException(id + "- id not found!"));
+    }
+
+    public OptionGroupEntity validateOptionGroup(Long id){
+        return optionGroupRepository.getOption(id).orElseThrow(()-> new NotFoundException(id + " option group not found"));
     }
 
 }
