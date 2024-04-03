@@ -11,14 +11,14 @@ import lombok.Setter;
 @MappedSuperclass
 public class BaseForParentAndChild extends BaseEntity {
 
-    @Column(unique = true, nullable = false)
-    private String name_uz;
+    @Column(name = "name_uz", unique = true, nullable = false)
+    private String nameUz;
 
-    @Column(unique = true, nullable = false)
-    private String name_ru;
+    @Column(name = "name_ru", unique = true, nullable = false)
+    private String nameRu;
 
-    @Column(unique = true, nullable = false)
-    private String name_en;
+    @Column(name = "name_en", unique = true, nullable = false)
+    private String nameEn;
 
     @Column(name = "parentId")
     private Long parentId;

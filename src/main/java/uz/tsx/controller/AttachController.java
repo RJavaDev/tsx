@@ -17,9 +17,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.tsx.controller.convert.AttachConvert;
-import uz.tsx.dto.dtoUtil.HttpResponse;
+import uz.tsx.dto.dtoUtil.ApiResponse;
+import uz.tsx.dto.dtoUtil.ResponseCode;
 import uz.tsx.dto.response.AttachDownloadDTO;
 import uz.tsx.dto.response.AttachResponseDto;
+import uz.tsx.dto.response.AttachUrlResponse;
+import uz.tsx.entity.AttachEntity;
 import uz.tsx.service.AttachService;
 
 import java.io.File;
@@ -41,16 +44,20 @@ public class AttachController {
     @Value("${attach.upload.folder}")
     private String ATTACH_UPLOAD_FOLDER;
 
+    @PostMapping("/img-upl")
+    public List<AttachUrlResponse> upload(@RequestParam MultipartFile[] files){
+        return AttachConvert.convertToAttachUrlDto(service.saveFile(files));
+    }
+
 
     @Operation(summary = "Upload Image", description = "This method is used to upload an image")
     @PostMapping("/upload")
-    public HttpResponse<Object> upload(@RequestParam MultipartFile file){
+    public ApiResponse<Object> upload(@RequestParam MultipartFile file){
 
          AttachResponseDto attach = AttachConvert.from(service.saveAttach(file));
 
-        return HttpResponse.build()
-                .code(HttpResponse.Status.OK)
-                .success(true)
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
                 .body(attach)
                 .message(HttpStatus.OK.name());
     }
@@ -59,13 +66,12 @@ public class AttachController {
     @PreAuthorize("hasAnyRole('ADMIN','CONTEND_MANAGER')")
     @Operation(summary = "Upload Images List", description = "This method is used to upload an images List")
     @PostMapping("/uploads")
-    public HttpResponse<Object> uploadAttachList(@RequestParam List<MultipartFile> files){
+    public ApiResponse<Object> uploadAttachList(@RequestParam List<MultipartFile> files){
 
         List<AttachResponseDto> attachDtoList = AttachConvert.from(service.saveAttach(files));
 
-        return HttpResponse.build()
-                .code(HttpResponse.Status.OK)
-                .success(true)
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
                 .body(attachDtoList)
                 .message(HttpStatus.OK.name());
     }

@@ -18,18 +18,18 @@ public class RegionConvert {
 
     public RegionEntity convertToEntity(RegionCreateRequestDto regionCreateRequestDto){
         RegionEntity region = new RegionEntity();
-        region.setName_uz(regionCreateRequestDto.getName_uz());
-        region.setName_ru(regionCreateRequestDto.getName_ru());
-        region.setName_en(regionCreateRequestDto.getName_en());
+        region.setNameUz(regionCreateRequestDto.getNameUz());
+        region.setNameRu(regionCreateRequestDto.getNameRu());
+        region.setNameEn(regionCreateRequestDto.getNameEn());
         region.setParentId(regionCreateRequestDto.getParentId());
         return region;
     }
 
     public RegionEntity convertToEntity(RegionUpdateRequestDto regionUpdateRequestDto){
         RegionEntity region = new RegionEntity();
-        region.setName_uz(regionUpdateRequestDto.getName_uz());
-        region.setName_en(regionUpdateRequestDto.getName_en());
-        region.setName_ru(regionUpdateRequestDto.getName_ru());
+        region.setNameUz(regionUpdateRequestDto.getNameUz());
+        region.setNameEn(regionUpdateRequestDto.getNameEn());
+        region.setNameRu(regionUpdateRequestDto.getNameRu());
         region.setParentId(regionUpdateRequestDto.getParentId());
         return region;
     }

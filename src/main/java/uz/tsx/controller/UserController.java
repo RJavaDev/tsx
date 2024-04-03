@@ -1,20 +1,18 @@
 package uz.tsx.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 import uz.tsx.controller.convert.SecurityUtils;
 import uz.tsx.controller.convert.UserConvert;
 import uz.tsx.dto.UserDto;
-import uz.tsx.dto.dtoUtil.HttpResponse;
+import uz.tsx.dto.dtoUtil.ApiResponse;
+import uz.tsx.dto.dtoUtil.ResponseCode;
+import uz.tsx.dto.dtoUtil.ResponseMessage;
 import uz.tsx.dto.request.UserUpdateRequestDto;
 import uz.tsx.entity.UserEntity;
 import uz.tsx.exception.interfaces.UserInterface;
@@ -32,90 +30,81 @@ public class UserController {
 
     private final UserService service;
 
-
-
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "This method for get", description = "This method is used to get how many points the admin user has scored")
     @GetMapping(value = "/info/{id}")
-    public HttpResponse<Object> getUserInformation(@PathVariable Long id) {
+    public ApiResponse<Object> getUserInformation(@PathVariable Long id) {
 
         UserInterface userInformation = service.getById(id);
         UserDto userDto = UserConvert.from(userInformation);
 
-        return HttpResponse.build()
-                .code(HttpResponse.Status.OK)
-                .success(true)
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
                 .body(userDto)
-                .message(HttpResponse.Status.OK.name());
+                .message(ResponseMessage.OK);
 
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("permitAll()")
     @Operation(summary = "Get My User Information", description = "Retrieve all the information about the current authenticated user.")
-    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = HttpResponse.class)))
     @GetMapping(value = "/get-me")
-    public HttpResponse<Object> getMe() {
+    public ApiResponse<Object> getMe() {
 
         UserEntity me = SecurityUtils.getUser();
 
         UserDto meInformation = UserConvert.from(Objects.requireNonNull(me));
 
-        return HttpResponse.build()
-                .code(HttpResponse.Status.OK)
-                .success(true)
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
                 .body(meInformation)
-                .message(HttpStatus.OK.name());
+                .message(ResponseMessage.OK);
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "This method for get", description = "This method provides information about all users to the administrator")
     @GetMapping(value = "/get/all")
-    public HttpResponse<Object> getUserAll() {
+    public ApiResponse<Object> getUserAll() {
 
         List<UserInterface> userInformation = service.getAll();
         List<UserDto> userDto = UserConvert.from(userInformation);
 
-        return HttpResponse.build()
-                .code(HttpResponse.Status.OK)
-                .success(true)
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
                 .body(userDto)
-                .message(HttpResponse.Status.OK.name());
-
+                .message(ResponseMessage.OK);
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("permitAll()")
     @Operation(summary = "This method for update", description = "This method updates the user's data")
     @PatchMapping(value = "/update-me")
-    public HttpResponse<Object> updateMe(@RequestBody UserUpdateRequestDto userUpdate) {
+    public ApiResponse<Object> updateMe(@RequestBody UserUpdateRequestDto userUpdate) {
 
         UserEntity updateUser = UserConvert.convertToEntity(userUpdate);
         Boolean isUpdateUser = service.updateMe(updateUser, userUpdate.getAttachId());
 
-        return HttpResponse.build()
-                .code(HttpResponse.Status.OK)
-                .success(true)
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
                 .body(isUpdateUser)
-                .message(HttpStatus.OK.name());
+                .message(ResponseMessage.OK);
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "This method for update by id", description = "This method updates the user's data")
     @PutMapping("/update/{id}")
-    public HttpResponse<Object> userUpdateId(@PathVariable Long id, @RequestBody UserUpdateRequestDto userUpdate) {
+    public ApiResponse<Object> userUpdateId(@PathVariable Long id, @RequestBody UserUpdateRequestDto userUpdate) {
 
         UserEntity updateUser = userUpdate.toEntity();
         Boolean isUpdateUser = service.updateById(updateUser, id);
 
-        return HttpResponse.build()
-                .code(HttpResponse.Status.OK)
-                .success(true)
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
                 .body(isUpdateUser)
-                .message(HttpStatus.OK.name());
+                .message(ResponseMessage.OK);
 
     }
 
@@ -123,12 +112,11 @@ public class UserController {
     @Operation(summary = "This user for delete", description = "This method is designed to delete a user by ID")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
-    public HttpResponse<Object> userDelete(@PathVariable Long id) {
+    public ApiResponse<Object> userDelete(@PathVariable Long id) {
 
         service.delete(id);
-        return HttpResponse.build()
-                .code(HttpResponse.Status.OK)
-                .success(true)
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
                 .body(true)
                 .message("User deleted successfully");
     }
@@ -136,17 +124,15 @@ public class UserController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("permitAll()")
     @Operation(summary = "Delete My User ", description = "Delete all information about the current authenticated user.")
-    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = HttpResponse.class)))
     @DeleteMapping(value = "/deleteMe")
-    public HttpResponse<Object>deleteMe(){
+    public ApiResponse<Object>deleteMe(){
 
        service.delete(SecurityUtils.getUserId());
 
-        return HttpResponse.build()
-                .code(HttpResponse.Status.OK)
-                .success(true)
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
                 .body(true)
-                .message(HttpStatus.OK.name());
+                .message(ResponseMessage.OK);
     }
 
 

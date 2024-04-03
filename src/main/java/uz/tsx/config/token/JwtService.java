@@ -8,6 +8,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import uz.tsx.exception.interfaces.UserInterface;
 
 import java.security.Key;
 import java.util.Date;
@@ -36,6 +37,10 @@ public class JwtService {
         return generateToken(new HashMap<>(), userDetails);
     }
 
+    public String generateToken(UserInterface userDetails) {
+        return generateToken(new HashMap<>(), userDetails);
+    }
+
     public String generateToken(
             Map<String, Object> extraClaims,
             UserDetails userDetails
@@ -44,6 +49,20 @@ public class JwtService {
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + time))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String generateToken(
+            Map<String, Object> extraClaims,
+            UserInterface userInterface
+    ) {
+        return Jwts
+                .builder()
+                .setClaims(extraClaims)
+                .setSubject(userInterface.getEmail_or_phone())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + time))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)

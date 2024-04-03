@@ -19,9 +19,9 @@ public class CategoryConvert {
 
         CategoryEntity category = new CategoryEntity();
 
-        category.setName_en(categoryDto.getName_en());
-        category.setName_ru(categoryDto.getName_ru());
-        category.setName_uz(categoryDto.getName_uz());
+        category.setNameEn(categoryDto.getName_en());
+        category.setNameRu(categoryDto.getName_ru());
+        category.setNameUz(categoryDto.getName_uz());
         category.setParentId(categoryDto.getParentId());
         return category;
     }
@@ -30,9 +30,9 @@ public class CategoryConvert {
     public CategoryEntity convertToEntity(CategoryUpdateRequestDto categoryDto){
 
         CategoryEntity category = new CategoryEntity();
-        category.setName_uz(categoryDto.getName_uz());
-        category.setName_ru(categoryDto.getName_ru());
-        category.setName_en(categoryDto.getName_en());
+        category.setNameUz(categoryDto.getName_uz());
+        category.setNameRu(categoryDto.getName_ru());
+        category.setNameEn(categoryDto.getName_en());
         category.setParentId(categoryDto.getParentId());
         return category;
     }
@@ -69,13 +69,23 @@ public class CategoryConvert {
 
         return categoryDto;
     }
+    public CategoryDto fromNoChild(CategoryEntity category){
+
+        CategoryDto categoryDto = category.getDto(false);
+        AttachEntity attachId = category.getAttach();
+        if(Objects.nonNull(attachId)){
+            categoryDto.setAttach(AttachConvert.convertToAttachUrlDto(attachId));
+        }
+
+        return categoryDto;
+    }
 
     public CategoryResponseDto fromOpenDataNoChild(CategoryEntity category){
 
         CategoryResponseDto categoryResponseDto = new CategoryResponseDto();
-        categoryResponseDto.setName_en(category.getName_en());
-        categoryResponseDto.setName_uz(category.getName_uz());
-        categoryResponseDto.setName_ru(category.getName_ru());
+        categoryResponseDto.setName_en(category.getNameEn());
+        categoryResponseDto.setName_uz(category.getNameUz());
+        categoryResponseDto.setName_ru(category.getNameRu());
         categoryResponseDto.setParentId(category.getParentId());
         AttachEntity attachId = category.getAttach();
         if(Objects.nonNull(attachId)){
