@@ -3,6 +3,7 @@ package uz.tsx.controller.convert;
 import lombok.experimental.UtilityClass;
 import uz.tsx.dto.announcement.option.OptionGroupDto;
 import uz.tsx.dto.request.OptionGroupCreateDto;
+import uz.tsx.dto.request.OptionGroupUpdate;
 import uz.tsx.entity.announcement.option.OptionGroupEntity;
 
 import java.util.List;
@@ -32,4 +33,15 @@ public class OperationGroupConvert {
         return entityList.stream().map(OperationGroupConvert::convertToDto).toList();
     }
 
+    public OptionGroupEntity convertToDto(OptionGroupUpdate dto) {
+
+        OptionGroupEntity entity = new OptionGroupEntity();
+
+        entity.setId(dto.getId());
+        entity.setNameEn(dto.getNameEn());
+        entity.setNameRu(dto.getNameRu());
+        entity.setNameUz(dto.getNameUz());
+
+        return entity;
+    }
 }

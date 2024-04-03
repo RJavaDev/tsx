@@ -69,6 +69,16 @@ public class CategoryConvert {
 
         return categoryDto;
     }
+    public CategoryDto fromNoChild(CategoryEntity category){
+
+        CategoryDto categoryDto = category.getDto(false);
+        AttachEntity attachId = category.getAttach();
+        if(Objects.nonNull(attachId)){
+            categoryDto.setAttach(AttachConvert.convertToAttachUrlDto(attachId));
+        }
+
+        return categoryDto;
+    }
 
     public CategoryResponseDto fromOpenDataNoChild(CategoryEntity category){
 

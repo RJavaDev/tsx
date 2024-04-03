@@ -23,10 +23,17 @@ public class OptionGroupServiceImpl implements OptionGroupService {
 
     @Override
     public OptionGroupEntity add(OptionGroupEntity entity) {
-        Long userId = SecurityUtils.getUserId();
-        entity.forCreate(userId);
+
+        entity.forCreate(SecurityUtils.getUserId());
 
         return repository.save(entity);
+    }
+
+    @Override
+    public boolean update(OptionGroupEntity entity) {
+        schemaValidator.validateOptionGroupId(entity.getId());
+        repository.save(entity);
+        return true;
     }
 
     @Override

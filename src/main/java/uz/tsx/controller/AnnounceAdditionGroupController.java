@@ -1,37 +1,38 @@
 package uz.tsx.controller;
 
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import uz.tsx.controller.convert.OperationGroupConvert;
-import uz.tsx.dto.announcement.option.OptionGroupDto;
+import uz.tsx.controller.convert.AdditionGroupConvert;
+import uz.tsx.dto.AdditionGroupDto;
+import uz.tsx.dto.announcement.additionInfo.AdditionComboValueDto;
 import uz.tsx.dto.dtoUtil.ApiResponse;
+import uz.tsx.dto.dtoUtil.HttpResponse;
 import uz.tsx.dto.dtoUtil.ResponseCode;
 import uz.tsx.dto.dtoUtil.ResponseMessage;
-import uz.tsx.dto.request.OptionGroupCreateDto;
-import uz.tsx.dto.request.OptionGroupUpdate;
-import uz.tsx.entity.announcement.option.OptionGroupEntity;
-import uz.tsx.service.OptionGroupService;
+import uz.tsx.dto.request.AdditionGroupCreate;
+import uz.tsx.dto.request.AdditionGroupUpdate;
+import uz.tsx.entity.announcement.additionInfo.AdditionGroupEntity;
+import uz.tsx.service.AnnounceAdditionGroupService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/option-group")
+@RequestMapping("/api/v1/announce-addition-group")
+@Tag(name = "Announce Addition Group Controller", description = "Operations related to announcing addition groups")
 @RequiredArgsConstructor
-@Tag(name = "Option Group Controller", description = "Operations related to option groups")
-public class OptionGroupController {
+public class AnnounceAdditionGroupController {
 
-    private final OptionGroupService service;
+    private final AnnounceAdditionGroupService service;
 
     @PostMapping("/add")
     @Operation(summary = "Add new option group", description = "Add a new option group to the system.")
-    public ApiResponse<Object> add(@RequestBody @Validated OptionGroupCreateDto dto){
+    public ApiResponse<Object> add(@RequestBody @Validated AdditionGroupCreate dto){
 
-        OptionGroupEntity entity = OperationGroupConvert.convertToEntity(dto);
-        OptionGroupEntity added = service.add(entity);
+        AdditionGroupEntity entity = AdditionGroupConvert.convertToEntity(dto);
+        boolean added = service.add(entity);
 
         return ApiResponse.build()
                 .code(ResponseCode.OK)
@@ -44,22 +45,27 @@ public class OptionGroupController {
     @Operation(summary = "Get option group by ID", description = "Retrieve an option group from the system by its ID.")
     public ApiResponse<Object> getById(@PathVariable Long id){
 
-        OptionGroupEntity entity = service.getById(id);
-        OptionGroupDto optionGroupDto = OperationGroupConvert.convertToDto(entity);
+        AdditionGroupEntity entity = service.getById(id);
+        AdditionGroupDto dto = AdditionGroupConvert.convertToDto(entity);
 
         return ApiResponse.build()
                 .code(ResponseCode.OK)
-                .body(optionGroupDto)
+                .body(dto)
                 .message(ResponseMessage.OK);
 
+    }
+
+    @GetMapping("/list")
+    public HttpResponse<List<AdditionComboValueDto>> listAnnounceGroupAdds(@RequestParam(value = "groupId") Long groupId) {
+        return HttpResponse.build(true, "", service.listAnnounceAdditionGroup(groupId), HttpResponse.Status.OK.ordinal());
     }
 
     @GetMapping("/get/all")
     @Operation(summary = "Get all option groups", description = "Retrieve all option groups from the system.")
     public ApiResponse<Object> getAll(){
 
-        List<OptionGroupEntity> optionGroupEntityList = service.getAll();
-        List<OptionGroupDto> optionGroupDtoList = OperationGroupConvert.convertToDto(optionGroupEntityList);
+        List<AdditionGroupEntity> optionGroupEntityList = service.getAll();
+        List<AdditionGroupDto> optionGroupDtoList = AdditionGroupConvert.convertToDto(optionGroupEntityList);
 
         return ApiResponse.build()
                 .code(ResponseCode.OK)
@@ -70,14 +76,14 @@ public class OptionGroupController {
 
     @PatchMapping("/update")
     @Operation(summary = "Update option group", description = "Update an existing option group in the system.")
-    public ApiResponse<Object> update(@RequestBody OptionGroupUpdate dto){
+    public ApiResponse<Object> update(@RequestBody AdditionGroupUpdate dto){
 
-        OptionGroupEntity entity = OperationGroupConvert.convertToDto(dto);
-        boolean isUpdate = service.update(entity);
+        AdditionGroupEntity entity = AdditionGroupConvert.convertToEntity(dto);
+        boolean update = service.update(entity);
 
         return ApiResponse.build()
                 .code(ResponseCode.OK)
-                .body(isUpdate)
+                .body(update)
                 .message(ResponseMessage.OK);
 
     }
@@ -90,7 +96,7 @@ public class OptionGroupController {
 
         return ApiResponse.build()
                 .code(ResponseCode.OK)
-                .body(true)
+                .body(Boolean.TRUE)
                 .message(ResponseMessage.DELETE_SUCCESS_MESSAGE);
 
     }

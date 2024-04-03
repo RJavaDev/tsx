@@ -13,4 +13,5 @@ public interface TableNames {
     String ANNOUNCEMENT_CONTACT = "tsx_announcement_contact";
     String OPTION = "tsx_option";
     String OPTION_GROUP = "tsx_option_group";
+    String ADDITION_GROUP = "tsx_add_group";
 }

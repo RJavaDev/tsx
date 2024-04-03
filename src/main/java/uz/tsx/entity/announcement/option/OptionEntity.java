@@ -1,9 +1,12 @@
 package uz.tsx.entity.announcement.option;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import uz.tsx.constants.TableNames;
+import uz.tsx.dto.RegionDto;
+import uz.tsx.dto.announcement.option.OptionDto;
 import uz.tsx.entity.CategoryEntity;
 import uz.tsx.entity.base.BaseEntity;
 
@@ -38,4 +41,10 @@ public class OptionEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private CategoryEntity category;
+
+    @JsonIgnore
+    public OptionDto toDto(String... ignoreProperties) {
+        return toDto(this, new OptionDto(), ignoreProperties);
+    }
+
 }
