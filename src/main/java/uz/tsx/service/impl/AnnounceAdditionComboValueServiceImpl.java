@@ -21,7 +21,7 @@ public class AnnounceAdditionComboValueServiceImpl implements AnnounceAdditionCo
     @Override
     public boolean add(AdditionComboValueEntity addedEntity) {
 
-        schemaValidator.validateAdditionGroupId(addedEntity.getGroupId());
+        schemaValidator.validateAdditionGroupByType(addedEntity.getGroupId());
         repository.save(addedEntity);
 
         return true;

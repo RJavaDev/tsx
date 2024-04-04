@@ -217,7 +217,14 @@ public class CommonSchemaValidator {
         if (!additionGroupRepository.existsByAdditionGroupId(id)) {
             throw new NotFoundException(id + "-id not found");
         }
-        ;
+    }
+
+    public void validateAdditionGroupByType(Long id) {
+
+        AdditionType entityDBType = validateAdditionGroup(id).getType();
+        if(entityDBType!=AdditionType.COMBOBOX){
+            throw new IllegalArgumentException(String.format("Addition to AdditionComboValue of type %s is not allowed.", entityDBType));
+        }
     }
 
     public AdditionGroupEntity validateAdditionGroupUpdate(AdditionGroupEntity entity) {
