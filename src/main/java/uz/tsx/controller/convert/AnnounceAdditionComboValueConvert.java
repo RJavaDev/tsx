@@ -6,6 +6,8 @@ import uz.tsx.dto.request.AdditionComboValueCreate;
 import uz.tsx.dto.request.AdditionComboValueUpdate;
 import uz.tsx.entity.announcement.additionInfo.AdditionComboValueEntity;
 
+import java.util.List;
+
 @UtilityClass
 public class AnnounceAdditionComboValueConvert {
 
@@ -39,5 +41,9 @@ public class AnnounceAdditionComboValueConvert {
         entity.setNameEn(updateDto.getNameEn());
 
         return entity;
+    }
+
+    public List<AdditionComboValueDto> convertToDto(List<AdditionComboValueEntity> comboValueById) {
+        return comboValueById.stream().map(AnnounceAdditionComboValueConvert::convertToDto).toList();
     }
 }

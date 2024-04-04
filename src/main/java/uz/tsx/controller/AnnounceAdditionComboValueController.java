@@ -15,6 +15,8 @@ import uz.tsx.dto.request.AdditionComboValueUpdate;
 import uz.tsx.entity.announcement.additionInfo.AdditionComboValueEntity;
 import uz.tsx.service.AnnounceAdditionComboValueService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/addition-combo-value")
 @Tag(name = "Announce Addition Combo Value Controller", description = "Operations related to announcing addition combo values")
@@ -48,6 +50,21 @@ public class AnnounceAdditionComboValueController {
                 .body(dto)
                 .message(ResponseMessage.OK);
     }
+
+    @GetMapping("/get/group/{id}")
+    @Operation(summary = "Get combo value by addition group ID", description = "Retrieve combo values from Addition Combo Value by the group ID.")
+    public ApiResponse<Object> getComboValueByAdditionGroupId(@PathVariable Long id) {
+
+        List<AdditionComboValueEntity> comboValueById = service.getComboValueByGroupId(id);
+        List<AdditionComboValueDto> dto = AnnounceAdditionComboValueConvert.convertToDto(comboValueById);
+
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
+                .body(dto)
+                .message(ResponseMessage.OK);
+    }
+
+
 
     @PatchMapping("/update")
     @Operation(summary = "Update addition combo value", description = "Update an existing addition combo value in the system.")

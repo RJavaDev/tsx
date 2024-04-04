@@ -38,6 +38,11 @@ public class AnnounceAdditionComboValueServiceImpl implements AnnounceAdditionCo
     }
 
     @Override
+    public List<AdditionComboValueEntity> getComboValueByGroupId(Long id) {
+        return repository.getComboValueByGroupId(id);
+    }
+
+    @Override
     public AdditionComboValueEntity getById(Long id) {
         return schemaValidator.validateAdditionComboValue(id);
     }

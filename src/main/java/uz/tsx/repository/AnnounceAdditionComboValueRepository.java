@@ -23,4 +23,7 @@ public interface AnnounceAdditionComboValueRepository extends JpaRepository<Addi
     @Modifying
     @Query(value = "UPDATE tsx_add_value SET status = 'DELETED' WHERE id = :comboId", nativeQuery = true)
     void delete(@Param("comboId")Long id);
+
+    @Query(value = "SELECT tsxav.* FROM tsx_add_value tsxav WHERE tsxav.group_id = :comboGroupId", nativeQuery = true)
+    List<AdditionComboValueEntity> getComboValueByGroupId(@Param("comboGroupId") Long id);
 }
