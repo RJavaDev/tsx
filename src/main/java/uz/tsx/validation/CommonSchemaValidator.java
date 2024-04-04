@@ -8,6 +8,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import uz.tsx.constants.EntityStatus;
 import uz.tsx.entity.*;
+import uz.tsx.entity.announcement.additionInfo.AdditionComboValueEntity;
 import uz.tsx.entity.announcement.additionInfo.AdditionGroupEntity;
 import uz.tsx.entity.announcement.additionInfo.AdditionType;
 import uz.tsx.entity.announcement.option.OptionEntity;
@@ -39,6 +40,7 @@ public class CommonSchemaValidator {
 
     private final AnnounceAdditionGroupRepository additionGroupRepository;
 
+    private final AnnounceAdditionComboValueRepository additionComboValueRepository;
 
 
     private void throwIdIsEmpty(String attachId) {
@@ -47,9 +49,9 @@ public class CommonSchemaValidator {
         }
     }
 
-    public void validateID(Long id){
+    public void validateID(Long id) {
         Assert.notNull(id, "The given id must not be null");
-        if(id<=0){
+        if (id <= 0) {
             throw new IllegalArgumentException(id + "-id does not meet the requirement!");
         }
     }
@@ -66,7 +68,7 @@ public class CommonSchemaValidator {
 
             List<AttachEntity> attachEntitiList = attachRepository.getAttachListById(attachIdList);
 
-            if(!CollectionUtils.isEmpty(attachEntitiList)){
+            if (!CollectionUtils.isEmpty(attachEntitiList)) {
                 for (String id : attachIdList) {
                     for (int i = 0; i < attachEntitiList.size(); i++) {
                         if (id.equals(attachEntitiList.get(i).getId())) {
@@ -125,7 +127,7 @@ public class CommonSchemaValidator {
             if (StringUtils.isNotEmpty(username)) {
                 userOriginalDB.setEmailOrPhone(username);
             }
-            if (StringUtils.isNoneEmpty(password)){
+            if (StringUtils.isNoneEmpty(password)) {
                 userOriginalDB.setPassword(passwordEncoder.encode(password));
             }
             if (StringUtils.isNotEmpty(attachId)) {
@@ -138,7 +140,7 @@ public class CommonSchemaValidator {
     }
 
     public RegionEntity validateRegion(Long regionId) {
-        return regionRepository.findByRegionId(regionId).orElseThrow(()-> new RegionNotFoundException(regionId + " - region id not found!"));
+        return regionRepository.findByRegionId(regionId).orElseThrow(() -> new RegionNotFoundException(regionId + " - region id not found!"));
     }
 
     public void categoryStatusCheck(CategoryEntity categoryentity, String attachId) {
@@ -163,43 +165,43 @@ public class CommonSchemaValidator {
 
     public void categoryAttachId(Long parentId, String attachId) {
 
-        if(Objects.nonNull(parentId) && Objects.nonNull(attachId)){
+        if (Objects.nonNull(parentId) && Objects.nonNull(attachId)) {
             throw new CategoryNotFoundException("image and parent id cannot be together!");
         }
 
-        if(Objects.isNull(attachId) && Objects.isNull(parentId)){
+        if (Objects.isNull(attachId) && Objects.isNull(parentId)) {
             throw new CategoryNotFoundException("imageId and parentId must not be null together!");
         }
     }
 
-    public void validateCategory(Long categoryId){
+    public void validateCategory(Long categoryId) {
         validateID(categoryId);
-        categoryRepository.findByCategoryId(categoryId).orElseThrow(()-> new CategoryNotFoundException(categoryId + "- id not found!"));
+        categoryRepository.findByCategoryId(categoryId).orElseThrow(() -> new CategoryNotFoundException(categoryId + "- id not found!"));
     }
 
-    public CategoryEntity validateGetCategory(Long id){
+    public CategoryEntity validateGetCategory(Long id) {
         if (Objects.isNull(id)) throw new CategoryNotFoundException("category id cannot be null");
-        return categoryRepository.findByCategoryId(id).orElseThrow(()-> new CategoryNotFoundException(id + "- id not found!"));
+        return categoryRepository.findByCategoryId(id).orElseThrow(() -> new CategoryNotFoundException(id + "- id not found!"));
     }
 
-    public CategoryEntity validateGetParentCategory(Long id){
+    public CategoryEntity validateGetParentCategory(Long id) {
         if (Objects.isNull(id)) return null;
-        return categoryRepository.findByCategoryId(id).orElseThrow(()-> new CategoryNotFoundException(id + "- id not found!"));
+        return categoryRepository.findByCategoryId(id).orElseThrow(() -> new CategoryNotFoundException(id + "- id not found!"));
     }
 
-    public void validateOptionGroupId(Long id){
+    public void validateOptionGroupId(Long id) {
         validateID(id);
-        if(!optionGroupRepository.existsById(id)){
-            throw new NotFoundException(id+"-id not found!");
+        if (!optionGroupRepository.existsById(id)) {
+            throw new NotFoundException(id + "-id not found!");
         }
     }
 
-    public OptionGroupEntity validateOptionGroup(Long id){
+    public OptionGroupEntity validateOptionGroup(Long id) {
         validateID(id);
-        return optionGroupRepository.getOption(id).orElseThrow(()-> new NotFoundException(id + " option group not found"));
+        return optionGroupRepository.getOption(id).orElseThrow(() -> new NotFoundException(id + " option group not found"));
     }
 
-    public OptionEntity validateOption(Long id){
+    public OptionEntity validateOption(Long id) {
         validateID(id);
         return optionRepository.getOptionById(id);
     }
@@ -207,14 +209,15 @@ public class CommonSchemaValidator {
     public AdditionGroupEntity validateAdditionGroup(Long id) {
 
         validateID(id);
-        return additionGroupRepository.getAdditionGroupById(id).orElseThrow(()-> new NotFoundException(id + "-id not found!"));
+        return additionGroupRepository.getAdditionGroupById(id).orElseThrow(() -> new NotFoundException(id + "-id not found!"));
     }
 
     public void validateAdditionGroupId(Long id) {
         validateID(id);
-        if(!additionGroupRepository.existsByAdditionGroupId(id)){
-            throw new NotFoundException(id+"-id not found");
-        };
+        if (!additionGroupRepository.existsByAdditionGroupId(id)) {
+            throw new NotFoundException(id + "-id not found");
+        }
+        ;
     }
 
     public AdditionGroupEntity validateAdditionGroupUpdate(AdditionGroupEntity entity) {
@@ -223,23 +226,59 @@ public class CommonSchemaValidator {
         String nameEn = entity.getNameEn();
         String nameRu = entity.getNameRu();
         String nameUz = entity.getNameUz();
-        if(Objects.nonNull(nameEn) && Objects.nonNull(nameRu) && Objects.nonNull(nameUz)){
+        if (Objects.nonNull(nameEn) && Objects.nonNull(nameRu) && Objects.nonNull(nameUz)) {
             entityDB.setNameEn(nameEn);
             entityDB.setNameRu(nameRu);
             entityDB.setNameUz(nameUz);
         }
 
         Long categoryId = entity.getCategoryId();
-        if(Objects.nonNull(categoryId)){
+        if (Objects.nonNull(categoryId)) {
             validateCategory(categoryId);
             entityDB.setCategoryId(categoryId);
         }
 
         AdditionType type = entity.getType();
-        if(Objects.nonNull(type)){
+        if (Objects.nonNull(type)) {
             entityDB.setType(type);
         }
 
         return entityDB;
+    }
+
+    public AdditionComboValueEntity validateAdditionComboValue(Long id) {
+        validateID(id);
+        return additionComboValueRepository.getAdditionComboValueById(id).orElseThrow(() -> new NotFoundException(id + "- id not found"));
+    }
+
+    public AdditionComboValueEntity validateAdditionComboValue(AdditionComboValueEntity updateEntity) {
+
+        AdditionComboValueEntity entityDB = validateAdditionComboValue(updateEntity.getId());
+
+        Long groupId = updateEntity.getGroupId();
+        if (Objects.nonNull(groupId)) {
+            validateAdditionGroupId(groupId);
+            entityDB.setGroupId(groupId);
+        }
+
+        String nameUz = updateEntity.getNameUz();
+        String nameRu = updateEntity.getNameRu();
+        String nameEn = updateEntity.getNameEn();
+
+        if(Objects.nonNull(nameEn) && Objects.nonNull(nameRu) && Objects.nonNull(nameUz)){
+            entityDB.setNameEn(nameEn);
+            entityDB.setNameRu(nameRu);
+            entityDB.setNameUz(nameUz);
+        }
+
+
+        return entityDB;
+    }
+
+    public void validateAdditionComboValueId(Long id) {
+        validateID(id);
+        if(!additionComboValueRepository.existsAdditionComboValue(id)){
+            throw new NotFoundException(id+"-id not found!");
+        }
     }
 }

@@ -1,7 +1,8 @@
-package uz.tsx.dto;
+package uz.tsx.dto.announcement.additionInfo;
 
 import lombok.Getter;
 import lombok.Setter;
+import uz.tsx.dto.CategoryDto;
 import uz.tsx.dto.base.BaseDto;
 import uz.tsx.entity.announcement.additionInfo.AdditionType;
 

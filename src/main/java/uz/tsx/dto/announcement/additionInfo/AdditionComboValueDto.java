@@ -16,5 +16,5 @@ public class AdditionComboValueDto extends BaseDto {
 
     private Long groupId;
 
-    private AnnounceAdditionGroupDto group;
+    private AdditionGroupDto group;
 }
