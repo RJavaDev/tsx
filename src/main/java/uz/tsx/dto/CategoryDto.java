@@ -18,11 +18,11 @@ import java.util.List;
 public class CategoryDto extends BaseDto {
 
     @NotBlank(message = "name must not be empty")
-    private String name_uz;
+    private String nameUz;
     @NotBlank(message = "name must not be empty")
-    private String name_ru;
+    private String nameRu;
     @NotBlank(message = "name must not be empty")
-    private String name_en;
+    private String nameEn;
 
     private Long parentId;
 

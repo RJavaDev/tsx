@@ -19,9 +19,9 @@ public class CategoryConvert {
 
         CategoryEntity category = new CategoryEntity();
 
-        category.setNameEn(categoryDto.getName_en());
-        category.setNameRu(categoryDto.getName_ru());
-        category.setNameUz(categoryDto.getName_uz());
+        category.setNameEn(categoryDto.getNameEn());
+        category.setNameRu(categoryDto.getNameRu());
+        category.setNameUz(categoryDto.getNameUz());
         category.setParentId(categoryDto.getParentId());
         return category;
     }
@@ -30,9 +30,9 @@ public class CategoryConvert {
     public CategoryEntity convertToEntity(CategoryUpdateRequestDto categoryDto){
 
         CategoryEntity category = new CategoryEntity();
-        category.setNameUz(categoryDto.getName_uz());
-        category.setNameRu(categoryDto.getName_ru());
-        category.setNameEn(categoryDto.getName_en());
+        category.setNameUz(categoryDto.getNameUz());
+        category.setNameRu(categoryDto.getNameRu());
+        category.setNameEn(categoryDto.getNameEn());
         category.setParentId(categoryDto.getParentId());
         return category;
     }
@@ -83,9 +83,9 @@ public class CategoryConvert {
     public CategoryResponseDto fromOpenDataNoChild(CategoryEntity category){
 
         CategoryResponseDto categoryResponseDto = new CategoryResponseDto();
-        categoryResponseDto.setName_en(category.getNameEn());
-        categoryResponseDto.setName_uz(category.getNameUz());
-        categoryResponseDto.setName_ru(category.getNameRu());
+        categoryResponseDto.setNameEn(category.getNameEn());
+        categoryResponseDto.setNameUz(category.getNameUz());
+        categoryResponseDto.setNameRu(category.getNameRu());
         categoryResponseDto.setParentId(category.getParentId());
         AttachEntity attachId = category.getAttach();
         if(Objects.nonNull(attachId)){
