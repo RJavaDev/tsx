@@ -49,6 +49,10 @@ public class CategoryConvert {
         return dto;
     }
 
+    public CategoryDto fromOneLevelChild(CategoryEntity entity){
+        return entity.getDto(true);
+    }
+
     public CategoryResponseDto fromOpenData(CategoryEntity category){
         CategoryResponseDto categoryResponseDto = fromOpenDataNoChild(category);
         categoryResponseDto.setChild(fromOpenData(category.getChildren()));
