@@ -1,15 +1,19 @@
 package uz.tsx.entity.announcement.additionInfo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import uz.tsx.constants.TableNames;
+import uz.tsx.dto.AdditionGroupDto;
+import uz.tsx.dto.CategoryDto;
 import uz.tsx.entity.CategoryEntity;
 import uz.tsx.entity.base.BaseEntity;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "tsx_add_group")
+@Table(name = TableNames.ADDITION_GROUP)
 public class AdditionGroupEntity extends BaseEntity {
     @Column(name = "name_uz")
     private String nameUz;
@@ -28,4 +32,10 @@ public class AdditionGroupEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private CategoryEntity category;
+
+    @JsonIgnore
+    public AdditionGroupDto toDto(String... ignoreProperties){
+        return toDto(this, new AdditionGroupDto(), ignoreProperties);
+    }
+
 }

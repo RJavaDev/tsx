@@ -59,6 +59,7 @@ public class AttachServiceImpl implements AttachService {
         return attachList;
     }
 
+
     @Override
     public AttachDownloadDTO download(String fileName) {
         try {
@@ -157,6 +158,31 @@ public class AttachServiceImpl implements AttachService {
         return new StringBuilder(originName).insert(originName.lastIndexOf("."), SUFFIX_MINI_IMG).toString();
     }
 
+    @Override
+    public List<AttachEntity> saveFile(MultipartFile[] files){
+        List<AttachEntity> attachEntityList = new ArrayList<>();
+
+        for(MultipartFile file: files){
+            AttachEntity attach = AttachConvert.generateAttachEntity(file.getOriginalFilename(), file.getSize(), file.getContentType());
+            fileSaveToSystem2(file, attach.getPath(), attach.getId(), attach.getType());
+            attachEntityList.add(repository.save(attach));
+        }
+
+        return attachEntityList;
+    }
+
+    private void fileSaveToSystem2(MultipartFile file, String pathFolder, String fileName, String type){
+        try {
+            String newFileName = fileName + "." + type;
+            Files.copy(file.getInputStream(), Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder ).resolve(newFileName), StandardCopyOption.REPLACE_EXISTING);
+
+            if (Objects.requireNonNull(file.getContentType()).startsWith("image")) {
+                String newImgHeight48File = fileName + SUFFIX_MINI_IMG + "." + type;
+                Thumbnails.of(file.getInputStream()).height(48).toFile(Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder).resolve(newImgHeight48File).toAbsolutePath().toString());
+            }
+
+        } catch (IOException ignore) {}
+    }
 
     @Override
     public List<AttachEntity> saveImgFiles(MultipartFile[] files) {                      // save files and return attaches

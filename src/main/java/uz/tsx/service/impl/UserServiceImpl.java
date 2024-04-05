@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.tsx.common.util.SecurityUtils;
+import uz.tsx.constants.EntityStatus;
 import uz.tsx.entity.UserEntity;
 import uz.tsx.exception.interfaces.UserInterface;
 import uz.tsx.repository.UserRepository;
@@ -47,6 +48,14 @@ public class UserServiceImpl implements UserService {
 
         return true;
     }
+
+    @Override
+    public void userActive() {
+        UserEntity user = SecurityUtils.getUser();
+        user.setStatus(EntityStatus.CREATED);
+        repository.save(user);
+    }
+
     @Override
     @Transactional
     public UserInterface getById(Long id) {

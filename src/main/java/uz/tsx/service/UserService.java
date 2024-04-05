@@ -8,4 +8,6 @@ public interface UserService extends BaseInterface<UserInterface>{
     Boolean updateMe(UserEntity userUpdate, String attachId);
 
     Boolean updateById(UserEntity userUpdate, Long id);
+
+    void userActive();
 }

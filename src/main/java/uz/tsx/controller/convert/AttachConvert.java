@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import static uz.tsx.constants.Characters.FOLDER_BOUNDARY;
+import static uz.tsx.service.AttachService.SUFFIX_MINI_IMG;
+
 @UtilityClass
 public class AttachConvert {
 
@@ -65,9 +68,8 @@ public class AttachConvert {
     private String getYmDString() {
         int year = Calendar.getInstance().get(Calendar.YEAR);
         int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
-        int day = Calendar.getInstance().get(Calendar.DATE);
 
-        return year + "/" + month + "/" + day; // 2022/04/23
+        return year + FOLDER_BOUNDARY + month + FOLDER_BOUNDARY; // 2022/04/23
     }
 
     private String getExtension(String fileName) {
@@ -99,7 +101,8 @@ public class AttachConvert {
 
         AttachUrlResponse url = new AttachUrlResponse();
 
-        url.setUrl(ATTACH_PATH + path + "/" + attachId + "." + type);
+        url.setOriginFile(ATTACH_PATH + path  + attachId + "." + type);
+        url.setMinFile(ATTACH_PATH + path + attachId + SUFFIX_MINI_IMG + "." + type);
 
         return url;
     }
@@ -108,7 +111,8 @@ public class AttachConvert {
 
         AttachUrlResponse url = new AttachUrlResponse();
 
-        url.setUrl(ATTACH_PATH + attach.getPath() + "/" + attach.getId() + "." + attach.getType());
+        url.setOriginFile(ATTACH_PATH + attach.getPath() + attach.getId() + "." + attach.getType());
+        url.setMinFile(ATTACH_PATH + attach.getPath() + attach.getId() + SUFFIX_MINI_IMG + "." + attach.getType());
 
         return url;
     }
@@ -121,7 +125,7 @@ public class AttachConvert {
     private AttachUrlResponse convertToAttachUrlDto(String defaultURL){
         AttachUrlResponse url = new AttachUrlResponse();
 
-        url.setUrl(ATTACH_PATH + defaultURL);
+        url.setOriginFile(ATTACH_PATH + defaultURL);
 
         return url;
     }

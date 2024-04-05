@@ -9,7 +9,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.web.bind.annotation.*;
 import uz.tsx.controller.convert.RegionConvert;
 import uz.tsx.dto.RegionDto;
-import uz.tsx.dto.dtoUtil.HttpResponse;
+import uz.tsx.dto.dtoUtil.ApiResponse;
+import uz.tsx.dto.dtoUtil.ResponseCode;
+import uz.tsx.dto.dtoUtil.ResponseMessage;
 import uz.tsx.dto.request.RegionCreateRequestDto;
 import uz.tsx.dto.request.RegionUpdateRequestDto;
 import uz.tsx.entity.RegionEntity;
@@ -30,89 +32,83 @@ public class RegionController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "This method for post", description = "This method Region add")
     @PostMapping("/add")
-    public HttpResponse<Object> addRegion(@RequestBody RegionCreateRequestDto regionDto) {
+    public ApiResponse<Object> addRegion(@RequestBody RegionCreateRequestDto regionDto) {
 
         RegionEntity region = RegionConvert.convertToEntity(regionDto);
         boolean regionSave = regionService.add(region);
 
-        return HttpResponse.build()
-                .code(HttpResponse.Status.OK)
-                .success(true)
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
                 .body(regionSave)
-                .message(HttpResponse.Status.OK.name());
+                .message(ResponseMessage.OK);
 
     }
 
     @Operation(summary = "This method for getId", description = "This method Region getId")
     @GetMapping("/get/tree/{id}")
-    public HttpResponse<Object> getRegionIdTree(@PathVariable Long id) {
+    public ApiResponse<Object> getRegionIdTree(@PathVariable Long id) {
 
         RegionEntity region = regionService.getByIdTree(id);
         RegionDto fromTree = RegionConvert.fromTree(region);
 
-        return HttpResponse.build()
-                .code(HttpResponse.Status.OK)
-                .success(true)
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
                 .body(fromTree)
-                .message(HttpResponse.Status.OK.name());
+                .message(ResponseMessage.OK);
 
     }
 
     @Operation(summary = "This method for getId", description = "This method Region getId")
     @GetMapping("/get/{id}")
-    public HttpResponse<Object> getRegionId(@PathVariable Long id) {
+    public ApiResponse<Object> getRegionId(@PathVariable Long id) {
 
         RegionEntity region = regionService.getById(id);
         RegionDto responseRegionDto = RegionConvert.fromNoTree(region);
 
-        return HttpResponse.build()
-                .code(HttpResponse.Status.OK)
-                .success(true)
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
                 .body(responseRegionDto)
-                .message(HttpResponse.Status.OK.name());
+                .message(ResponseMessage.OK);
     }
 
     @Operation(summary = "This method for getAll", description = "This method user getAll")
     @GetMapping("/get/all")
-    public HttpResponse<Object> getAllRegion() {
+    public ApiResponse<Object> getAllRegion() {
 
         List<RegionEntity> allRegion = regionService.getAll();
         List<RegionDto> regionList = RegionConvert.fromNoTree(allRegion);
 
-        return HttpResponse.build()
-                .code(HttpResponse.Status.OK)
-                .success(true)
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
                 .body(regionList)
-                .message(HttpResponse.Status.OK.name());
+                .message(ResponseMessage.OK);
     }
 
     @Operation(summary = "This method for getAll", description = "This method user getAll")
     @GetMapping("/get/all-tree")
-    public HttpResponse<Object> getAllTreeRegion() {
+    public ApiResponse<Object> getAllTreeRegion() {
 
         List<RegionEntity> allRegionTree = regionService.getAllTree();
         List<RegionDto> regionTreeList = RegionConvert.fromTree(allRegionTree);
-        return HttpResponse.build()
-                .code(HttpResponse.Status.OK)
-                .success(true)
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
                 .body(regionTreeList)
-                .message(HttpResponse.Status.OK.name());
+                .message(ResponseMessage.OK);
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "This method for Post", description = "This method user update")
     @PatchMapping("/update/{id}")
-    public HttpResponse<Object> update(@RequestBody RegionUpdateRequestDto regionDto, @PathVariable Long id) {
+    public ApiResponse<Object> update(@RequestBody RegionUpdateRequestDto regionDto, @PathVariable Long id) {
 
         RegionEntity regionEntity = RegionConvert.convertToEntity(regionDto);
         boolean isUpdate = regionService.update(regionEntity, id);
 
-        return HttpResponse.build()
-                .code(HttpResponse.Status.OK)
-                .success(true)
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
                 .body(isUpdate)
-                .message(HttpResponse.Status.OK.name());
+                .message(ResponseMessage.OK);
 
     }
 
@@ -120,15 +116,14 @@ public class RegionController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "This method for Delete", description = "This method user delete")
     @DeleteMapping("/delete/{id}")
-    public HttpResponse<Object> deleteRegion(@PathVariable Long id) {
+    public ApiResponse<Object> deleteRegion(@PathVariable Long id) {
 
         regionService.delete(id);
 
-        return HttpResponse.build()
-                .code(HttpResponse.Status.OK)
-                .success(true)
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
                 .body(true)
-                .message(HttpResponse.Status.OK.name());
+                .message(ResponseMessage.OK);
     }
 
 }

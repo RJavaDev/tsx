@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.tsx.common.util.SecurityUtils;
 import uz.tsx.config.token.JwtService;
+import uz.tsx.constants.EntityStatus;
 import uz.tsx.controller.convert.TokenResponseConvert;
 import uz.tsx.dto.request.LoginRequestDto;
 import uz.tsx.dto.response.TokenResponseDto;
@@ -45,9 +46,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public TokenResponseDto authenticate(LoginRequestDto request) {
 
-        UserEntity user = verifyUser(request.getEmailOrPhone(),request.getPassword());
-        String jwt = jwtService.generateToken(user);
-        UserInterface userDB = commonSchemaValidator.validateUser(request.getEmailOrPhone());
+        UserInterface userDB = verifyUserInterface(request.getEmailOrPhone(), request.getPassword());
+        String jwt = jwtService.generateToken(userDB);
 
         return TokenResponseConvert.from(jwt, userDB);
     }
@@ -59,6 +59,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userForCreate(user);
+
+        user.setStatus(EntityStatus.PASSIVE);
 
         return repository.save(user);
 
@@ -87,13 +89,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     private UserEntity verifyUser(String username, String password) {
-        UserEntity entity = repository.getByUsername(username).orElseThrow(
-                () -> new AuthenticationException(username + " username not found!")
-        );
 
-        verifyPassword(password, entity.getPassword());
+        UserEntity user = commonSchemaValidator.validateUserEntity(username);
 
-        return entity;
+        verifyPassword(password, user.getPassword());
+
+        return user;
+    }
+
+    private UserInterface verifyUserInterface(String username, String password) {
+
+        UserInterface userDB = commonSchemaValidator.validateUser(username);
+
+        verifyPassword(password, userDB.getPassword());
+
+        return userDB;
     }
 
     private void verifyPassword(String passwordDto, String userPassword) {

@@ -4,16 +4,20 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import uz.tsx.constants.EntityStatus;
 import uz.tsx.entity.*;
+import uz.tsx.entity.announcement.additionInfo.AdditionGroupEntity;
+import uz.tsx.entity.announcement.additionInfo.AdditionType;
+import uz.tsx.entity.announcement.option.OptionEntity;
+import uz.tsx.entity.announcement.option.OptionGroupEntity;
 import uz.tsx.exception.*;
 import uz.tsx.exception.interfaces.UserInterface;
 import uz.tsx.repository.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -29,11 +33,24 @@ public class CommonSchemaValidator {
 
     private final CategoryRepository categoryRepository;
 
+    private final OptionGroupRepository optionGroupRepository;
+
+    private final OptionRepository optionRepository;
+
+    private final AnnounceAdditionGroupRepository additionGroupRepository;
+
 
 
     private void throwIdIsEmpty(String attachId) {
         if (attachId.isEmpty()) {
             throw new FileNotFoundException(attachId + " not null!");
+        }
+    }
+
+    public void validateID(Long id){
+        Assert.notNull(id, "The given id must not be null");
+        if(id<=0){
+            throw new IllegalArgumentException(id + "-id does not meet the requirement!");
         }
     }
 
@@ -83,6 +100,12 @@ public class CommonSchemaValidator {
         );
     }
 
+    public UserEntity validateUserEntity(String username) {
+        return userRepository.getByUsername(username).orElseThrow(
+                () -> new AuthenticationException(username + " username not found!")
+        );
+    }
+
     public UserInterface validateUser(String username) {
         return userRepository.getUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username + " username id not found!")
         );
@@ -119,7 +142,7 @@ public class CommonSchemaValidator {
     }
 
     public void categoryStatusCheck(CategoryEntity categoryentity, String attachId) {
-        CategoryEntity getByCategoryNameOriginDB = categoryRepository.findByCategoryName(categoryentity.getName_en());
+        CategoryEntity getByCategoryNameOriginDB = categoryRepository.findByCategoryName(categoryentity.getNameEn());
 
         if (Objects.nonNull(getByCategoryNameOriginDB)) {
 
@@ -132,7 +155,7 @@ public class CommonSchemaValidator {
                 }
                 categoryentity.setId(getByCategoryNameOriginDB.getId());
             } else {
-                throw new CategoryNotFoundException(categoryentity.getName_en() + " such a category exists!");
+                throw new CategoryNotFoundException(categoryentity.getNameEn() + " such a category exists!");
             }
         }
         categoryAttachId(categoryentity.getParentId(), attachId);
@@ -150,6 +173,7 @@ public class CommonSchemaValidator {
     }
 
     public void validateCategory(Long categoryId){
+        validateID(categoryId);
         categoryRepository.findByCategoryId(categoryId).orElseThrow(()-> new CategoryNotFoundException(categoryId + "- id not found!"));
     }
 
@@ -163,4 +187,59 @@ public class CommonSchemaValidator {
         return categoryRepository.findByCategoryId(id).orElseThrow(()-> new CategoryNotFoundException(id + "- id not found!"));
     }
 
+    public void validateOptionGroupId(Long id){
+        validateID(id);
+        if(!optionGroupRepository.existsById(id)){
+            throw new NotFoundException(id+"-id not found!");
+        }
+    }
+
+    public OptionGroupEntity validateOptionGroup(Long id){
+        validateID(id);
+        return optionGroupRepository.getOption(id).orElseThrow(()-> new NotFoundException(id + " option group not found"));
+    }
+
+    public OptionEntity validateOption(Long id){
+        validateID(id);
+        return optionRepository.getOptionById(id);
+    }
+
+    public AdditionGroupEntity validateAdditionGroup(Long id) {
+
+        validateID(id);
+        return additionGroupRepository.getAdditionGroupById(id).orElseThrow(()-> new NotFoundException(id + "-id not found!"));
+    }
+
+    public void validateAdditionGroupId(Long id) {
+        validateID(id);
+        if(!additionGroupRepository.existsByAdditionGroupId(id)){
+            throw new NotFoundException(id+"-id not found");
+        };
+    }
+
+    public AdditionGroupEntity validateAdditionGroupUpdate(AdditionGroupEntity entity) {
+        AdditionGroupEntity entityDB = validateAdditionGroup(entity.getId());
+
+        String nameEn = entity.getNameEn();
+        String nameRu = entity.getNameRu();
+        String nameUz = entity.getNameUz();
+        if(Objects.nonNull(nameEn) && Objects.nonNull(nameRu) && Objects.nonNull(nameUz)){
+            entityDB.setNameEn(nameEn);
+            entityDB.setNameRu(nameRu);
+            entityDB.setNameUz(nameUz);
+        }
+
+        Long categoryId = entity.getCategoryId();
+        if(Objects.nonNull(categoryId)){
+            validateCategory(categoryId);
+            entityDB.setCategoryId(categoryId);
+        }
+
+        AdditionType type = entity.getType();
+        if(Objects.nonNull(type)){
+            entityDB.setType(type);
+        }
+
+        return entityDB;
+    }
 }
