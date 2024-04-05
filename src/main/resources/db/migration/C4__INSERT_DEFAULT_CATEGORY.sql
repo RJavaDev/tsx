@@ -1,3 +1,8 @@
+--create default attach
+INSERT INTO tsx_attach (id, content_type, created_date, origin_name, path, size, type)
+VALUES ('7d5ade1d-0950-4785-bd73-d85430080a46', 'image/jpeg', now(), 'Image from wp-s.ru (1).jpg', 'images/category',
+        308630, 'jpg');
+
 -- create default 1 category
 INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, attach_id)
 VALUES
@@ -21,7 +26,7 @@ VALUES
       ('CREATED', now(), 'Motorcycle parts and accessories', 'Мотозапчасти и аксессуары', 'Mototsikl qismlari va aksessuarlari', function_getId('Transportation')),
      ('CREATED', now(), 'Spare parts for / agricultural technology', 'Запчасти для / с.х. техники', 'Qishloq xo''jaligi uchun ehtiyot qismlar texnologiya', function_getId('Transportation')),
      ('CREATED', now(), 'Buses', 'Автобусы', 'Avtobuslar', function_getId('Transportation')),
-     ('CREATED', now(), 'Trucks', 'Грузовые_автомобили', 'Yuk mashinalari', function_getId('Transportation')),
+     ('CREATED', now(), 'Trucks', 'Грузовые автомобили', 'Yuk mashinalari', function_getId('Transportation')),
      ('CREATED', now(), 'Trailers', 'Прицепы', 'Treylerlar', function_getId('Transportation')),
      ('CREATED', now(), 'Other spare parts', 'Прочие запчасти', 'Boshqa ehtiyot qismlar', function_getId('Transportation')),
      ('CREATED', now(), 'Agricultural machinery', 'Сельхозтехника', 'Qishloq xo''jaligi texnikasi', function_getId('Transportation')),
