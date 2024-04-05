@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uz.tsx.controller.convert.AdditionGroupConvert;
-import uz.tsx.dto.AdditionGroupDto;
+import uz.tsx.dto.announcement.additionInfo.AdditionGroupDto;
 import uz.tsx.dto.announcement.additionInfo.AdditionComboValueDto;
 import uz.tsx.dto.dtoUtil.ApiResponse;
 import uz.tsx.dto.dtoUtil.HttpResponse;

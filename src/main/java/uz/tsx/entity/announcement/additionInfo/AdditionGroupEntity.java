@@ -5,8 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import uz.tsx.constants.TableNames;
-import uz.tsx.dto.AdditionGroupDto;
-import uz.tsx.dto.CategoryDto;
+import uz.tsx.dto.announcement.additionInfo.AdditionGroupDto;
 import uz.tsx.entity.CategoryEntity;
 import uz.tsx.entity.base.BaseEntity;
 

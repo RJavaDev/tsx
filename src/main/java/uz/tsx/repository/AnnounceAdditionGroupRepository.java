@@ -18,7 +18,7 @@ public interface AnnounceAdditionGroupRepository extends JpaRepository<AdditionG
     List<AdditionGroupEntity> getAdditionGroupEntitiesByIds(@Param("group_ids") List<Long> groupIds);
 
     @Query(value = "SELECT tsxag.* FROM tsx_add_group tsxag WHERE tsxag.id = :additionGroupId AND tsxag.status <> 'DELETED'", nativeQuery = true)
-    Optional<AdditionGroupEntity> getAdditionGroupById(Long id);
+    Optional<AdditionGroupEntity> getAdditionGroupById(@Param("additionGroupId") Long id);
 
     @Query(value = "SELECT tsxag.* FROM tsx_add_group tsxag WHERE tsxag.status <> 'DELETED'", nativeQuery = true)
     List<AdditionGroupEntity> getAllAdditionGroup();

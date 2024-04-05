@@ -1,7 +1,7 @@
 package uz.tsx.controller.convert;
 
 import lombok.experimental.UtilityClass;
-import uz.tsx.dto.AdditionGroupDto;
+import uz.tsx.dto.announcement.additionInfo.AdditionGroupDto;
 import uz.tsx.dto.request.AdditionGroupCreate;
 import uz.tsx.dto.request.AdditionGroupUpdate;
 import uz.tsx.entity.announcement.additionInfo.AdditionGroupEntity;
