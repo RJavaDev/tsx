@@ -36,3 +36,9 @@ INSERT INTO tsx_add_value(status, created_date, group_id, name_en, name_ru, name
 VALUES
     ('CREATED', NOW(), function_get_add_group_id('Тип дисков'), 'Stamped/Steel', 'Штампованные/Сталные', 'Shampovlangan/Steellik'),
     ('CREATED', NOW(), function_get_add_group_id('Тип дисков'), 'Aluminum/Alloy', 'Алюминиевые/Легкосплавные', 'Alyuminiy/Legkospalv');
+
+-- tsx_add_value default 2.1
+INSERT INTO tsx_add_value(status, created_date, group_id, name_en, name_ru, name_uz)
+VALUES
+    ('CREATED', NOW(), function_get_add_group_id('Вид бизнеса'), 'Private Person', 'Частное лицо', 'Jismoniy shaxs'),
+    ('CREATED', NOW(), function_get_add_group_id('Вид бизнеса'), 'Business', 'Бизнес', 'Biznes');

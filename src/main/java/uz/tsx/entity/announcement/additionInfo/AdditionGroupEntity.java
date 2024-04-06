@@ -28,6 +28,8 @@ public class AdditionGroupEntity extends BaseEntity {
     @Column(name = "category_id")
     private Long categoryId;
 
+    // TODO ManyToMany qilish kerak
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private CategoryEntity category;
