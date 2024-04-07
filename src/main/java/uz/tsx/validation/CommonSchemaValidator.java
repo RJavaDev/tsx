@@ -219,10 +219,10 @@ public class CommonSchemaValidator {
         }
     }
 
-    public void validateAdditionGroupByType(Long id) {
+    public void validateAdditionGroupByType(Long id, AdditionType type) {
 
         AdditionType entityDBType = validateAdditionGroup(id).getType();
-        if(entityDBType!=AdditionType.COMBOBOX){
+        if(entityDBType!=type){
             throw new IllegalArgumentException(String.format("Addition to AdditionComboValue of type %s is not allowed.", entityDBType));
         }
     }
