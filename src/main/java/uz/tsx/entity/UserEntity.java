@@ -17,6 +17,7 @@ import uz.tsx.entity.role.RoleEnum;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -41,9 +42,11 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private RegionEntity region;
 
-
     @Enumerated(EnumType.STRING)
     private List<RoleEnum> roleEnumList;
+
+    @Column(name = "last_active_date")
+    private Date lastActiveDate;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

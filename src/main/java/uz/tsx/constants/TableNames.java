@@ -3,7 +3,6 @@ package uz.tsx.constants;
 public interface TableNames {
     String TSX_USER = "tsx_user";
     String CATEGORY = "tsx_category";
-    String PRODUCT = "tsx_product";
     String ATTACH = "tsx_attach";
     String REGION = "tsx_region";
     String EMAIL = "tsx_email";
@@ -14,4 +13,5 @@ public interface TableNames {
     String OPTION = "tsx_option";
     String OPTION_GROUP = "tsx_option_group";
     String ADDITION_GROUP = "tsx_add_group";
+    String MESSAGE = "tsx_message";
 }
