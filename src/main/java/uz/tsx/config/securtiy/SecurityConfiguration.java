@@ -41,7 +41,9 @@ public class SecurityConfiguration {
             "/api/v1/order-for-service/add",
             "/api/v1/attach/upload",
             "/images/**",
-            "/api/v1/user/email"
+            "/api/v1/user/email",
+            "/api/v1/announcement/**",
+            "/test/test"
     };
 
     @Bean

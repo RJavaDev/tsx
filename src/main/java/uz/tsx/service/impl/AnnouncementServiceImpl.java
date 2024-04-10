@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import uz.tsx.common.util.SecurityUtils;
 import uz.tsx.dto.CurrencyDto;
 import uz.tsx.dto.announcement.AnnouncementContactDto;
 import uz.tsx.dto.announcement.AnnouncementDto;
@@ -20,7 +21,9 @@ import uz.tsx.dto.announcement.selector.AnnounceOptionSelector;
 import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
 import uz.tsx.dto.dtoUtil.DataTable;
 import uz.tsx.entity.AttachEntity;
+import uz.tsx.entity.announcement.AnnouncementContactEntity;
 import uz.tsx.entity.announcement.AnnouncementEntity;
+import uz.tsx.entity.announcement.AnnouncementPriceEntity;
 import uz.tsx.entity.announcement.additionInfo.AdditionGroupEntity;
 import uz.tsx.entity.announcement.option.OptionEntity;
 import uz.tsx.interfaces.AnnouncementInterface;
@@ -28,6 +31,7 @@ import uz.tsx.repository.AnnounceAdditionGroupRepository;
 import uz.tsx.repository.AnnouncementRepository;
 import uz.tsx.repository.OptionRepository;
 import uz.tsx.service.*;
+import uz.tsx.validation.CommonSchemaValidator;
 import uz.tsx.validation.Validation;
 
 import java.util.*;
@@ -36,7 +40,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AnnouncementServiceImpl implements AnnouncementService {
 
-    private final AnnouncementRepository announcementRepository;
+    private final AnnouncementRepository repository;
     private final AnnounceAdditionGroupRepository announceAdditionGroupRepository;
     private final OptionRepository optionRepository;
     private final AnnouncementContactService announcementContactService;
@@ -44,9 +48,25 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     private final CategoryService categoryService;
     private final AttachService attachService;
 
+    private final CommonSchemaValidator commonValidator;
+
+    @Override
+    public AnnouncementEntity createNewAnnouncement(AnnouncementEntity entity) {
+
+        AnnouncementContactEntity contactInfoEntity = announcementContactService.addNewAnnounceContact(entity.getContactInfo());
+        AnnouncementPriceEntity priceEntity = announcementPriceService.addNewAnnouncementPrice(entity.getPriceTag());
+
+        entity.setContactInfoId(contactInfoEntity.getId());
+        entity.setPriceTagId(priceEntity.getCurrencyId());
+
+        entity.forCreate(SecurityUtils.getUserId());
+
+        return repository.save(entity);
+    }
+
     @Override
     public List<AnnouncementDto> findAllAnnouncements() {
-        List<AnnouncementEntity> list = announcementRepository.findAllBy();
+        List<AnnouncementEntity> list = repository.findAllBy();
         List<AnnouncementDto> announcementDtos = list.stream().map(AnnouncementEntity::toDto).toList();
 
         List<Long> groupIds = new ArrayList<>();
@@ -72,7 +92,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     public AnnouncementDto findAnnouncementByIdAbout(Long announceId) {
         if(!Validation.checkId(announceId)) return null;
 
-        Optional<AnnouncementEntity> entityOpt = announcementRepository.findById(announceId);
+        Optional<AnnouncementEntity> entityOpt = repository.findById(announceId);
         AnnouncementDto announcementDto = entityOpt.map(AnnouncementEntity::toDto).
                 orElseThrow(() -> new IllegalStateException("Announce is not found"));
 
@@ -80,7 +100,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         announcementDto.setPriceTag(announcementPriceService.getById(announcementDto.getPriceTagId()));
         announcementDto.setContactInfo(announcementContactService.getById(announcementDto.getContactInfoId()));
 
-        List<String> attachImages = announcementRepository.getAttachImages(entityOpt.get().getId());
+        List<String> attachImages = repository.getAttachImages(entityOpt.get().getId());
         attachImages.forEach(originName -> {
             announcementDto.getAttachPhotosUrl().add("/attach/file/" + originName);
             announcementDto.getAttachMiniPhotosUrl().add("/attach/file/" + attachService.getMinAttachImgName(originName));
@@ -189,7 +209,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             entity.setAdditionalOptions(announceOptionDtos);
         }
 
-        announcementRepository.save(entity);
+        repository.save(entity);
         AnnouncementDto createdAnnounce = entity.toDto();
         createdAnnounce.setContactInfo(createdContactInfo);
         createdAnnounce.setPriceTag(createdPriceTag);
@@ -207,7 +227,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             size = MapUtils.getInteger(filter, "size", 20);
         }
 
-        Page<AnnouncementEntity> pageAnnouncement = announcementRepository.findPage(PageRequest.of(page - 1, size));
+        Page<AnnouncementEntity> pageAnnouncement = repository.findPage(PageRequest.of(page - 1, size));
         List<AnnouncementDto> dtos = pageAnnouncement.stream().map(AnnouncementEntity::toDto).toList();
 
         DataTable<AnnouncementDto> datatable = new DataTable<>();
@@ -227,7 +247,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             size = MapUtils.getInteger(filter, "size", 20);
         }
 
-        Page<AnnouncementInterface> pageAnnouncement = announcementRepository.findPageInterface(PageRequest.of(page - 1, size));
+        Page<AnnouncementInterface> pageAnnouncement = repository.findPageInterface(PageRequest.of(page - 1, size));
         List<AnnouncementDto> dtos = pageAnnouncement.stream().map(aInterface -> {
             AnnouncementDto dto = new AnnouncementDto();
             AnnouncementPriceDto priceDto = new AnnouncementPriceDto();
@@ -257,23 +277,20 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
-    public AnnouncementDto saveAnnounceImages(Long announceId, MultipartFile[] imgFiles) {
-        if(!Validation.checkId(announceId) || imgFiles == null)
+    public AnnouncementEntity saveAnnounceImages(Long announceId, MultipartFile[] imgFiles) {
+
+        if(Objects.isNull(imgFiles))
             throw new IllegalStateException("Bad request");
 
-        AnnouncementEntity entity = announcementRepository.findById(announceId).
-                orElseThrow(() -> new IllegalStateException("Announce is not found"));
+        AnnouncementEntity entityDB = commonValidator.validateAnnouncementId(announceId);
 
-        AnnouncementDto dto = entity.toDto();
-        List<AttachEntity> attachEntities = attachService.saveImgFiles(imgFiles);
-        entity.setAttachPhotos(attachEntities);
-        announcementRepository.save(entity);
+        List<AttachEntity> attachEntityList = attachService.saveAttach(imgFiles);
 
-        attachEntities.forEach(aEntity -> {
-            dto.getAttachPhotosUrl().add("/attach/file/" + aEntity.getOriginName());
-            dto.getAttachMiniPhotosUrl().add("/attach/file/" + aEntity.getMiniName());
-        });
+        entityDB.setAttachPhotos(attachEntityList);
 
-        return dto;
+        repository.save(entityDB);
+
+
+        return entityDB;
     }
 }

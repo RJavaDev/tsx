@@ -59,6 +59,15 @@ public class AttachServiceImpl implements AttachService {
         return attachList;
     }
 
+    @Override
+    public List<AttachEntity> saveAttach(MultipartFile [] multipartFiles) {
+        List<AttachEntity> attachList = new ArrayList<>();
+        for (MultipartFile attach : multipartFiles) {
+            attachList.add(saveAttach(attach));
+        }
+        return attachList;
+    }
+
 
     @Override
     public AttachDownloadDTO download(String fileName) {

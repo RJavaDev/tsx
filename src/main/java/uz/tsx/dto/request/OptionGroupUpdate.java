@@ -1,6 +1,6 @@
 package uz.tsx.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 public class OptionGroupUpdate {
 
-    @NotBlank(message = "id must not be empty")
+    @NotNull(message = "id must not be empty")
     private Long id;
 
     private String nameUz;

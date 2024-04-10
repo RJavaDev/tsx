@@ -2,8 +2,8 @@ package uz.tsx.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uz.tsx.controller.convert.AdditionGroupConvert;
 import uz.tsx.dto.announcement.additionInfo.AdditionGroupDto;
@@ -29,7 +29,7 @@ public class AnnounceAdditionGroupController {
 
     @PostMapping("/add")
     @Operation(summary = "Add new option group", description = "Add a new option group to the system.")
-    public ApiResponse<Object> add(@RequestBody @Validated AdditionGroupCreate dto){
+    public ApiResponse<Object> add(@RequestBody @Valid AdditionGroupCreate dto){
 
         AdditionGroupEntity entity = AdditionGroupConvert.convertToEntity(dto);
         boolean added = service.add(entity);

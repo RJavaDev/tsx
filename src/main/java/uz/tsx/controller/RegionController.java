@@ -3,6 +3,7 @@ package uz.tsx.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -32,7 +33,7 @@ public class RegionController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "This method for post", description = "This method Region add")
     @PostMapping("/add")
-    public ApiResponse<Object> addRegion(@RequestBody RegionCreateRequestDto regionDto) {
+    public ApiResponse<Object> addRegion(@RequestBody @Valid RegionCreateRequestDto regionDto) {
 
         RegionEntity region = RegionConvert.convertToEntity(regionDto);
         boolean regionSave = regionService.add(region);

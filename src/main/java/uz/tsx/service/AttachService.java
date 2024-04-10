@@ -15,6 +15,8 @@ public interface AttachService {
 
     List<AttachEntity> saveAttach(List<MultipartFile> multipartFiles);
 
+    List<AttachEntity> saveAttach(MultipartFile [] multipartFiles);
+
     AttachDownloadDTO download(String fileName);
 
     Page<AttachResponseDto> getWithPage(Integer page, Integer size);

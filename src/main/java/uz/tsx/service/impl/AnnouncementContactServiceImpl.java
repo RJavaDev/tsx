@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import uz.tsx.common.util.SecurityUtils;
 import uz.tsx.dto.announcement.AnnouncementContactDto;
 import uz.tsx.entity.announcement.AnnouncementContactEntity;
 import uz.tsx.repository.AnnouncementContactRepository;
@@ -11,6 +12,7 @@ import uz.tsx.service.AnnouncementContactService;
 import uz.tsx.validation.Validation;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +32,19 @@ public class AnnouncementContactServiceImpl implements AnnouncementContactServic
         announcementContactRepository.save(entity);
 
         return entity.toDto(entity, new AnnouncementContactDto());
+    }
+
+    @Override
+    public AnnouncementContactEntity addNewAnnounceContact(AnnouncementContactEntity entity) {
+
+        String phone = entity.getPhone();
+        if(StringUtils.isEmpty(phone) && Objects.isNull(phone))
+            throw new IllegalStateException("Email or phone is empty");
+
+
+        entity.forCreate(SecurityUtils.getUserId());
+
+        return announcementContactRepository.save(entity);
     }
 
     @Override

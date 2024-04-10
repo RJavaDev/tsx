@@ -1,5 +1,8 @@
 package uz.tsx.common.handler;
 
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Path;
+import jakarta.validation.metadata.ConstraintDescriptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -19,11 +22,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import uz.tsx.common.handler.pojo.FieldErrorResponse;
 import uz.tsx.common.handler.pojo.TraceableErrorResponse;
+import uz.tsx.dto.dtoUtil.ApiResponse;
+import uz.tsx.dto.dtoUtil.ResponseCode;
+import uz.tsx.dto.dtoUtil.ResponseMessage;
 import uz.tsx.exception.*;
 
-import javax.validation.ConstraintViolationException;
-import javax.validation.Path;
-import javax.validation.metadata.ConstraintDescriptor;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
@@ -116,6 +119,7 @@ public class CommonExceptionHandler {
                 .build();
     }
 
+    // Dto request @NotBlank @NotNull @NotEmpty Checked
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(BAD_REQUEST)
     FieldErrorResponse handle(MethodArgumentNotValidException ex) {
@@ -175,7 +179,7 @@ public class CommonExceptionHandler {
     FieldErrorResponse handle(UserConflictData ex) {
         return FieldErrorResponse.builder()
                 .message(ex.getMessage())
-                .code("This user data is already aviable")
+                .code("This user data is already available")
                 .build();
     }
 
@@ -214,6 +218,7 @@ public class CommonExceptionHandler {
                 .code(BAD_REQUEST.toString())
                 .build();
     }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(BAD_REQUEST)
     TraceableErrorResponse handle(Exception ex) {

@@ -3,10 +3,10 @@ package uz.tsx.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uz.tsx.controller.convert.CategoryConvert;
 import uz.tsx.dto.CategoryDto;
@@ -32,7 +32,7 @@ public class CategoryController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "Add Category", description = "This method adds a new category. If no parentId is provided, the added category will be considered as a parent category.")
     @PostMapping("/add")
-    public ApiResponse<Object> addCategory(@RequestBody @Validated CategoryCreateRequestDto categoryDto) {
+    public ApiResponse<Object> addCategory(@RequestBody @Valid CategoryCreateRequestDto categoryDto) {
 
         CategoryEntity category = CategoryConvert.convertToEntity(categoryDto);
         boolean categorySave = service.add(category, categoryDto.getAttachId());
