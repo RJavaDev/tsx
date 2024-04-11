@@ -3,6 +3,7 @@ package uz.tsx.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.tsx.controller.convert.AnnouncementConvert;
@@ -27,11 +28,11 @@ public class AnnouncementController {
         this.announcementService = announcementService;
     }
 
-    @PostMapping("/create")
-    @Operation(summary = "Create new announcement", description = "Create a new announcement.")
-    public HttpResponse<AnnouncementDto> createAnnouncement(@RequestBody AnnouncementDto dto) {
-        return HttpResponse.build(true, "OK", announcementService.createNewAnnouncement(dto), HttpResponse.Status.OK.getCode());
-    }
+//    @PostMapping("/create")
+//    @Operation(summary = "Create new announcement", description = "Create a new announcement.")
+//    public HttpResponse<AnnouncementDto> createAnnouncement(@RequestBody AnnouncementDto dto) {
+//        return HttpResponse.build(true, "OK", announcementService.createNewAnnouncement(dto), HttpResponse.Status.OK.getCode());
+//    }
 
     @PostMapping("/add")
     @Operation(summary = "Create new announcement", description = "Create a new announcement.")
@@ -49,7 +50,7 @@ public class AnnouncementController {
                 .code(ResponseCode.OK);
     }
 
-    @PostMapping("/save/announcement-images")
+    @PostMapping("/save/images")
     @Operation(summary = "Save announcement images", description = "Save images for a specific announcement.")
     public ApiResponse<Object> saveAnnouncementImages(@RequestParam("announceId") Long announceId, @RequestParam("images") MultipartFile[] images) {
 
@@ -62,11 +63,23 @@ public class AnnouncementController {
                 .code(ResponseCode.OK);
     }
 
-    @PostMapping("/save/images")
-    @Operation(summary = "Save announcement images", description = "Save images for a specific announcement.")
-    public HttpResponse<Object> saveImages(@RequestParam("announceId") Long announceId,
-                                           @RequestParam("images") MultipartFile[] images) {
-        return HttpResponse.build(true, "OK", announcementService.saveAnnounceImages(announceId, images));
+//    @PostMapping("/save/images")
+//    @Operation(summary = "Save announcement images", description = "Save images for a specific announcement.")
+//    public HttpResponse<Object> saveImages(@RequestParam("announceId") Long announceId,
+//                                           @RequestParam("images") MultipartFile[] images) {
+//        return HttpResponse.build(true, "OK", announcementService.saveAnnounceImages(announceId, images));
+//    }
+
+    @GetMapping("/get/{id}")
+    public ApiResponse<Object> getById(@PathVariable Long id) {
+
+        AnnouncementEntity entity = announcementService.getById(id);
+        AnnouncementDto announcementDto = AnnouncementConvert.convertToDto(entity);
+
+        return ApiResponse.build()
+                .message(ResponseMessage.OK)
+                .body(announcementDto)
+                .code(ResponseCode.OK);
     }
 
     @GetMapping("/all/about")
@@ -83,8 +96,8 @@ public class AnnouncementController {
 
     @GetMapping("/datatable")
     @Operation(summary = "Get announcements as datatable", description = "Retrieve announcements in a datatable format.")
-    public HttpResponse<DataTable<AnnouncementDto>> table(@RequestParam(value = "page", defaultValue = "1", required = false) Integer page,
-                                                          @RequestParam(value = "size", defaultValue = "10", required = false) Integer size) {
+    public HttpResponse<DataTable<AnnouncementDto>> stable(@RequestParam(value = "page", defaultValue = "1", required = false) Integer page,
+                                                           @RequestParam(value = "size", defaultValue = "10", required = false) Integer size) {
 
         Map<String, Object> filterMap = new HashMap<>();
         filterMap.put("page", page);
@@ -92,6 +105,19 @@ public class AnnouncementController {
         return HttpResponse.build(true, "OK", announcementService.table2(filterMap), HttpResponse.Status.OK.getCode());
     }
 
+    @GetMapping("/home")
+    public ApiResponse<Object> getHomePageAnnouncement(@RequestBody(required = false) PageParam pageParam) {
+        if (pageParam == null) {
+            pageParam = new PageParam();
+        }
+        Page<AnnouncementEntity> pageHomeData = announcementService.getPageHomeData(pageParam);
+        List<AnnouncementDto> dtoList = AnnouncementConvert.convertToDto(pageHomeData);
+
+        return ApiResponse.build()
+                .message(ResponseMessage.OK)
+                .body(dtoList)
+                .code(ResponseCode.OK);
+    }
 
 
 }

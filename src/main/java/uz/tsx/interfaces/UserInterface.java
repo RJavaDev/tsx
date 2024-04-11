@@ -1,4 +1,4 @@
-package uz.tsx.exception.interfaces;
+package uz.tsx.interfaces;
 
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import org.hibernate.annotations.Type;

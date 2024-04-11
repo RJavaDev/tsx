@@ -81,18 +81,18 @@ public class AttachConvert {
         return fileName.substring(lastIndex + 1);
     }
 
-    public AttachUrlResponse convertToAttachUrlDtoForUser(AttachEntity attach){
-        if(Objects.isNull(attach)){
+    public AttachUrlResponse convertToAttachUrlDtoForUser(AttachEntity attach) {
+        if (Objects.isNull(attach)) {
             return convertToAttachUrlDto(DEFAULT_USER_IMAGE);
-        }else {
+        } else {
             return convertToAttachUrlDto(attach);
         }
     }
 
-    public AttachUrlResponse convertToAttachUrlDtoForUser(String attachId, String path, String type){
-        if (Objects.nonNull(attachId)){
+    public AttachUrlResponse convertToAttachUrlDtoForUser(String attachId, String path, String type) {
+        if (Objects.nonNull(attachId)) {
             return convertToAttachUrlDto(attachId, path, type);
-        }else {
+        } else {
             return convertToAttachUrlDto(DEFAULT_USER_IMAGE);
         }
     }
@@ -101,28 +101,33 @@ public class AttachConvert {
 
         AttachUrlResponse url = new AttachUrlResponse();
 
-        url.setOriginFile(ATTACH_PATH + path  + attachId + "." + type);
+        url.setOriginFile(ATTACH_PATH + path + attachId + "." + type);
         url.setMinFile(ATTACH_PATH + path + attachId + SUFFIX_MINI_IMG + "." + type);
 
         return url;
     }
 
     public AttachUrlResponse convertToAttachUrlDto(AttachEntity attach) {
+        if (Objects.nonNull(attach)) {
+            AttachUrlResponse url = new AttachUrlResponse();
 
-        AttachUrlResponse url = new AttachUrlResponse();
+            url.setOriginFile(ATTACH_PATH + attach.getPath() + attach.getId() + "." + attach.getType());
+            url.setMinFile(ATTACH_PATH + attach.getPath() + attach.getId() + SUFFIX_MINI_IMG + "." + attach.getType());
 
-        url.setOriginFile(ATTACH_PATH + attach.getPath() + attach.getId() + "." + attach.getType());
-        url.setMinFile(ATTACH_PATH + attach.getPath() + attach.getId() + SUFFIX_MINI_IMG + "." + attach.getType());
-
-        return url;
+            return url;
+        }
+        return null;
     }
 
-    public List<AttachUrlResponse> convertToAttachUrlDto(List<AttachEntity> attachList){
-        return attachList.stream().map(AttachConvert::convertToAttachUrlDto).toList();
+    public List<AttachUrlResponse> convertToAttachUrlDto(List<AttachEntity> attachList) {
+        if (Objects.nonNull(attachList)) {
+            return attachList.stream().map(AttachConvert::convertToAttachUrlDto).toList();
+        }
+        return null;
     }
 
 
-    private AttachUrlResponse convertToAttachUrlDto(String defaultURL){
+    private AttachUrlResponse convertToAttachUrlDto(String defaultURL) {
         AttachUrlResponse url = new AttachUrlResponse();
 
         url.setOriginFile(ATTACH_PATH + defaultURL);

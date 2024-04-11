@@ -25,7 +25,5 @@ public interface AttachService {
 
     List<AttachEntity> saveImgFiles(MultipartFile[] files);
 
-    List<AttachEntity> saveFile(MultipartFile[] files);
-
     String getMinAttachImgName(String originName);
 }

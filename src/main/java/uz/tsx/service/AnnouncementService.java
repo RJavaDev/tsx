@@ -1,8 +1,10 @@
 package uz.tsx.service;
 
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 import uz.tsx.dto.announcement.AnnouncementDto;
 import uz.tsx.dto.dtoUtil.DataTable;
+import uz.tsx.dto.dtoUtil.PageParam;
 import uz.tsx.entity.announcement.AnnouncementEntity;
 
 import java.util.List;
@@ -16,11 +18,15 @@ public interface AnnouncementService {
 
     AnnouncementDto findAnnouncementByIdAbout(Long id);
 
-    AnnouncementDto createNewAnnouncement(AnnouncementDto dto);
+   // AnnouncementDto createNewAnnouncement(AnnouncementDto dto);
 
     DataTable<AnnouncementDto> table1(Map<String, Object> filter);
 
     DataTable<AnnouncementDto> table2(Map<String, Object> filter);
 
     AnnouncementEntity saveAnnounceImages(Long announceId, MultipartFile[] imgFiles);
+
+    AnnouncementEntity getById(Long id);
+
+    Page<AnnouncementEntity> getPageHomeData(PageParam pageParam);
 }

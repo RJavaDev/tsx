@@ -1,14 +1,12 @@
 package uz.tsx.interfaces;
 
-import uz.tsx.dto.CurrencyDto;
-
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public interface AnnouncementInterface {
     Long getId();
     String getTitle();
-    Date getCreatedDate();
+    LocalDateTime getCreatedDate();
     Double getLongitude();
     Double getLatitude();
     String getPhone();

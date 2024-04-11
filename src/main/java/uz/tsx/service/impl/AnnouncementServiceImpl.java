@@ -1,6 +1,5 @@
 package uz.tsx.service.impl;
 
-import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.BeanUtils;
@@ -9,17 +8,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uz.tsx.common.util.SecurityUtils;
+import uz.tsx.controller.convert.AnnouncementConvert;
 import uz.tsx.dto.CurrencyDto;
 import uz.tsx.dto.announcement.AnnouncementContactDto;
 import uz.tsx.dto.announcement.AnnouncementDto;
 import uz.tsx.dto.announcement.AnnouncementPriceDto;
 import uz.tsx.dto.announcement.additionInfo.AnnounceAdditionGroupDto;
-import uz.tsx.dto.announcement.additionInfo.AnnounceAdditionInfoDto;
-import uz.tsx.dto.announcement.option.AnnounceOptionDto;
 import uz.tsx.dto.announcement.option.OptionDto;
 import uz.tsx.dto.announcement.selector.AnnounceOptionSelector;
 import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
 import uz.tsx.dto.dtoUtil.DataTable;
+import uz.tsx.dto.dtoUtil.PageParam;
 import uz.tsx.entity.AttachEntity;
 import uz.tsx.entity.announcement.AnnouncementContactEntity;
 import uz.tsx.entity.announcement.AnnouncementEntity;
@@ -56,8 +55,8 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         AnnouncementContactEntity contactInfoEntity = announcementContactService.addNewAnnounceContact(entity.getContactInfo());
         AnnouncementPriceEntity priceEntity = announcementPriceService.addNewAnnouncementPrice(entity.getPriceTag());
 
-        entity.setContactInfoId(contactInfoEntity.getId());
-        entity.setPriceTagId(priceEntity.getCurrencyId());
+        entity.setContactInfo(contactInfoEntity);
+        entity.setPriceTag(priceEntity);
 
         entity.forCreate(SecurityUtils.getUserId());
 
@@ -169,53 +168,53 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         }
     }
 
-    @Override
-    public AnnouncementDto createNewAnnouncement(AnnouncementDto dto) {
-        if(dto == null) return null;
-
-        if(StringUtils.isEmpty(dto.getTitle())) throw new IllegalStateException("Announce title can't be empty");
-        if(dto.getCategoryId() == null) throw new IllegalStateException("CategoryId is null");
-
-        // CHECK contactInfo
-        if(dto.getContactInfo() == null || (StringUtils.isEmpty(dto.getContactInfo().getGmail()) && StringUtils.isEmpty(dto.getContactInfo().getPhone())))
-            throw new IllegalStateException("Contact info is not full");
-
-        // CHECK priceTag
-        if(dto.getPriceTag() == null || dto.getPriceTag().getCurrencyId() == null || dto.getPriceTag().getPrice() == null)
-            throw new IllegalStateException("PriceTag is not full");
-
-        AnnouncementContactDto createdContactInfo = announcementContactService.createAnnounceContact(dto.getContactInfo());
-        AnnouncementPriceDto createdPriceTag = announcementPriceService.createAnnouncePrice(dto.getPriceTag());
-
-        AnnouncementEntity entity = new AnnouncementEntity();
-        BeanUtils.copyProperties(dto, entity);
-        entity.setPriceTagId(createdPriceTag.getId());
-        entity.setContactInfoId(createdContactInfo.getId());
-        entity.forCreate();
-
-        if(dto.getAdditionalInfos() != null) {
-            Set<AnnounceAdditionInfoDto> announceAdditionInfos = new HashSet<>();
-            for(AnnouncementInfoSelector sInfo : dto.getAdditionalInfos())
-                announceAdditionInfos.add(sInfo.toDto());
-
-            entity.setAdditionalInfos(announceAdditionInfos);
-        }
-
-        if(dto.getAdditionalOptions() != null) {
-            Set<AnnounceOptionDto> announceOptionDtos = new HashSet<>();
-            for(AnnounceOptionSelector sOption : dto.getAdditionalOptions())
-                announceOptionDtos.add(sOption.toDto());
-
-            entity.setAdditionalOptions(announceOptionDtos);
-        }
-
-        repository.save(entity);
-        AnnouncementDto createdAnnounce = entity.toDto();
-        createdAnnounce.setContactInfo(createdContactInfo);
-        createdAnnounce.setPriceTag(createdPriceTag);
-
-        return createdAnnounce;
-    }
+//    @Override
+//    public AnnouncementDto createNewAnnouncement(AnnouncementDto dto) {
+//        if(dto == null) return null;
+//
+//        if(StringUtils.isEmpty(dto.getTitle())) throw new IllegalStateException("Announce title can't be empty");
+//        if(dto.getCategoryId() == null) throw new IllegalStateException("CategoryId is null");
+//
+//        // CHECK contactInfo
+//        if(dto.getContactInfo() == null || (StringUtils.isEmpty(dto.getContactInfo().getGmail()) && StringUtils.isEmpty(dto.getContactInfo().getPhone())))
+//            throw new IllegalStateException("Contact info is not full");
+//
+//        // CHECK priceTag
+//        if(dto.getPriceTag() == null || dto.getPriceTag().getCurrencyId() == null || dto.getPriceTag().getPrice() == null)
+//            throw new IllegalStateException("PriceTag is not full");
+//
+//        AnnouncementContactDto createdContactInfo = announcementContactService.createAnnounceContact(dto.getContactInfo());
+//        AnnouncementPriceDto createdPriceTag = announcementPriceService.createAnnouncePrice(dto.getPriceTag());
+//
+//        AnnouncementEntity entity = new AnnouncementEntity();
+//        BeanUtils.copyProperties(dto, entity);
+//        entity.setPriceTagId(createdPriceTag.getId());
+//        entity.setContactInfoId(createdContactInfo.getId());
+//        entity.forCreate();
+//
+//        if(dto.getAdditionalInfos() != null) {
+//            Set<AnnounceAdditionInfoDto> announceAdditionInfos = new HashSet<>();
+//            for(AnnouncementInfoSelector sInfo : dto.getAdditionalInfos())
+//                announceAdditionInfos.add(sInfo.toDto());
+//
+//            entity.setAdditionalInfos(announceAdditionInfos);
+//        }
+//
+//        if(dto.getAdditionalOptions() != null) {
+//            Set<AnnounceOptionDto> announceOptionDtos = new HashSet<>();
+//            for(AnnounceOptionSelector sOption : dto.getAdditionalOptions())
+//                announceOptionDtos.add(sOption.toDto());
+//
+//            entity.setAdditionalOptions(announceOptionDtos);
+//        }
+//
+//        repository.save(entity);
+//        AnnouncementDto createdAnnounce = entity.toDto();
+//        createdAnnounce.setContactInfo(createdContactInfo);
+//        createdAnnounce.setPriceTag(createdPriceTag);
+//
+//        return createdAnnounce;
+//    }
 
     @Override
     public DataTable<AnnouncementDto> table1(Map<String, Object> filter) {
@@ -292,5 +291,15 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
 
         return entityDB;
+    }
+
+    @Override
+    public AnnouncementEntity getById(Long id) {
+        return commonValidator.validateAnnouncementId(id);
+    }
+
+    @Override
+    public Page<AnnouncementEntity> getPageHomeData(PageParam pageParam){
+        return repository.getAnnouncementPage(PageRequest.of(pageParam.getPage() - 1, pageParam.getSize()));
     }
 }

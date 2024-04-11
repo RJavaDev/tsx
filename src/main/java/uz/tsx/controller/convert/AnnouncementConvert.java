@@ -2,15 +2,21 @@ package uz.tsx.controller.convert;
 
 import lombok.experimental.UtilityClass;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import uz.tsx.dto.CurrencyDto;
+import uz.tsx.dto.announcement.AnnouncementContactDto;
 import uz.tsx.dto.announcement.AnnouncementDto;
+import uz.tsx.dto.announcement.AnnouncementPriceDto;
 import uz.tsx.dto.announcement.additionInfo.AnnounceAdditionInfoDto;
 import uz.tsx.dto.announcement.announcementCreated.AnnouncementCreatedDto;
 import uz.tsx.dto.announcement.option.AnnounceOptionDto;
 import uz.tsx.dto.announcement.selector.AnnounceOptionSelector;
 import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
 import uz.tsx.entity.announcement.AnnouncementEntity;
+import uz.tsx.interfaces.AnnouncementInterface;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -36,6 +42,38 @@ public class AnnouncementConvert {
         dto.setAdditionalInfos(announceAdditionInfoToSelector(newAnnouncementEntity.getAdditionalInfos()));
         dto.setAdditionalOptions(announceOptionDtoToSelector(newAnnouncementEntity.getAdditionalOptions()));
         dto.setAttachUrlResponses(AttachConvert.convertToAttachUrlDto(newAnnouncementEntity.getAttachPhotos()));
+
+        return dto;
+    }
+
+    public AnnouncementDto convertToDto(AnnouncementInterface interfaceDB){
+        AnnouncementDto dto = new AnnouncementDto();
+        AnnouncementContactDto contactDto = new AnnouncementContactDto();
+        AnnouncementPriceDto priceDto = new AnnouncementPriceDto();
+        CurrencyDto currencyDto = new CurrencyDto();
+
+        dto.setId(interfaceDB.getId());
+        dto.setTitle(interfaceDB.getTitle());
+        dto.setCreatedDate(interfaceDB.getCreatedDate());
+
+        contactDto.setLongitude(interfaceDB.getLongitude());
+        contactDto.setLatitude(interfaceDB.getLatitude());
+        contactDto.setPhone(interfaceDB.getPhone());
+        contactDto.setGmail(interfaceDB.getGmail());
+        contactDto.setAddress(interfaceDB.getAddress());
+
+        dto.setContactInfo(contactDto);
+
+        priceDto.setPrice(interfaceDB.getPrice());
+        priceDto.setIsDeal(interfaceDB.getIsDeal());
+        priceDto.setIsFree(interfaceDB.getIsFree());
+        priceDto.setIsExchange(interfaceDB.getIsExchange());
+        priceDto.setCurrencyId(interfaceDB.getCurrencyId());
+        currencyDto.setCode(interfaceDB.getCurrencyCode());
+        priceDto.setCurrency(currencyDto);
+
+
+        dto.setPriceTag(priceDto);
 
         return dto;
     }
@@ -92,4 +130,7 @@ public class AnnouncementConvert {
     }
 
 
+    public List<AnnouncementDto> convertToDto(Page<AnnouncementEntity> pageHomeData) {
+        return pageHomeData.stream().map(AnnouncementConvert::convertToDto).toList();
+    }
 }

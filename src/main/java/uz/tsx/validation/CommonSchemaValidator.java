@@ -15,7 +15,7 @@ import uz.tsx.entity.announcement.additionInfo.AdditionType;
 import uz.tsx.entity.announcement.option.OptionEntity;
 import uz.tsx.entity.announcement.option.OptionGroupEntity;
 import uz.tsx.exception.*;
-import uz.tsx.exception.interfaces.UserInterface;
+import uz.tsx.interfaces.UserInterface;
 import uz.tsx.repository.*;
 
 import java.util.List;
@@ -303,7 +303,7 @@ public class CommonSchemaValidator {
 
     public AnnouncementEntity validateAnnouncementId(Long announceId) {
         validateID(announceId);
-        return announcementRepository.findById(announceId).
+        return announcementRepository.getAnnouncementById(announceId).
                 orElseThrow(() -> new IllegalStateException("Announce is not found"));
     }
 }

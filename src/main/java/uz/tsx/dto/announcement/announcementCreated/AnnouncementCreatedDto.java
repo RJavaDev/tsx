@@ -1,5 +1,6 @@
 package uz.tsx.dto.announcement.announcementCreated;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,11 +13,13 @@ import java.util.Set;
 @Setter
 public class AnnouncementCreatedDto {
 
-    @NotNull(message = "")
+    @NotBlank(message = "title cannot be empty")
     private String title;
 
+    @NotNull(message = "categoryId cannot be empty")
     private Long categoryId;
 
+    @NotBlank(message = "description cannot be empty")
     private String description;
 
     private AnnouncementPriceCreateDto priceTag;
