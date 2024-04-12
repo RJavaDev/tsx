@@ -14,4 +14,5 @@ public interface TableNames {
     String OPTION = "tsx_option";
     String OPTION_GROUP = "tsx_option_group";
     String ADDITION_GROUP = "tsx_add_group";
+    String LIKE="tsx_like";
 }
