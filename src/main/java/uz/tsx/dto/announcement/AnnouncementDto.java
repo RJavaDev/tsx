@@ -32,6 +32,8 @@ public class AnnouncementDto extends BaseDto {
 
     private AnnouncementContactDto contactInfo;
 
+    private Integer iSaw;
+
     private Set<AnnouncementInfoSelector> additionalInfos;
 
     private Set<AnnounceOptionSelector> additionalOptions;

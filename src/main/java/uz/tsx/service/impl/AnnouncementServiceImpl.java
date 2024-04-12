@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import uz.tsx.common.util.SecurityUtils;
 import uz.tsx.dto.CurrencyDto;
 import uz.tsx.dto.announcement.AnnouncementContactDto;
 import uz.tsx.dto.announcement.AnnouncementDto;
@@ -20,6 +21,7 @@ import uz.tsx.dto.announcement.selector.AnnounceOptionSelector;
 import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
 import uz.tsx.dto.dtoUtil.DataTable;
 import uz.tsx.entity.AttachEntity;
+import uz.tsx.entity.UserEntity;
 import uz.tsx.entity.announcement.AnnouncementEntity;
 import uz.tsx.entity.announcement.additionInfo.AdditionGroupEntity;
 import uz.tsx.entity.announcement.option.OptionEntity;
@@ -43,6 +45,9 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     private final AnnouncementPriceService announcementPriceService;
     private final CategoryService categoryService;
     private final AttachService attachService;
+    private List<Long> userCount;
+
+
 
     @Override
     public List<AnnouncementDto> findAllAnnouncements() {
@@ -101,6 +106,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
         Map<Long, OptionDto> optionIdToValueMap = findAdditionOptions(optionIds);
         fillAnnounceAdditionOptions(Collections.singletonList(announcementDto), optionIdToValueMap);
+        iSaw(announceId);
         return announcementDto;
     }
 
@@ -275,5 +281,21 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         });
 
         return dto;
+    }
+
+    public void iSaw (Long announcementId){
+        UserEntity user = SecurityUtils.getUser();
+        Optional<AnnouncementEntity> announcement = announcementRepository.findById(announcementId);
+        if (announcement.isPresent()){
+            for (Long userId:userCount){
+                if (user != null && !Objects.equals(userId, user.getId())){
+                    userCount.add(user.getId());
+                }
+            }
+            AnnouncementEntity announcement1 = announcement.get();
+            announcement1.setISaw(userCount.size());
+            announcementRepository.save(announcement1);
+
+        }
     }
 }
