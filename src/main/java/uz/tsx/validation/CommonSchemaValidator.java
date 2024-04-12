@@ -8,13 +8,14 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import uz.tsx.constants.EntityStatus;
 import uz.tsx.entity.*;
+import uz.tsx.entity.announcement.AnnouncementEntity;
 import uz.tsx.entity.announcement.additionInfo.AdditionComboValueEntity;
 import uz.tsx.entity.announcement.additionInfo.AdditionGroupEntity;
 import uz.tsx.entity.announcement.additionInfo.AdditionType;
 import uz.tsx.entity.announcement.option.OptionEntity;
 import uz.tsx.entity.announcement.option.OptionGroupEntity;
 import uz.tsx.exception.*;
-import uz.tsx.exception.interfaces.UserInterface;
+import uz.tsx.interfaces.UserInterface;
 import uz.tsx.repository.*;
 
 import java.util.List;
@@ -41,6 +42,10 @@ public class CommonSchemaValidator {
     private final AnnounceAdditionGroupRepository additionGroupRepository;
 
     private final AnnounceAdditionComboValueRepository additionComboValueRepository;
+
+    private final CurrencyRepository currencyRepository;
+
+    private final AnnouncementRepository announcementRepository;
 
 
     private void throwIdIsEmpty(String attachId) {
@@ -191,7 +196,7 @@ public class CommonSchemaValidator {
 
     public void validateOptionGroupId(Long id) {
         validateID(id);
-        if (!optionGroupRepository.existsById(id)) {
+        if (!optionGroupRepository.existsByGroupId(id)) {
             throw new NotFoundException(id + "-id not found!");
         }
     }
@@ -219,10 +224,10 @@ public class CommonSchemaValidator {
         }
     }
 
-    public void validateAdditionGroupByType(Long id) {
+    public void validateAdditionGroupByType(Long id, AdditionType type) {
 
         AdditionType entityDBType = validateAdditionGroup(id).getType();
-        if(entityDBType!=AdditionType.COMBOBOX){
+        if(entityDBType!=type){
             throw new IllegalArgumentException(String.format("Addition to AdditionComboValue of type %s is not allowed.", entityDBType));
         }
     }
@@ -287,5 +292,18 @@ public class CommonSchemaValidator {
         if(!additionComboValueRepository.existsAdditionComboValue(id)){
             throw new NotFoundException(id+"-id not found!");
         }
+    }
+
+    public void validateCurrencyId(Long currencyId) {
+        validateID(currencyId);
+        if(!currencyRepository.existsCurrencyId(currencyId)){
+            throw new NotFoundException(currencyId+"-id not found!");
+        }
+    }
+
+    public AnnouncementEntity validateAnnouncementId(Long announceId) {
+        validateID(announceId);
+        return announcementRepository.getAnnouncementById(announceId).
+                orElseThrow(() -> new IllegalStateException("Announce is not found"));
     }
 }

@@ -1,13 +1,15 @@
 package uz.tsx.common.util;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.tsx.entity.UserEntity;
 
+@UtilityClass
 public class SecurityUtils {
-    public static String getUsername(){
+    public String getUsername(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(authentication instanceof UsernamePasswordAuthenticationToken token) {
@@ -18,7 +20,7 @@ public class SecurityUtils {
         return null;
     }
 
-    public static UserEntity getUser(){
+    public UserEntity getUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(authentication instanceof UsernamePasswordAuthenticationToken token) {
@@ -29,7 +31,7 @@ public class SecurityUtils {
         return null;
     }
 
-    public static Long getUserId(){
+    public Long getUserId(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(authentication instanceof UsernamePasswordAuthenticationToken token) {

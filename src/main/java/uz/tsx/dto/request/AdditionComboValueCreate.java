@@ -10,15 +10,15 @@ import lombok.Setter;
 @Setter
 public class AdditionComboValueCreate {
 
-    @NotNull(message = "nameUz must not be empty")
+    @NotBlank(message = "nameUz must not be empty")
     private String nameUz;
 
-    @NotNull(message = "nameRu must not be empty")
+    @NotBlank(message = "nameRu must not be empty")
     private String nameRu;
 
-    @NotNull(message = "nameEn must not be empty")
+    @NotBlank(message = "nameEn must not be empty")
     private String nameEn;
 
-    @NotBlank(message = "groupId must not be empty")
+    @NotNull(message = "groupId must not be empty")
     private Long groupId;
 }

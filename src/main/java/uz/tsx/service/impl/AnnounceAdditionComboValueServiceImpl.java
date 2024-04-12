@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.tsx.entity.announcement.additionInfo.AdditionComboValueEntity;
+import uz.tsx.entity.announcement.additionInfo.AdditionType;
 import uz.tsx.repository.AnnounceAdditionComboValueRepository;
 import uz.tsx.service.AnnounceAdditionComboValueService;
 import uz.tsx.validation.CommonSchemaValidator;
@@ -21,7 +22,7 @@ public class AnnounceAdditionComboValueServiceImpl implements AnnounceAdditionCo
     @Override
     public boolean add(AdditionComboValueEntity addedEntity) {
 
-        schemaValidator.validateAdditionGroupByType(addedEntity.getGroupId());
+        schemaValidator.validateAdditionGroupByType(addedEntity.getGroupId(), AdditionType.COMBOBOX);
         repository.save(addedEntity);
 
         return true;

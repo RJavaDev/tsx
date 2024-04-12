@@ -2,8 +2,8 @@ package uz.tsx.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uz.tsx.controller.convert.AnnounceAdditionComboValueConvert;
 import uz.tsx.dto.announcement.additionInfo.AdditionComboValueDto;
@@ -27,7 +27,7 @@ public class AnnounceAdditionComboValueController {
 
     @PostMapping("/add")
     @Operation(summary = "Add new addition combo value", description = "Add a new addition combo value to the system.")
-    public ApiResponse<Object> add(@RequestBody @Validated AdditionComboValueCreate dto) {
+    public ApiResponse<Object> add(@RequestBody @Valid AdditionComboValueCreate dto) {
 
         AdditionComboValueEntity addedEntity = AnnounceAdditionComboValueConvert.convertToEntity(dto);
         boolean added = service.add(addedEntity);

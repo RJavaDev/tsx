@@ -3,8 +3,8 @@ package uz.tsx.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uz.tsx.controller.convert.OperationGroupConvert;
 import uz.tsx.dto.announcement.option.OptionGroupDto;
@@ -28,7 +28,7 @@ public class OptionGroupController {
 
     @PostMapping("/add")
     @Operation(summary = "Add new option group", description = "Add a new option group to the system.")
-    public ApiResponse<Object> add(@RequestBody @Validated OptionGroupCreateDto dto){
+    public ApiResponse<Object> add(@RequestBody @Valid OptionGroupCreateDto dto){
 
         OptionGroupEntity entity = OperationGroupConvert.convertToEntity(dto);
         OptionGroupEntity added = service.add(entity);

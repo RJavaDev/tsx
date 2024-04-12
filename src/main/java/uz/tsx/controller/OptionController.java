@@ -1,7 +1,7 @@
 package uz.tsx.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.validation.annotation.Validated;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import uz.tsx.controller.convert.OptionConvert;
 import uz.tsx.dto.announcement.option.OptionDto;
@@ -26,7 +26,7 @@ public class OptionController {
 
     @PostMapping("/add")
     @Operation(summary = "Add new option", description = "Add a new option to the system.")
-    public ApiResponse<Object> addOption(@RequestBody @Validated OptionCreateDto dto){
+    public ApiResponse<Object> addOption(@RequestBody @Valid OptionCreateDto dto){
 
         OptionEntity entity = OptionConvert.convertToEntity(dto);
         boolean isAdd = service.add(entity);

@@ -6,6 +6,7 @@ import uz.tsx.dto.CategoryDto;
 import uz.tsx.dto.announcement.selector.AnnounceOptionSelector;
 import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
 import uz.tsx.dto.base.BaseDto;
+import uz.tsx.dto.response.AttachUrlResponse;
 
 import java.util.*;
 
@@ -21,6 +22,8 @@ public class AnnouncementDto extends BaseDto {
     private List<String> attachPhotosUrl = new ArrayList<>();
 
     private List<String> attachMiniPhotosUrl = new ArrayList<>();
+
+    private List<AttachUrlResponse> attachUrlResponses;
 
     private String description;
 
