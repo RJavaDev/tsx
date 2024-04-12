@@ -298,10 +298,6 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
         repository.save(entityDB);
 
-        AnnouncementDto dto = entity.toDto();
-        List<AttachEntity> attachEntities = attachService.saveImgFiles(imgFiles);
-        entity.setAttachPhotos(attachEntities);
-        announcementRepository.save(entity);
 
         return entityDB;
     }
@@ -318,7 +314,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     public void iSaw (Long announcementId){
         UserEntity user = SecurityUtils.getUser();
-        Optional<AnnouncementEntity> announcement = announcementRepository.findById(announcementId);
+        Optional<AnnouncementEntity> announcement = repository.findById(announcementId);
         if (announcement.isPresent()){
             for (Long userId:userCount){
                 if (user != null && !Objects.equals(userId, user.getId())){
@@ -327,7 +323,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             }
             AnnouncementEntity announcement1 = announcement.get();
             announcement1.setISaw(userCount.size());
-            announcementRepository.save(announcement1);
+            repository.save(announcement1);
 
         }
     }
