@@ -55,37 +55,21 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     @Override
-    public boolean update(CategoryEntity newUpdateObject, Long categoryId, String attachId) {
-        CategoryEntity entity = childIdAndParentIdVerify(newUpdateObject, categoryId);
-        entity.setParentId(newUpdateObject.getParentId());
-        String nameRu = newUpdateObject.getNameRu();
-        String nameEn = newUpdateObject.getNameEn();
-        String nameUz = newUpdateObject.getNameUz();
+    public boolean update(CategoryEntity newUpdateObject, String attachId) {
 
-        if (!nameEn.isEmpty()) {
-            deletedObjectOriginDataBase(nameEn);
-            entity.setNameEn(nameEn);
-            entity.setNameRu(nameRu);
-            entity.setNameUz(nameUz);
-        }
+        CategoryEntity updateEntity = commonSchemaValidator.validateCategoryUpdate(newUpdateObject);
 
+        commonSchemaValidator.categoryUpdateParentAttachIdTogetherInspection(updateEntity, attachId);
 
-
-        AttachEntity attach = commonSchemaValidator.validateAttach(attachId);
-        entity.setAttach(attach);
-
-        entity.forUpdate(SecurityUtils.getUserId());
-        repository.save(entity);
+        updateEntity.forUpdate(SecurityUtils.getUserId());
+        repository.save(updateEntity);
         return true;
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
-        if (id != null) {
-            repository.findByCategoryId(id).orElseThrow(
-                    () -> new CategoryNotFoundException(id + " id not found!!!"));
-        }
+        commonSchemaValidator.doesCategoryExist(id);
         repository.categoryDelete(id);
     }
 
@@ -111,6 +95,8 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     private CategoryEntity childIdAndParentIdVerify(CategoryEntity category, Long categoryId) {
+
+
 
         CategoryEntity entity = null;
         if (category.getParentId() != null) {

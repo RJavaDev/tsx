@@ -115,11 +115,11 @@ public class CategoryController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "Update Category by ID", description = "This method updates a category based on the provided ID.")
-    @PatchMapping("/update/{id}")
-    public ApiResponse<Object> update(@RequestBody CategoryUpdateRequestDto categoryDto, @PathVariable Long id) {
+    @PatchMapping("/update")
+    public ApiResponse<Object> update(@RequestBody @Valid CategoryUpdateRequestDto categoryDto) {
 
         CategoryEntity category = CategoryConvert.convertToEntity(categoryDto);
-        boolean isUpdate = service.update(category, id, categoryDto.getAttachId());
+        boolean isUpdate = service.update(category, categoryDto.getAttachId());
 
         return ApiResponse.build()
                 .code(ResponseCode.OK)

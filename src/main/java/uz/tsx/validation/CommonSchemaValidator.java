@@ -166,19 +166,56 @@ public class CommonSchemaValidator {
 
     }
 
+    public void categoryUpdateParentAttachIdTogetherInspection(CategoryEntity updateEntity, String attachId) {
+        if(Objects.isNull(attachId)){
+            categoryParentAttachIdTogetherInspection(updateEntity, updateEntity.getAttach().getId());
+        }else{
+            categoryParentAttachIdTogetherInspection(updateEntity, attachId);
+        }
+    }
+
     public void validateCategory(Long categoryId) {
         validateID(categoryId);
         categoryRepository.findByCategoryId(categoryId).orElseThrow(() -> new CategoryNotFoundException(categoryId + "- id not found!"));
     }
 
+    public CategoryEntity validateCategoryUpdate(CategoryEntity newUpdateObject) {
+
+        CategoryEntity categoryDB = validateGetCategory(newUpdateObject.getId());
+
+        String nameEn = newUpdateObject.getNameEn();
+        String nameUz = newUpdateObject.getNameUz();
+        String nameRu = newUpdateObject.getNameRu();
+
+        if(Objects.nonNull(nameEn) && Objects.nonNull(nameRu) && Objects.nonNull(nameUz)){
+            categoryDB.setNameEn(nameEn);
+            categoryDB.setNameRu(nameRu);
+            categoryDB.setNameUz(nameUz);
+        }
+
+        Long parentId = newUpdateObject.getParentId();
+        if(Objects.nonNull(parentId)){
+            categoryDB.setParentId(parentId);
+        }
+
+        return categoryDB;
+    }
+
     public CategoryEntity validateGetCategory(Long id) {
-        if (Objects.isNull(id)) throw new CategoryNotFoundException("category id cannot be null");
+        validateID(id);
         return categoryRepository.findByCategoryId(id).orElseThrow(() -> new CategoryNotFoundException(id + "- id not found!"));
     }
 
     public CategoryEntity validateGetParentCategory(Long id) {
         if (Objects.isNull(id)) return null;
         return categoryRepository.findByCategoryId(id).orElseThrow(() -> new CategoryNotFoundException(id + "- id not found!"));
+    }
+
+    public void doesCategoryExist(Long categoryId){
+        validateID(categoryId);
+        if(!categoryRepository.doesCategoryExistById(categoryId)){
+            throw new CategoryNotFoundException(categoryId + "-id not found!");
+        }
     }
 
     public void validateOptionGroupId(Long id) {
