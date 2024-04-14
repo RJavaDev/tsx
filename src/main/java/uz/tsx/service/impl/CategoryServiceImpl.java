@@ -30,11 +30,8 @@ public class CategoryServiceImpl implements CategoryService {
     public boolean add(CategoryEntity category, String attachId) {
         Long userId = SecurityUtils.getUserId();
 
-        commonSchemaValidator.categoryStatusCheck(category, attachId);
+        commonSchemaValidator.categoryParentAttachIdTogetherInspection(category, attachId);
 
-        AttachEntity attach = commonSchemaValidator.validateAttach(attachId);
-
-        category.setAttach(attach);
         category.forCreate(userId);
 
         repository.save(category);

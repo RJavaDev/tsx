@@ -99,7 +99,7 @@ public class CategoryController {
                 .message(ResponseMessage.OK);
     }
 
-        @Operation(summary = "Get All Categories with Tree Structure", description = "This method retrieves all categories in a tree structure, starting from the root category and including all its descendants.")
+    @Operation(summary = "Get All Categories with Tree Structure", description = "This method retrieves all categories in a tree structure, starting from the root category and including all its descendants.")
     @GetMapping("/get/all-tree")
     public ApiResponse<Object> getAllTreeCategory() {
 
