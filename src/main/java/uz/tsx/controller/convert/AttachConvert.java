@@ -38,7 +38,7 @@ public class AttachConvert {
         dto.setType(attachEntity.getType());
         dto.setSize(attachEntity.getSize());
         dto.setCreatedData(attachEntity.getCreatedDate());
-        dto.setUrl(ATTACH_PATH + attachEntity.getPath() + "/" + attachEntity.getId() + "." + attachEntity.getType());
+        dto.setAttachUrl(AttachConvert.convertToAttachUrlDto(attachEntity));
         return dto;
     }
 

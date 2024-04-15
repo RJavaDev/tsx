@@ -15,5 +15,5 @@ public class AttachResponseDto {
     private String type;
     private Double duration;
     private LocalDateTime createdData;
-    private String url;
+    private AttachUrlResponse attachUrl;
 }
