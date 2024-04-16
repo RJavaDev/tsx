@@ -43,7 +43,7 @@ public class AnnouncementEntity extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "i_saw", unique = true, nullable = false)
+    @Column(name = "i_saw")
     private Integer iSaw;
 
     @Column(name = "price_tag_id")

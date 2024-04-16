@@ -1,7 +1,9 @@
 package uz.tsx.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.tsx.controller.convert.OptionConvert;
 import uz.tsx.dto.announcement.option.OptionDto;
@@ -24,6 +26,8 @@ public class OptionController {
         this.service = optionService;
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/add")
     @Operation(summary = "Add new option", description = "Add a new option to the system.")
     public ApiResponse<Object> addOption(@RequestBody @Valid OptionCreateDto dto){
@@ -37,6 +41,8 @@ public class OptionController {
                 .message(ResponseMessage.OK);
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/get/{id}")
     @Operation(summary = "Get option by ID", description = "Retrieve an option from the system by its ID.")
     public ApiResponse<Object> getById(@PathVariable Long id){
@@ -50,6 +56,8 @@ public class OptionController {
                 .message(ResponseMessage.OK);
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/getAll")
     @Operation(summary = "Get all options", description = "Retrieve all options from the system.")
     public ApiResponse<Object> getALL(){
@@ -63,6 +71,8 @@ public class OptionController {
                 .message(ResponseMessage.OK);
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/list")
     @Operation(summary = "Get options by group", description = "Retrieve a list of options belonging to a specific group.")
     public ApiResponse<Object> getOptionsByGroup(@RequestParam(value = "groupId", required = false) Long groupId) {
@@ -76,6 +86,8 @@ public class OptionController {
                 .message(ResponseMessage.OK);
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     @Operation(summary = "Delete option by ID", description = "Delete an option from the system by its ID.")
     public ApiResponse<Object> delete(@PathVariable Long id){
