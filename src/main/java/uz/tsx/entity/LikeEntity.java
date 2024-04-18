@@ -13,15 +13,20 @@ import uz.tsx.entity.base.BaseEntity;
 @Table(name = TableNames.LIKE)
 public class LikeEntity extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+   public enum LikeStatus{
+        DISLIKE,
+        LIKE
+
+    }
+
+    @ManyToOne
     private AnnouncementEntity announcement;
 
     @Column(name = "count")
     private Integer likeCount;
 
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private UserEntity user;
-
+    @Column(name = "like_status")
+    private LikeStatus likeStatus;
 
 
 }

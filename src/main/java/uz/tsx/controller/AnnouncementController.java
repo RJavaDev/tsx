@@ -1,7 +1,9 @@
 package uz.tsx.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +35,7 @@ public class AnnouncementController {
 //    public HttpResponse<AnnouncementDto> createAnnouncement(@RequestBody AnnouncementDto dto) {
 //        return HttpResponse.build(true, "OK", announcementService.createNewAnnouncement(dto), HttpResponse.Status.OK.getCode());
 //    }
-
+    @SecurityRequirement(name = "Bearer Authentication")
     @PostMapping("/add")
     @Operation(summary = "Create new announcement", description = "Create a new announcement.")
     public ApiResponse<Object> addNewAnnouncement(@RequestBody @Valid AnnouncementCreatedDto dto) {
@@ -71,9 +73,10 @@ public class AnnouncementController {
 //    }
 
     @GetMapping("/get/{id}")
-    public ApiResponse<Object> getById(@PathVariable Long id) {
-
+    public ApiResponse<Object> getById(@PathVariable Long id, HttpServletRequest httpServletRequest) {
+        announcementService.iSaw(id,httpServletRequest);
         AnnouncementEntity entity = announcementService.getById(id);
+
         AnnouncementDto announcementDto = AnnouncementConvert.convertToDto(entity);
 
         return ApiResponse.build()

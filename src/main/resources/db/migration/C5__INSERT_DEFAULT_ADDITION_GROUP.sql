@@ -108,7 +108,6 @@ VALUES
     ('CREATED', NOW(), 'Brand_7', 'Марка_7', 'Brend_7', function_getid('Мотоциклы'), 3),
     ('CREATED', NOW(), 'Mileage 2', 'Пробег 2', 'Kilometr 2', function_getid('Мотоциклы'), 2),
     ('CREATED', NOW(), 'Year of issue 2', 'Год выпуска 2', 'Chiqarilgan yili 2', function_getid('Мотоциклы'), 1),
-    ('CREATED', NOW(), 'Type', 'Тип', 'Turi', function_getid('Мотоциклы'), 3),
     ('CREATED', NOW(), 'Engine capacity 2', 'Объем двигателя 2', 'Dvigatel quvvati 2', function_getid('Мотоциклы'), 2),
     ('CREATED', NOW(), 'Type', 'Тип', 'Turi', function_getid('Мотоциклы'), 2);
 
@@ -131,7 +130,6 @@ VALUES
 -- tsx_add_group default 2.2.1
 INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
 VALUES
-    ('CREATED', NOW(), 'Type of business', 'Вид бизнеса', 'Biznes turi', function_getid('Недвижимость'), 0),
     ('CREATED', NOW(), 'State 2', 'Состояние 2', 'Davlat 2', function_getid('Посуточная аренда'), 0),
     ('CREATED', NOW(), 'Number of beds', 'Количества спалных мест', 'To''shaklar soni', function_getid('Посуточная аренда'), 3),
     ('CREATED', NOW(), 'Regulations', 'Парвила', 'Qoidalar', function_getid('Посуточная аренда'), 3),
@@ -203,7 +201,7 @@ VALUES
 -- tsx_add_group default  2.5.1
 INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
 VALUES
-    ('CREATED', NOW(), 'Type', 'Тип', 'Turi', function_getid('Гаражи / стоянки'), 0),
+    ('CREATED', NOW(), 'Type 2', 'Тип 2', 'Turi 2', function_getid('Гаражи / стоянки'), 0),
     ('CREATED', NOW(), 'Purpose 2', 'Назначение 2', 'Maqsad 2', function_getid('Гаражи / стоянки'), 3),
     ('CREATED', NOW(), 'Parking spaces', 'Машиномест', 'Avtoturargohlar', function_getid('Гаражи / стоянки'), 3),
     ('CREATED', NOW(), 'Square', 'Площадь', 'Kvadrat', function_getid('Гаражи / стоянки'), 2),
@@ -239,5 +237,35 @@ VALUES
 -- tsx_add_group default  2.7.1
 INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
 VALUES
+    ('CREATED', NOW(), 'Type of business 2', 'Вид бизнеса 2', 'Biznes turi 2', function_getid('Транспорт'), 0),
     ('CREATED', NOW(), 'Subcategories 2', 'Подкатегории 2', 'Pastki toifalar 2', function_getid('Декор окон'), 3),
     ('CREATED', NOW(), 'State 12', 'Состояние 12', 'Holati 12', function_getid('Предметы интерьера'), 0);
+
+-- tsx_add_group default  4.1.1
+INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
+VALUES
+    ('CREATED', NOW(), 'Type of business 3', 'Вид бизнеса 3', 'Biznes turi 3', function_getid('Электроника'), 0),
+    ('CREATED', NOW(), 'Subcategories 3', 'Подкатегории 3', 'Pastki toifalar 3', function_getid('Аксессуары и  комплектуюшие'), 3),
+    ('CREATED', NOW(), 'Subcategories 4', 'Подкатегории 4', 'Pastki toifalar 4', function_getid('Мобильные телефоны'), 3),
+    ('CREATED', NOW(), 'Subcategories 5', 'Подкатегории 5', 'Pastki toifalar 5', function_getid('Стационарные телефоны'), 3),
+    ('CREATED', NOW(), 'Screen diagonal', 'Другое', 'Ekran diagonali', function_getid('Ноутбуки'), 3),
+    ('CREATED', NOW(), 'Laptop brand*', 'Марка ноутбука*', 'Noutbuk brendi*', function_getid('Ноутбуки'), 3),
+    ('CREATED', NOW(), 'Types of Accessories', 'Типы аксесуаров', 'Aksessuarlar turlari', function_getid('Аксессуары2'), 3),
+    ('CREATED', NOW(), 'Types of components', 'Типы комплектующих', 'Komponentlar turlari', function_getid('Комплектующие'), 3),
+    ('CREATED', NOW(), 'Monitor brand', 'Марка монитора', 'Monitor brendi', function_getid('Мониторы'), 3),
+    ('CREATED', NOW(), 'Types of consumables', 'Типы расходников', 'Sarf materiallari turlari', function_getid('Внешние накопители'), 3),
+    ('CREATED', NOW(), 'Types of consumables 2', 'Типы расходников 2', 'Sarf materiallari turlari 2', function_getid('Расходные материалы'), 3),
+    ('CREATED', NOW(), 'Camera brand', 'Марка фотоапаратаов', 'Kamera brendi', function_getid('Цифровые фотоаппараты'), 3),
+    ('CREATED', NOW(), 'Camcorder brand', 'Марка видеокамеры', 'Videokamera brendi', function_getid('Видеокамеры'), 3),
+    ('CREATED', NOW(), 'Camcorder brand 2', 'Марка видеокамеры 2', 'Videokamera brendi 2', function_getid('Объективы'), 3),
+    ('CREATED', NOW(), 'Types of accessories', 'Виды аксесуаров', 'Aksessuarlar turlari', function_getid('Аксессуары для фото / видеокамер'), 3),
+    ('CREATED', NOW(), 'Player brand ', 'Марка плеера', 'O''yinchi brendi', function_getid('Медиа проигрыватели'), 3),
+    ('CREATED', NOW(), 'Player brand 2', 'Марка плеера 2', 'O''yinchi brendi 2', function_getid('Телевизоры'), 3),
+    ('CREATED', NOW(), 'Type 3', 'Тип 3', 'Turi 3', function_getid('Телевизоры'), 0),
+    ('CREATED', NOW(), 'Player brand 3', 'Марка плеера 3', 'O''yinchi brendi 3', function_getid('Mp3 плееры'), 3),
+    ('CREATED', NOW(), 'Music center brand', 'Марка музыкального центра', 'Musiqa markazi brendi', function_getid('Музыкальные центры'), 3),
+    ('CREATED', NOW(), 'Brand 10', 'Марка 10', 'Brand 10', function_getid('Усилители / ресиверы'), 3),
+    ('CREATED', NOW(), 'Brand 11', 'Марка 11', 'Brand 11', function_getid('Cd / md / виниловые проигрыватели'), 3),
+    ('CREATED', NOW(), 'Brand 12', 'Марка 12', 'Brand 12', function_getid('Техника для дома'), 3),
+    ('CREATED', NOW(), 'Brand 13', 'Марка 13', 'Brand 13', function_getid('Техника для кухни'), 3),
+    ('CREATED', NOW(), 'State 13', 'Состояние 13', 'Holati 13', function_getid('Электроника'), 0);

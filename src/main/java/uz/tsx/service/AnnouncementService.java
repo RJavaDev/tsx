@@ -1,5 +1,6 @@
 package uz.tsx.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 import uz.tsx.dto.announcement.AnnouncementDto;
@@ -29,4 +30,7 @@ public interface AnnouncementService {
     AnnouncementEntity getById(Long id);
 
     Page<AnnouncementEntity> getPageHomeData(PageParam pageParam);
+
+    Integer iSaw (Long id, HttpServletRequest httpServletRequest);
+
 }

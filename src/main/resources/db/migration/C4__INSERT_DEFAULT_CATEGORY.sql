@@ -1,20 +1,20 @@
 --create default attach
 INSERT INTO tsx_attach (id, content_type, created_date, origin_name, path, size, type)
-VALUES ('7d5ade1d-0950-4785-bd73-d85430080a46', 'image/jpeg', now(), 'Image from wp-s.ru (1).jpg', 'images/category',
+VALUES ('06e74d93-a22c-466f-977b-8f2510eca4c8', 'image/jpeg', now(), 'medium_news_size_duncan-git-header.jpg', 'images/category',
         308630, 'jpg');
 
 -- create default 1 category
 INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, attach_id)
 VALUES
-       ('CREATED', now(), 'Transportation', 'Транспорт', 'Transport', '7d5ade1d-0950-4785-bd73-d85430080a46'),
-       ('CREATED', now(), 'Real estate', 'Недвижимость', 'Ko''chmas mulk', '7d5ade1d-0950-4785-bd73-d85430080a46'),
-       ('CREATED', now(), 'Work and services', 'Работа и услуги', 'Ish va xizmatlar', '7d5ade1d-0950-4785-bd73-d85430080a46'),
-       ('CREATED', now(), 'Animals', 'Животные', 'Hayvonlar', '7d5ade1d-0950-4785-bd73-d85430080a46'),
-       ('CREATED', now(), 'Electronics', 'Электроника', 'Elektronika', '7d5ade1d-0950-4785-bd73-d85430080a46'),
-       ('CREATED', now(), 'Clothing and textiles', 'Одежда и текстил', 'Kiyim va to''qimachilik', '7d5ade1d-0950-4785-bd73-d85430080a46'),
-       ('CREATED', now(), 'Construction', 'Строительства', 'Qurilish', '7d5ade1d-0950-4785-bd73-d85430080a46'),
-       ('CREATED', now(), 'Food', 'Продукты питания', 'Oziq-ovqat maxsulotlari', '7d5ade1d-0950-4785-bd73-d85430080a46'),
-       ('CREATED', now(), 'Entertainment', 'Развлечение', 'O''yin-kulgi','7d5ade1d-0950-4785-bd73-d85430080a46');
+       ('CREATED', now(), 'Transportation', 'Транспорт', 'Transport', '06e74d93-a22c-466f-977b-8f2510eca4c8'),
+       ('CREATED', now(), 'Real estate', 'Недвижимость', 'Ko''chmas mulk', '06e74d93-a22c-466f-977b-8f2510eca4c8'),
+       ('CREATED', now(), 'Work and services', 'Работа и услуги', 'Ish va xizmatlar', '06e74d93-a22c-466f-977b-8f2510eca4c8'),
+       ('CREATED', now(), 'Animals', 'Животные', 'Hayvonlar', '06e74d93-a22c-466f-977b-8f2510eca4c8'),
+       ('CREATED', now(), 'Electronics', 'Электроника', 'Elektronika', '06e74d93-a22c-466f-977b-8f2510eca4c8'),
+       ('CREATED', now(), 'Clothing and textiles', 'Одежда и текстил', 'Kiyim va to''qimachilik', '06e74d93-a22c-466f-977b-8f2510eca4c8'),
+       ('CREATED', now(), 'Construction', 'Строительства', 'Qurilish', '06e74d93-a22c-466f-977b-8f2510eca4c8'),
+       ('CREATED', now(), 'Food', 'Продукты питания', 'Oziq-ovqat maxsulotlari', '06e74d93-a22c-466f-977b-8f2510eca4c8'),
+       ('CREATED', now(), 'Entertainment', 'Развлечение', 'O''yin-kulgi','06e74d93-a22c-466f-977b-8f2510eca4c8');
 
 -- create default 1.1 category
 INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
@@ -240,6 +240,7 @@ VALUES
     ('CREATED', now(), 'Home Appliances', 'Техника для дома', 'Maishiy texnika1', function_getid('Electronics')),
     ('CREATED', now(), 'Kitchen appliances', 'Техника для кухни', 'Oshxona jihozlari', function_getid('Electronics')),
     ('CREATED', now(), 'Photo/video', 'Фото / видео', 'Foto/video', function_getid('Electronics')),
+    ('CREATED', now(), 'PTV video equipment', 'Тв видеотехника', 'Televizion video uskunalar', function_getid('Electronics')),
     ('CREATED', now(), 'Accessories and components', 'Аксессуары и  комплектуюшие', 'Aksessuarlar va komponentlar', function_getid('Electronics')),
     ('CREATED', now(), 'Climatic equipment', 'Климатическое  оборудовование', 'Iqlim uskunalari', function_getid('Electronics')),
     ('CREATED', now(), 'Other electronics', 'Прочая электроника', 'Boshqa elektronika', function_getid('Electronics'));
@@ -254,7 +255,7 @@ VALUES
     ('CREATED', now(), 'Radios', 'Радиоприемники', 'Radiolar',  function_getid('Audio equipment')),
     ('CREATED', now(), 'Portable speakers', 'Портативная акустика', 'Portativ dinamiklar',  function_getid('Audio equipment')),
     ('CREATED', now(), 'Amplifiers/receivers', 'Усилители / ресиверы', 'Kuchaytirgichlar/qabul qiluvchilar',  function_getid('Audio equipment')),
-    ('CREATED', now(), 'CD/MD/Vinyl players', 'CD / md / виниловы проигрыватели', 'CD/MD/vinil pleyerlar',  function_getid('Audio equipment')),
+    ('CREATED', now(), 'CD/MD/Vinyl players', 'Cd / md / виниловые проигрыватели', 'CD/MD/vinil pleyerlar',  function_getid('Audio equipment')),
     ('CREATED', now(), 'Other audio equipment', 'Прочая аудиотехника', 'Boshqa audio uskunalar',  function_getid('Audio equipment')),
     ('CREATED', now(), 'Headphones', 'Наушники', 'Naushniklar',  function_getid('Audio equipment'));
 
@@ -298,6 +299,37 @@ VALUES ('CREATED', now(), 'Accessories for TV/Video Equipment', 'Аксессу�
        ('CREATED', now(), 'Satellite TV', 'Спутниковое тв', 'Sun''iy yo''ldosh televideniesi', function_getid('Тв / видеотехника')),
        ('CREATED', now(), 'Other TV/video equipment', 'Прочая тв /  видеотехника', 'Boshqa televizor/video uskunalari',
         function_getid('Тв / видеотехника'));
+
+-- create default 1.5.6 category
+INSERT INTO tsx_category (status, created_date, name_en, name_ru, name_uz, parent_id)
+VALUES
+    ('CREATED', NOW(), 'Accessories', 'Аксессуары', 'Aksessuarlar', function_getid('Tелефоны')),
+    ('CREATED', NOW(), 'Mobile Phones', 'Мобильные телефоны', 'Mobil telefonlar', function_getid('Tелефоны')),
+    ('CREATED', NOW(), 'SIM Cards Tariffs Numbers', 'Сим карты тарифы номера', 'SIM kartlar tariflari raqamlari', function_getid('Tелефоны')),
+    ('CREATED', NOW(), 'Landline Phones', 'Стационарные телефоны', 'Qo''ng''iroq telefonlari', function_getid('Tелефоны')),
+    ('CREATED', NOW(), 'Other Phones', 'Прочие телефоны', 'Boshqa telefonlar', function_getid('Tелефоны'));
+
+-- create default 1.5.7 category
+INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
+VALUES
+    ('CREATED', NOW(), 'Computers', 'Компьютеры', 'Kompyuterlar', function_getid('Фото / видео')),
+    ('CREATED', NOW(), 'Film Cameras', 'Пленочные фотоаппараты', 'Plenachnye fotoapparaty', function_getid('Фото / видео')),
+    ('CREATED', NOW(), 'Digital Cameras', 'Цифровые фотоаппараты', 'Tsifrovye fotoapparaty', function_getid('Фото / видео')),
+    ('CREATED', NOW(), 'Video Cameras', 'Видеокамеры', 'Videokamery', function_getid('Фото / видео')),
+    ('CREATED', NOW(), 'Lenses', 'Объективы', 'Ob''yektivy', function_getid('Фото / видео')),
+    ('CREATED', NOW(), 'Tripods Monopods', 'Штативы моноподы', 'Shtativy monopody', function_getid('Фото / видео')),
+    ('CREATED', NOW(), 'Camera Flashes', 'Фотовспышки', 'Fotovspyshki', function_getid('Фото / видео')),
+    ('CREATED', NOW(), 'Camera Video Accessories', 'Аксессуары для фото видеокамер', 'Foto videokamerlar uchun aksessuarlar', function_getid('Фото / видео')),
+    ('CREATED', NOW(), 'Telescopes Binoculars', 'Телескопы бинокли', 'Teleskopy binokli', function_getid('Фото / видео'));
+
+-- create default 1.5.7 category
+INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
+VALUES
+    ('CREATED', NOW(), 'Media Players', 'Медиа проигрыватели', 'Media pleery', function_getid('Тв видеотехника')),
+    ('CREATED', NOW(), 'Televisions', 'Телевизоры', 'Televizorlar', function_getid('Тв видеотехника')),
+    ('CREATED', NOW(), 'TV Video Accessories', 'Аксессуары для ТВ Видеотехники', 'TV va video texnikasi uchun aksessuarlar', function_getid('Тв видеотехника')),
+    ('CREATED', NOW(), 'Satellite TV', 'Спутниковое тв', 'Orbita TV', function_getid('Тв видеотехника')),
+    ('CREATED', NOW(), 'Other TV Video Equipment', 'Прочая тв видеотехника', 'Boshqa TV video texnikasi', function_getid('Тв видеотехника'));
 
 -- create default 1.6.0 category
 INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
