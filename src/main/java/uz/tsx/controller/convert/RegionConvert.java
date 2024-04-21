@@ -27,6 +27,7 @@ public class RegionConvert {
 
     public RegionEntity convertToEntity(RegionUpdateRequestDto regionUpdateRequestDto){
         RegionEntity region = new RegionEntity();
+        region.setId(regionUpdateRequestDto.getId());
         region.setNameUz(regionUpdateRequestDto.getNameUz());
         region.setNameEn(regionUpdateRequestDto.getNameEn());
         region.setNameRu(regionUpdateRequestDto.getNameRu());
