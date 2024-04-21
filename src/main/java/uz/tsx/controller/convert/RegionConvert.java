@@ -58,4 +58,8 @@ public class RegionConvert {
         return regionEntityList.stream().map(RegionConvert::fromTree)
                 .filter(p -> p.getStatus() != EntityStatus.DELETED).toList();
     }
+
+    public RegionDto fromOneLevelChild(RegionEntity entity) {
+        return entity.getDto(true);
+    }
 }

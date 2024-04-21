@@ -8,13 +8,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
+import uz.tsx.controller.convert.CategoryConvert;
 import uz.tsx.controller.convert.RegionConvert;
+import uz.tsx.dto.CategoryDto;
 import uz.tsx.dto.RegionDto;
 import uz.tsx.dto.dtoUtil.ApiResponse;
 import uz.tsx.dto.dtoUtil.ResponseCode;
 import uz.tsx.dto.dtoUtil.ResponseMessage;
 import uz.tsx.dto.request.RegionCreateRequestDto;
 import uz.tsx.dto.request.RegionUpdateRequestDto;
+import uz.tsx.entity.CategoryEntity;
 import uz.tsx.entity.RegionEntity;
 import uz.tsx.service.RegionService;
 
@@ -43,6 +46,19 @@ public class RegionController {
                 .body(regionSave)
                 .message(ResponseMessage.OK);
 
+    }
+
+    @Operation(summary = "Get Region Child", description = "This method retrieves the regin along with its descendants in a tree structure based on the provided ID.")
+    @GetMapping("/get/child/{id}")
+    public ApiResponse<Object> getCategoryChildId(@PathVariable Long id) {
+
+        RegionEntity getRegionDB = regionService.getById(id);
+        RegionDto dto = RegionConvert.fromOneLevelChild(getRegionDB);
+
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
+                .body(dto)
+                .message(ResponseMessage.OK);
     }
 
     @Operation(summary = "This method for getId", description = "This method Region getId")
