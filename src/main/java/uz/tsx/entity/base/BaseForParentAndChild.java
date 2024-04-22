@@ -10,7 +10,6 @@ import lombok.Setter;
 @Setter
 @MappedSuperclass
 public class BaseForParentAndChild extends BaseEntity {
-    // TODO DELETE UNIQUE
 
     @Column(name = "name_uz", unique = true, nullable = false)
     private String nameUz;

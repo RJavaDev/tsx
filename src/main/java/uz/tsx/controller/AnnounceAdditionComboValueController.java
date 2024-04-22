@@ -1,9 +1,11 @@
 package uz.tsx.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.tsx.controller.convert.AnnounceAdditionComboValueConvert;
 import uz.tsx.dto.announcement.additionInfo.AdditionComboValueDto;
@@ -25,9 +27,11 @@ public class AnnounceAdditionComboValueController {
 
     private final AnnounceAdditionComboValueService service;
 
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/add")
     @Operation(summary = "Add new addition combo value", description = "Add a new addition combo value to the system.")
-    public ApiResponse<Object> add(@RequestBody @Validated AdditionComboValueCreate dto) {
+    public ApiResponse<Object> add(@RequestBody @Valid AdditionComboValueCreate dto) {
 
         AdditionComboValueEntity addedEntity = AnnounceAdditionComboValueConvert.convertToEntity(dto);
         boolean added = service.add(addedEntity);
@@ -38,6 +42,8 @@ public class AnnounceAdditionComboValueController {
                 .message(ResponseMessage.OK);
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/get/{id}")
     @Operation(summary = "Get addition combo value by ID", description = "Retrieve an addition combo value from the system by its ID.")
     public ApiResponse<Object> getById(@PathVariable Long id) {
@@ -51,6 +57,8 @@ public class AnnounceAdditionComboValueController {
                 .message(ResponseMessage.OK);
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/get/group/{id}")
     @Operation(summary = "Get combo value by addition group ID", description = "Retrieve combo values from Addition Combo Value by the group ID.")
     public ApiResponse<Object> getComboValueByAdditionGroupId(@PathVariable Long id) {
@@ -65,7 +73,8 @@ public class AnnounceAdditionComboValueController {
     }
 
 
-
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PatchMapping("/update")
     @Operation(summary = "Update addition combo value", description = "Update an existing addition combo value in the system.")
     public ApiResponse<Object> update(@RequestBody AdditionComboValueUpdate updateDto) {
@@ -79,6 +88,8 @@ public class AnnounceAdditionComboValueController {
                 .message(ResponseMessage.OK);
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     @Operation(summary = "Delete addition combo value by ID", description = "Delete an addition combo value from the system by its ID.")
     public ApiResponse<Object> delete(@PathVariable Long id) {

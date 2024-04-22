@@ -11,7 +11,7 @@ public interface CategoryService extends BaseInterface<CategoryEntity>{
 
     List<CategoryEntity> getAllTree();
 
-    boolean update(CategoryEntity newUpdateObject, Long categoryId, String attachId);
+    boolean update(CategoryEntity newUpdateObject, String attachId);
 
     CategoryDto findTreeFromBottom(Long childId);           // find category link to its parent and so on ...
 }

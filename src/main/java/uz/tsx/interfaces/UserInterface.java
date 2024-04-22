@@ -1,4 +1,4 @@
-package uz.tsx.exception.interfaces;
+package uz.tsx.interfaces;
 
 import uz.tsx.constants.EntityStatus;
 

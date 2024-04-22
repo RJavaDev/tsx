@@ -30,6 +30,7 @@ public class CategoryConvert {
     public CategoryEntity convertToEntity(CategoryUpdateRequestDto categoryDto){
 
         CategoryEntity category = new CategoryEntity();
+        category.setId(categoryDto.getId());
         category.setNameUz(categoryDto.getNameUz());
         category.setNameRu(categoryDto.getNameRu());
         category.setNameEn(categoryDto.getNameEn());

@@ -2,6 +2,7 @@ package uz.tsx.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +28,7 @@ public class AuthenticationController {
 
     @Operation(summary = "User Registration", description = "This method is used for user registration")
     @PostMapping("/register")
-    public ApiResponse<Object> register(@RequestBody UserCreateRequestDto userDto) {
+    public ApiResponse<Object> register(@RequestBody @Valid UserCreateRequestDto userDto) {
 
         UserEntity userEntity = UserConvert.convertToEntity(userDto);
         TokenResponseDto register = service.register(userEntity);
@@ -40,7 +41,7 @@ public class AuthenticationController {
 
     @Operation(summary = "User Login", description = "This method is used for user authentication and login")
     @PostMapping("/login")
-    public ApiResponse<Object> authenticate(@RequestBody LoginRequestDto request) {
+    public ApiResponse<Object> authenticate(@RequestBody @Valid LoginRequestDto request) {
 
         TokenResponseDto authenticate = service.authenticate(request);
 

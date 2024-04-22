@@ -27,6 +27,7 @@ public class RegionConvert {
 
     public RegionEntity convertToEntity(RegionUpdateRequestDto regionUpdateRequestDto){
         RegionEntity region = new RegionEntity();
+        region.setId(regionUpdateRequestDto.getId());
         region.setNameUz(regionUpdateRequestDto.getNameUz());
         region.setNameEn(regionUpdateRequestDto.getNameEn());
         region.setNameRu(regionUpdateRequestDto.getNameRu());
@@ -57,5 +58,9 @@ public class RegionConvert {
     public List<RegionDto> fromTree(List<RegionEntity> regionEntityList){
         return regionEntityList.stream().map(RegionConvert::fromTree)
                 .filter(p -> p.getStatus() != EntityStatus.DELETED).toList();
+    }
+
+    public RegionDto fromOneLevelChild(RegionEntity entity) {
+        return entity.getDto(true);
     }
 }

@@ -15,7 +15,7 @@ import uz.tsx.dto.dtoUtil.ResponseCode;
 import uz.tsx.dto.dtoUtil.ResponseMessage;
 import uz.tsx.dto.request.UserUpdateRequestDto;
 import uz.tsx.entity.UserEntity;
-import uz.tsx.exception.interfaces.UserInterface;
+import uz.tsx.interfaces.UserInterface;
 import uz.tsx.service.UserService;
 
 import java.util.List;

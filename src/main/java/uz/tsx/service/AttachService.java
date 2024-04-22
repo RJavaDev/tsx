@@ -15,6 +15,8 @@ public interface AttachService {
 
     List<AttachEntity> saveAttach(List<MultipartFile> multipartFiles);
 
+    List<AttachEntity> saveAttach(MultipartFile [] multipartFiles);
+
     AttachDownloadDTO download(String fileName);
 
     Page<AttachResponseDto> getWithPage(Integer page, Integer size);
@@ -22,8 +24,6 @@ public interface AttachService {
     String deleteById(String fileName);
 
     List<AttachEntity> saveImgFiles(MultipartFile[] files);
-
-    List<AttachEntity> saveFile(MultipartFile[] files);
 
     String getMinAttachImgName(String originName);
 }

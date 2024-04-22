@@ -1,10 +1,9 @@
 package uz.tsx.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import uz.tsx.entity.announcement.additionInfo.AdditionType;
-
-import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter

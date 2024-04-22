@@ -3,7 +3,7 @@ package uz.tsx.controller.convert;
 import lombok.experimental.UtilityClass;
 import uz.tsx.dto.response.TokenResponseDto;
 import uz.tsx.entity.UserEntity;
-import uz.tsx.exception.interfaces.UserInterface;
+import uz.tsx.interfaces.UserInterface;
 
 @UtilityClass
 public class TokenResponseConvert {

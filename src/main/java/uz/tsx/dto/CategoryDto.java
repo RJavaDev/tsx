@@ -1,5 +1,6 @@
 package uz.tsx.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,6 @@ import uz.tsx.dto.base.BaseDto;
 import uz.tsx.dto.response.AttachUrlResponse;
 import uz.tsx.entity.CategoryEntity;
 
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Getter
@@ -19,8 +19,10 @@ public class CategoryDto extends BaseDto {
 
     @NotBlank(message = "name must not be empty")
     private String nameUz;
+
     @NotBlank(message = "name must not be empty")
     private String nameRu;
+
     @NotBlank(message = "name must not be empty")
     private String nameEn;
 

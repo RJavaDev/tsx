@@ -59,6 +59,15 @@ public class AttachServiceImpl implements AttachService {
         return attachList;
     }
 
+    @Override
+    public List<AttachEntity> saveAttach(MultipartFile [] multipartFiles) {
+        List<AttachEntity> attachList = new ArrayList<>();
+        for (MultipartFile attach : multipartFiles) {
+            attachList.add(saveAttach(attach));
+        }
+        return attachList;
+    }
+
 
     @Override
     public AttachDownloadDTO download(String fileName) {
@@ -119,21 +128,6 @@ public class AttachServiceImpl implements AttachService {
         return optional.get();
     }
 
-    private void fileSaveToSystem(MultipartFile file, String pathFolder, String fileName, String extension) {
-
-        try {
-
-            byte[] bytes = file.getBytes();
-            Path path = Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder + "/" + fileName + "." + extension);
-            File newFile = Files.write(path, bytes).toFile();
-            contentCheck(extension, newFile);
-
-        } catch (IOException e) {
-            throw new FileUploadException("File could not upload");
-        }
-
-    }
-
     private void contentCheck(String extension, File newFile) {
         try {
 
@@ -158,20 +152,7 @@ public class AttachServiceImpl implements AttachService {
         return new StringBuilder(originName).insert(originName.lastIndexOf("."), SUFFIX_MINI_IMG).toString();
     }
 
-    @Override
-    public List<AttachEntity> saveFile(MultipartFile[] files){
-        List<AttachEntity> attachEntityList = new ArrayList<>();
-
-        for(MultipartFile file: files){
-            AttachEntity attach = AttachConvert.generateAttachEntity(file.getOriginalFilename(), file.getSize(), file.getContentType());
-            fileSaveToSystem2(file, attach.getPath(), attach.getId(), attach.getType());
-            attachEntityList.add(repository.save(attach));
-        }
-
-        return attachEntityList;
-    }
-
-    private void fileSaveToSystem2(MultipartFile file, String pathFolder, String fileName, String type){
+    private void fileSaveToSystem(MultipartFile file, String pathFolder, String fileName, String type){
         try {
             String newFileName = fileName + "." + type;
             Files.copy(file.getInputStream(), Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder ).resolve(newFileName), StandardCopyOption.REPLACE_EXISTING);

@@ -42,7 +42,8 @@ public class SecurityConfiguration {
             "/api/v1/attach/upload",
             "/images/**",
             "/api/v1/user/email",
-            "/**",
+            "/api/v1/announcement/**",
+            "/api/v1/announce-addition-group/**"
     };
 
     @Bean

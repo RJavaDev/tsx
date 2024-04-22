@@ -3,17 +3,21 @@ package uz.tsx.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
+import uz.tsx.controller.convert.CategoryConvert;
 import uz.tsx.controller.convert.RegionConvert;
+import uz.tsx.dto.CategoryDto;
 import uz.tsx.dto.RegionDto;
 import uz.tsx.dto.dtoUtil.ApiResponse;
 import uz.tsx.dto.dtoUtil.ResponseCode;
 import uz.tsx.dto.dtoUtil.ResponseMessage;
 import uz.tsx.dto.request.RegionCreateRequestDto;
 import uz.tsx.dto.request.RegionUpdateRequestDto;
+import uz.tsx.entity.CategoryEntity;
 import uz.tsx.entity.RegionEntity;
 import uz.tsx.service.RegionService;
 
@@ -32,7 +36,7 @@ public class RegionController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "This method for post", description = "This method Region add")
     @PostMapping("/add")
-    public ApiResponse<Object> addRegion(@RequestBody RegionCreateRequestDto regionDto) {
+    public ApiResponse<Object> addRegion(@RequestBody @Valid RegionCreateRequestDto regionDto) {
 
         RegionEntity region = RegionConvert.convertToEntity(regionDto);
         boolean regionSave = regionService.add(region);
@@ -42,6 +46,19 @@ public class RegionController {
                 .body(regionSave)
                 .message(ResponseMessage.OK);
 
+    }
+
+    @Operation(summary = "Get Region Child", description = "This method retrieves the regin along with its descendants in a tree structure based on the provided ID.")
+    @GetMapping("/get/child/{id}")
+    public ApiResponse<Object> getCategoryChildId(@PathVariable Long id) {
+
+        RegionEntity getRegionDB = regionService.getById(id);
+        RegionDto dto = RegionConvert.fromOneLevelChild(getRegionDB);
+
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
+                .body(dto)
+                .message(ResponseMessage.OK);
     }
 
     @Operation(summary = "This method for getId", description = "This method Region getId")
@@ -99,11 +116,11 @@ public class RegionController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "This method for Post", description = "This method user update")
-    @PatchMapping("/update/{id}")
-    public ApiResponse<Object> update(@RequestBody RegionUpdateRequestDto regionDto, @PathVariable Long id) {
+    @PatchMapping("/update")
+    public ApiResponse<Object> update(@RequestBody RegionUpdateRequestDto regionDto) {
 
         RegionEntity regionEntity = RegionConvert.convertToEntity(regionDto);
-        boolean isUpdate = regionService.update(regionEntity, id);
+        boolean isUpdate = regionService.update(regionEntity);
 
         return ApiResponse.build()
                 .code(ResponseCode.OK)

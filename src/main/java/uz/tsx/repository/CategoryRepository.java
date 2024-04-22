@@ -45,4 +45,7 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
                    "    )\n" +
                    "select * from sub_category order by id desc", nativeQuery = true)
     List<CategoryEntity> getCategoriesByChildToAncestors(@Param("id") Long childId);
+
+    @Query(value = "SELECT COUNT(tsxc.id) > 0 FROM tsx_category tsxc WHERE tsxc.id = :categoryId AND tsxc.status <> 'DELETED'", nativeQuery = true)
+    boolean doesCategoryExistById(@Param("categoryId") Long categoryId);
 }

@@ -1,7 +1,6 @@
 package uz.tsx.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.tsx.common.util.SecurityUtils;
@@ -15,7 +14,7 @@ import uz.tsx.entity.role.RoleEnum;
 import uz.tsx.exception.AuthenticationException;
 import uz.tsx.exception.UserDataException;
 import uz.tsx.exception.UserUnauthorizedAction;
-import uz.tsx.exception.interfaces.UserInterface;
+import uz.tsx.interfaces.UserInterface;
 import uz.tsx.repository.UserRepository;
 import uz.tsx.service.AuthenticationService;
 import uz.tsx.validation.CommonSchemaValidator;
@@ -52,7 +51,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return TokenResponseConvert.from(jwt, userDB);
     }
 
-    private UserEntity saveUser(@NotNull UserEntity user) throws UserDataException {
+    private UserEntity saveUser(UserEntity user) throws UserDataException {
 
         commonSchemaValidator.userPasswordAndPhoneNumberCheck(user.getUsername());
 

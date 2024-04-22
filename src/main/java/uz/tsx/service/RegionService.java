@@ -12,6 +12,6 @@ public interface RegionService extends BaseInterface<RegionEntity>{
 
     List<RegionEntity> getAllTree();
 
-    boolean update(RegionEntity newUpdateObject, Long regionId);
+    boolean update(RegionEntity newUpdateObject);
 
 }

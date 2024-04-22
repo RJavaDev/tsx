@@ -44,12 +44,6 @@ public class AttachController {
     @Value("${attach.upload.folder}")
     private String ATTACH_UPLOAD_FOLDER;
 
-    @PostMapping("/img-upl")
-    public List<AttachUrlResponse> upload(@RequestParam MultipartFile[] files){
-        return AttachConvert.convertToAttachUrlDto(service.saveFile(files));
-    }
-
-
     @Operation(summary = "Upload Image", description = "This method is used to upload an image")
     @PostMapping("/upload")
     public ApiResponse<Object> upload(@RequestParam MultipartFile file){

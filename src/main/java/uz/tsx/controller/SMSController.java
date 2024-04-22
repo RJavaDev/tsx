@@ -1,8 +1,10 @@
 package uz.tsx.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 import uz.tsx.dto.dtoUtil.ApiResponse;
@@ -17,14 +19,16 @@ import uz.tsx.SMS.service.SMSCodeService;
 @EnableMethodSecurity
 @RequestMapping("api/v1/sms")
 @RequiredArgsConstructor
-@Tag(name = "User Controller", description = "This Controller manages the user for Admin")
+@Tag(name = "SMS Controller", description = "This Controller manages SMS operations")
 public class SMSController {
 
     private final SMSCodeService smsCodeService;
 
     private final UserService userService;
 
-    @Operation(summary = "This method for get", description = "This send sms email or phone")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("permitAll()")
+    @Operation(summary = "Send SMS", description = "This endpoint sends an SMS to the user")
     @GetMapping(value = "/send-sms")
     public ApiResponse<Object> sendSms() {
 
@@ -37,7 +41,9 @@ public class SMSController {
 
     }
 
-    @Operation(summary = "This method for get", description = "This is method to activate the user by sms code")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("permitAll()")
+    @Operation(summary = "Activate User with SMS Code", description = "This endpoint activates the user using an SMS code")
     @PostMapping(value = "/activate")
     public ApiResponse<Object> isValidSMSCode(@RequestBody SMSCodeDto smsCode) {
 

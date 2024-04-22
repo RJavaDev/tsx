@@ -1,5 +1,6 @@
 package uz.tsx.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,6 @@ import lombok.Setter;
 import uz.tsx.dto.base.BaseDto;
 import uz.tsx.entity.RegionEntity;
 
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Getter
@@ -15,12 +15,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegionDto extends BaseDto {
+
     @NotBlank(message = "name must not be empty")
-    private String name_uz;
+    private String nameUz;
+
     @NotBlank(message = "name must not be empty")
-    private String name_en;
+    private String nameEn;
+
     @NotBlank(message = "name must not be empty")
-    private String name_ru;
+    private String nameRu;
 
     private Long parentId;
 

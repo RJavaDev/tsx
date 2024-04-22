@@ -24,11 +24,7 @@ public class RegionServiceImpl implements RegionService {
     public boolean add(RegionEntity regionEntity) {
         Long userId = SecurityUtils.getUserId();
 
-        RegionEntity byCreatedByName = repository.findByRegionName(regionEntity.getNameEn());
-        if (byCreatedByName != null) {
-             regionStatusCheckAndSave(byCreatedByName, regionEntity, userId);
-             return true;
-        }
+        deletedObjectOriginDataBase(null, regionEntity.getNameEn(), regionEntity.getNameRu(), regionEntity.getNameUz());
         regionEntity.forCreate(userId);
         repository.save(regionEntity);
         return true;
@@ -63,9 +59,9 @@ public class RegionServiceImpl implements RegionService {
         return repository.getRegionAllTree();}
 
     @Override
-    public boolean update(RegionEntity newUpdateObject, Long regionId) {
+    public boolean update(RegionEntity newUpdateObject) {
 
-        RegionEntity entity = childIdAndParentIdVerify(newUpdateObject,regionId);
+        RegionEntity entity = childIdAndParentIdVerify(newUpdateObject, newUpdateObject.getId());
 
         entity.setParentId(newUpdateObject.getParentId());
 
@@ -73,11 +69,13 @@ public class RegionServiceImpl implements RegionService {
         String nameUz = newUpdateObject.getNameUz();
         String nameRu = newUpdateObject.getNameRu();
 
-        if(!nameEn.isEmpty()){
-            deletedObjectOriginDataBase(nameEn);
-            entity.setNameEn(nameEn);
-            entity.setNameRu(nameRu);
-            entity.setNameUz(nameUz);
+        if(Objects.nonNull(nameEn) && Objects.nonNull(nameRu) && Objects.nonNull(nameUz)){
+            if(!nameEn.isEmpty() && !nameRu.isEmpty() && !nameUz.isEmpty()){
+                deletedObjectOriginDataBase(newUpdateObject.getId(), nameEn, nameRu, nameUz);
+                entity.setNameEn(nameEn);
+                entity.setNameRu(nameRu);
+                entity.setNameUz(nameUz);
+            }
         }
         entity.forUpdate(SecurityUtils.getUserId());
 
@@ -152,13 +150,15 @@ public class RegionServiceImpl implements RegionService {
         return entity;
     }
 
-    private void deletedObjectOriginDataBase(String updateObjectName) {
+    private void deletedObjectOriginDataBase(Long id, String nameEn, String nameRu, String nameUz) {
 
-        RegionEntity originDBObject = repository.findByRegionName(updateObjectName);
-        if(originDBObject.getStatus()==EntityStatus.DELETED){
-            repository.delete(originDBObject);
-        }else {
-            throw new CategoryNotFoundException(updateObjectName + " the region with this name already exists");
-        }
+        List<RegionEntity> originDBObject = repository.findByRegionName(id, nameEn, nameRu, nameUz);
+        originDBObject.forEach((region)->{
+            if(region.getStatus()==EntityStatus.DELETED){
+                repository.delete(region);
+            }else {
+                throw new RegionNotFoundException(region + " the region with this name already exists");
+            }
+        });
     }
 }

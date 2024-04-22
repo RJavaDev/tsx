@@ -16,7 +16,7 @@ public class AnnouncementInfoSelector extends AnnounceAdditionInfoDto {
         String url = "";
 
         if (getAdditionType() == AdditionType.COMBOBOX) {
-            url += "/tsx_add_group/list";
+            url += "/announce-addition-group/list";
 
             if(getAdditionGroupId() != null) {
                 url += "?groupId=" + getAdditionGroupId();
