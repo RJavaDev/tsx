@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import uz.tsx.entity.chat.ChatMessageEntity;
-import uz.tsx.exception.interfaces.UserInterface;
+import uz.tsx.interfaces.UserInterface;
 
 import java.util.List;
 import java.util.Optional;
