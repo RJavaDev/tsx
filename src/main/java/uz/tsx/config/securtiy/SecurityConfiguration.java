@@ -43,7 +43,8 @@ public class SecurityConfiguration {
             "/images/**",
             "/api/v1/user/email",
             "/api/v1/announcement/**",
-            "/api/v1/announce-addition-group/**"
+            "/api/v1/announce-addition-group/**",
+            "/**"
     };
 
     @Bean
