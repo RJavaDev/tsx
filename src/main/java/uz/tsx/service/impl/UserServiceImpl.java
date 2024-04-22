@@ -27,11 +27,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Boolean updateMe(UserEntity userUpdate, String attachId) {
+    public Boolean updateMe(UserEntity userUpdate, String attachId, Long regionId) {
 
         UserEntity userOriginalDB = SecurityUtils.getUser();
 
-        UserEntity userEntity = commonSchemaValidator.validateUserUpdate(userUpdate, userOriginalDB, attachId);
+        UserEntity userEntity = commonSchemaValidator.validateUserUpdate(userUpdate, userOriginalDB, attachId, regionId);
         userEntity.forUpdate();
         repository.save(userEntity);
         return true;
@@ -57,7 +57,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
+    public UserInterface getMe(Long id) {
+        commonSchemaValidator.validateID(id);
+        return repository.getMe(id);
+    }
+
+    @Override
     public UserInterface getById(Long id) {
         return commonSchemaValidator.validateUser(id);
     }

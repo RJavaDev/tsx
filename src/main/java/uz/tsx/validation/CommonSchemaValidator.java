@@ -118,7 +118,7 @@ public class CommonSchemaValidator {
     }
 
 
-    public UserEntity validateUserUpdate(UserEntity userUpdate, UserEntity userOriginalDB, String attachId) {
+    public UserEntity validateUserUpdate(UserEntity userUpdate, UserEntity userOriginalDB, String attachId, Long regionId) {
         if (Objects.nonNull(userUpdate)) {
 
             String firstname = userUpdate.getFirstname();
@@ -136,6 +136,10 @@ public class CommonSchemaValidator {
             }
             if (StringUtils.isNotEmpty(attachId)) {
                 userOriginalDB.setAttach(validateAttach(attachId));
+            }
+            if(Objects.nonNull(regionId)){
+                RegionEntity regionEntity = validateRegion(regionId);
+                userOriginalDB.setRegion(regionEntity);
             }
 
 

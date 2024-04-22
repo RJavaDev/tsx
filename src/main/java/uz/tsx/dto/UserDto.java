@@ -23,9 +23,9 @@ public class UserDto extends BaseDto {
 
     private String emailOrPhone;
 
-    private String address_ru;
-    private String address_uz;
-    private String address_en;
+    private String addressRu;
+    private String addressUz;
+    private String addressEn;
 
     private AttachUrlResponse attach;
 

@@ -27,6 +27,7 @@ import uz.tsx.dto.dtoUtil.ResponseCode;
 import uz.tsx.dto.dtoUtil.ResponseMessage;
 import uz.tsx.exception.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
@@ -104,6 +105,15 @@ public class CommonExceptionHandler {
     @ExceptionHandler(IllegalStateException.class)
     @ResponseStatus(CONFLICT)
     FieldErrorResponse handle(IllegalStateException ex) {
+        return FieldErrorResponse.builder()
+                .message(ex.getMessage())
+                .code("IllegalState")
+                .build();
+    }
+
+    @ExceptionHandler(InvocationTargetException.class)
+    @ResponseStatus(CONFLICT)
+    FieldErrorResponse handle(InvocationTargetException ex) {
         return FieldErrorResponse.builder()
                 .message(ex.getMessage())
                 .code("IllegalState")

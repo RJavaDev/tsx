@@ -52,9 +52,9 @@ public class UserConvert {
 
         if(!Objects.equals(userRegion, Characters.USER_ADDRESS_CHECK)){
             String[] address = userRegion.split("\\|");
-            dto.setAddress_en(address[0]);
-            dto.setAddress_ru(address[1]);
-            dto.setAddress_uz(address[2]);
+            dto.setAddressEn(address[0]);
+            dto.setAddressRu(address[1]);
+            dto.setAddressUz(address[2]);
         }
 
         return dto;

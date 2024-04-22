@@ -52,13 +52,14 @@ public class UserController {
     @GetMapping(value = "/get-me")
     public ApiResponse<Object> getMe() {
 
-        UserEntity me = SecurityUtils.getUser();
+        Long meId = SecurityUtils.getUserId();
+        UserInterface meInformation = service.getMe(meId);
 
-        UserDto meInformation = UserConvert.from(Objects.requireNonNull(me));
+        UserDto meInformationDto = UserConvert.from(meInformation);
 
         return ApiResponse.build()
                 .code(ResponseCode.OK)
-                .body(meInformation)
+                .body(meInformationDto)
                 .message(ResponseMessage.OK);
     }
 
@@ -84,7 +85,7 @@ public class UserController {
     public ApiResponse<Object> updateMe(@RequestBody UserUpdateRequestDto userUpdate) {
 
         UserEntity updateUser = UserConvert.convertToEntity(userUpdate);
-        Boolean isUpdateUser = service.updateMe(updateUser, userUpdate.getAttachId());
+        Boolean isUpdateUser = service.updateMe(updateUser, userUpdate.getAttachId(), userUpdate.getRegionId());
 
         return ApiResponse.build()
                 .code(ResponseCode.OK)
