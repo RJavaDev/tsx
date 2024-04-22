@@ -24,12 +24,17 @@ public class UserDto extends BaseDto {
     private String emailOrPhone;
 
     private String address_ru;
+
     private String address_uz;
+
     private String address_en;
 
     private AttachUrlResponse attach;
 
     private List<RoleEnum> roleEnumList;
+
+    private Integer countUnreadMessages;
+
     public UserEntity toEntity( String... ignoreProperties) {
         return super.toEntity(this, new UserEntity(), ignoreProperties);
     }

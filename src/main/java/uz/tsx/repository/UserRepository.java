@@ -35,11 +35,11 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             "            WHERE tsxu.email_or_phone = :username AND tsxu.status <> 'DELETED'\n", nativeQuery = true)
     Optional<UserInterface> getUserByUsername(@Param("username") String username);
 
-    @Query(value = "SELECT tsxu.*, get_region_address(tsxu.region_id) AS address,tsxa.path, tsxa.type " +
-            "FROM tsx_user tsxu " +
-            "LEFT JOIN tsx_attach tsxa ON tsxu.attach_id = tsxa.id " +
-            "WHERE tsxu.status <> 'DELETED' " +
-            "AND 'USER' = ANY(tsxu.role_enum_list)", nativeQuery = true)
+    @Query(value = "SELECT tsxu.id, tsxu.created_date, tsxu.status, tsxu.email_or_phone, tsxu.firstname, tsxu.lastname, tsxu.password,\n" +
+                   "       cast(tsxu.role_enum_list as text), tsxu.last_active_date, get_region_address(tsxu.region_id) AS address, tsxa.path, tsxa.type\n" +
+                   "FROM tsx_user tsxu\n" +
+                   "         LEFT JOIN tsx_attach tsxa ON tsxu.attach_id = tsxa.id\n" +
+                   "WHERE tsxu.status <> 'DELETED' AND 'USER' = ANY (tsxu.role_enum_list)", nativeQuery = true)
     List<UserInterface> getAllUser();
 
     @Modifying

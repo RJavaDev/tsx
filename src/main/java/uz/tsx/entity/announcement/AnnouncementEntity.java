@@ -4,6 +4,7 @@ import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.annotations.Type;
 import org.springframework.beans.BeanUtils;
 import uz.tsx.constants.TableNames;
@@ -69,7 +70,7 @@ public class AnnouncementEntity extends BaseEntity {
         AnnouncementDto dto = new AnnouncementDto();
         super.toDto(this, dto, ignoreProperties);
 
-        if(getAdditionalInfos() != null) {
+        if(!ArrayUtils.contains(ignoreProperties, "additionalInfos") && getAdditionalInfos() != null) {
             Set<AnnouncementInfoSelector> additionalInfos = new HashSet<>();
 
             for(AnnounceAdditionInfoDto infoDto : getAdditionalInfos()) {
@@ -81,7 +82,7 @@ public class AnnouncementEntity extends BaseEntity {
             dto.setAdditionalInfos(additionalInfos);
         }
 
-        if(getAdditionalOptions() != null) {
+        if(!ArrayUtils.contains(ignoreProperties, "additionalOptions") && getAdditionalOptions() != null) {
             Set<AnnounceOptionSelector> additionalOptions = new HashSet<>();
 
             for(AnnounceOptionDto optionDto : getAdditionalOptions()) {
