@@ -42,8 +42,6 @@ public class AnnounceAdditionComboValueController {
                 .message(ResponseMessage.OK);
     }
 
-    @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/get/{id}")
     @Operation(summary = "Get addition combo value by ID", description = "Retrieve an addition combo value from the system by its ID.")
     public ApiResponse<Object> getById(@PathVariable Long id) {
@@ -57,8 +55,6 @@ public class AnnounceAdditionComboValueController {
                 .message(ResponseMessage.OK);
     }
 
-    @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/get/group/{id}")
     @Operation(summary = "Get combo value by addition group ID", description = "Retrieve combo values from Addition Combo Value by the group ID.")
     public ApiResponse<Object> getComboValueByAdditionGroupId(@PathVariable Long id) {

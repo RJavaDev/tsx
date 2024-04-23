@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.tsx.controller.convert.AnnouncementConvert;
@@ -36,6 +37,7 @@ public class AnnouncementController {
 //        return HttpResponse.build(true, "OK", announcementService.createNewAnnouncement(dto), HttpResponse.Status.OK.getCode());
 //    }
     @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("permitAll()")
     @PostMapping("/add")
     @Operation(summary = "Create new announcement", description = "Create a new announcement.")
     public ApiResponse<Object> addNewAnnouncement(@RequestBody @Valid AnnouncementCreatedDto dto) {
@@ -52,6 +54,8 @@ public class AnnouncementController {
                 .code(ResponseCode.OK);
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("permitAll()")
     @PostMapping("/save/images")
     @Operation(summary = "Save announcement images", description = "Save images for a specific announcement.")
     public ApiResponse<Object> saveAnnouncementImages(@RequestParam("announceId") Long announceId, @RequestParam("images") MultipartFile[] images) {

@@ -43,8 +43,7 @@ public class AnnounceAdditionGroupController {
                 .message(ResponseMessage.OK);
 
     }
-    @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+
     @GetMapping("/get/{id}")
     @Operation(summary = "Get option group by ID", description = "Retrieve an option group from the system by its ID.")
     public ApiResponse<Object> getById(@PathVariable Long id){
@@ -58,15 +57,13 @@ public class AnnounceAdditionGroupController {
                 .message(ResponseMessage.OK);
 
     }
-    @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+
     @GetMapping("/list")
     @Operation(summary = "Get the ComboValue selection group by id", description = "Get the ComboValue from the system parameter group by its ID.")
     public HttpResponse<List<AdditionComboValueDto>> listAnnounceGroupAdds(@RequestParam(value = "groupId") Long groupId) {
         return HttpResponse.build(true, "", service.listAnnounceAdditionGroup(groupId), HttpResponse.Status.OK.ordinal());
     }
-    @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+
     @GetMapping("/get/all")
     @Operation(summary = "Get all option groups", description = "Retrieve all option groups from the system.")
     public ApiResponse<Object> getAll(){

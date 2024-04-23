@@ -32,6 +32,7 @@ public class SecurityConfiguration {
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/api/v1/category/get/**",
+            "/api/v1/category/tree/top/ancestors",
             "/api/v1/product/get/**",
             "/api/v1/technical-service/get/**",
             "/api/v1/banner/get/**",
@@ -44,6 +45,11 @@ public class SecurityConfiguration {
             "/api/v1/user/email",
             "/api/v1/announcement/**",
             "/api/v1/announce-addition-group/**",
+            "/api/v1/tsx-option/get/**",
+            "/api/v1/option-group/get/**",
+            "/api/v1/addition-combo-value/get/**",
+            "/api/v1/announce-addition-group/**",
+            "/api/v1/announcement/**",
             "/**"
     };
 

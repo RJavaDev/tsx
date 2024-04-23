@@ -44,8 +44,6 @@ public class OptionGroupController {
 
     }
 
-    @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/get/{id}")
     @Operation(summary = "Get option group by ID", description = "Retrieve an option group from the system by its ID.")
     public ApiResponse<Object> getById(@PathVariable Long id){
@@ -60,8 +58,6 @@ public class OptionGroupController {
 
     }
 
-    @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/get/all")
     @Operation(summary = "Get all option groups", description = "Retrieve all option groups from the system.")
     public ApiResponse<Object> getAll(){

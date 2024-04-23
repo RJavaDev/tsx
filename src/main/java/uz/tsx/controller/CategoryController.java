@@ -142,7 +142,7 @@ public class CategoryController {
 
     }
 
-    @SecurityRequirement(name = "Bearer Authentication")
+
     @Operation(summary = "Getting ancestors", description = "Getting ancestors.")
     @GetMapping("/tree/top/ancestors")
     public HttpResponse<CategoryDto> findTreeFromBottom(@RequestParam("childId") Long childId) {

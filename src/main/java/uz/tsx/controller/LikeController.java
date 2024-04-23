@@ -34,7 +34,6 @@ import java.util.List;
 public class LikeController {
 
     private final LikeService likeService;
-//    @SecurityRequirement(name = "Bearer Authentication")
 
 
     @Operation(summary = "Add Like", description = "This method adds (on,of) a new Like.")

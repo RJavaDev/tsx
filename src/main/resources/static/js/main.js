@@ -9,7 +9,7 @@ const connectingElement = document.querySelector('.connecting');
 const chatArea = document.querySelector('#chat-messages');
 const logout = document.querySelector('#logout');
 
-let token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIrOTk4OTE0MDczNDM4IiwiaWF0IjoxNzEzNjkxNzA4LCJleHAiOjE3MTQyOTY1MDh9.WsYdHCbJdgh1bNU2xMPSQqdHdQISxH1qYovdpkEL8mY'
+let token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIrOTkxOCIsImlhdCI6MTcxMzg5NzYwNSwiZXhwIjoxNzE0NTAyNDA1fQ.0DmSBPd2n-R4U1mCp01Oixx9KP4vr7SAAnCBIQPHCnY'
 
 let stompClient = null;
 let announceId = null;
