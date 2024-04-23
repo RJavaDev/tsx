@@ -48,7 +48,7 @@ public class AnnounceAdditionGroupServiceImpl implements AnnounceAdditionGroupSe
 
         AdditionGroupEntity updateEntity = schemaValidator.validateAdditionGroupUpdate(entity);
 
-        entity.forUpdate(SecurityUtils.getUserId());
+        updateEntity.forUpdate(SecurityUtils.getUserId());
 
         repository.save(updateEntity);
 

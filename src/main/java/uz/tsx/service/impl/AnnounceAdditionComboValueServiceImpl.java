@@ -3,6 +3,7 @@ package uz.tsx.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.tsx.controller.convert.SecurityUtils;
 import uz.tsx.entity.announcement.additionInfo.AdditionComboValueEntity;
 import uz.tsx.entity.announcement.additionInfo.AdditionType;
 import uz.tsx.repository.AnnounceAdditionComboValueRepository;
@@ -23,6 +24,7 @@ public class AnnounceAdditionComboValueServiceImpl implements AnnounceAdditionCo
     public boolean add(AdditionComboValueEntity addedEntity) {
 
         schemaValidator.validateAdditionGroupByType(addedEntity.getGroupId(), AdditionType.COMBOBOX);
+        addedEntity.forCreate(SecurityUtils.getUserId());
         repository.save(addedEntity);
 
         return true;
@@ -32,7 +34,7 @@ public class AnnounceAdditionComboValueServiceImpl implements AnnounceAdditionCo
     public boolean update(AdditionComboValueEntity updateEntity) {
 
         AdditionComboValueEntity updatedOriginEntity = schemaValidator.validateAdditionComboValue(updateEntity);
-
+        updatedOriginEntity.forUpdate(SecurityUtils.getUserId());
         repository.save(updatedOriginEntity);
 
         return true;

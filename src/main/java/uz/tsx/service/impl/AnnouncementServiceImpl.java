@@ -1,5 +1,8 @@
 package uz.tsx.service.impl;
 
+import com.fasterxml.jackson.databind.DatabindContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.BeanUtils;
@@ -8,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uz.tsx.common.util.SecurityUtils;
-import uz.tsx.controller.convert.AnnouncementConvert;
 import uz.tsx.dto.CurrencyDto;
 import uz.tsx.dto.announcement.AnnouncementContactDto;
 import uz.tsx.dto.announcement.AnnouncementDto;
@@ -18,9 +20,11 @@ import uz.tsx.dto.announcement.option.OptionDto;
 import uz.tsx.dto.announcement.selector.AnnounceOptionSelector;
 import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
 import uz.tsx.dto.dtoUtil.DataTable;
+import uz.tsx.dto.dtoUtil.HttpResponse;
 import uz.tsx.dto.dtoUtil.PageParam;
 import uz.tsx.entity.AttachEntity;
 import uz.tsx.entity.announcement.AnnouncementContactEntity;
+import uz.tsx.entity.UserEntity;
 import uz.tsx.entity.announcement.AnnouncementEntity;
 import uz.tsx.entity.announcement.AnnouncementPriceEntity;
 import uz.tsx.entity.announcement.additionInfo.AdditionGroupEntity;
@@ -47,6 +51,10 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     private final CategoryService categoryService;
     private final AttachService attachService;
 
+    private final Map<Long,List<Long>> userCount=new HashMap<>();
+
+
+
     private final CommonSchemaValidator commonValidator;
 
     @Override
@@ -58,9 +66,16 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         entity.setContactInfo(contactInfoEntity);
         entity.setPriceTag(priceEntity);
 
-        entity.forCreate(SecurityUtils.getUserId());
 
-        return repository.save(entity);
+
+        entity.setISaw(1);
+        entity.forCreate(SecurityUtils.getUserId());
+        AnnouncementEntity save = repository.save(entity);
+
+        List<Long>user=new ArrayList<>();
+        user.add(SecurityUtils.getUserId());
+        userCount.put(save.getId(), user);
+        return save;
     }
 
     @Override
@@ -301,5 +316,65 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     public Page<AnnouncementEntity> getPageHomeData(PageParam pageParam){
         return repository.getAnnouncementPage(PageRequest.of(pageParam.getPage() - 1, pageParam.getSize()));
+    }
+
+
+    @Override
+    public Integer iSaw(Long announcementId, HttpServletRequest httpServletRequest){
+        UserEntity user = SecurityUtils.getUser();
+        Long id=1L;
+        boolean yes=true;
+        HttpSession session = httpServletRequest.getSession();
+        UserEntity user1 = (UserEntity) session.getAttribute("currentSessionUser");
+        Optional<AnnouncementEntity> announcement = repository.findById(announcementId);
+
+        if (userCount.size()>0){
+            List<Long> longs = userCount.get(announcement.get().getId());
+            try {
+                if (user != null && announcement.isPresent()) {
+                    List<Long> longs1 = userCount.get(announcementId);
+
+
+                    for (Long userId : longs1) {
+                        if (Objects.equals(userId, user.getId())) {
+                            yes = false;
+                        }
+                    }
+                    if (yes) {
+                        longs.add(user.getId());
+                        userCount.put(announcement.get().getId(), longs);
+                    }
+                } else {
+                    longs.add(1L);
+                    userCount.put(announcement.get().getId(), longs);
+                }
+            }
+           catch (NullPointerException e){
+                List<Long>u=new ArrayList<>();
+                u.addAll(Collections.singleton(Long.valueOf(announcement.get().getISaw())));
+                u.add(user.getId());
+                userCount.put(announcementId,u);
+            }
+        }
+
+        else {
+                if (Objects.nonNull(user)){id=user.getId();}
+
+            List<Long>u=new ArrayList<>();
+                u.add(id);
+            userCount.put(announcementId,u);
+            AnnouncementEntity announcement1 = announcement.get();
+            List<Long> longs = userCount.get(announcementId);
+            announcement1.setISaw(longs.size()+announcement1.getISaw());
+            repository.save(announcement1);
+            return longs.size();
+        }
+
+        AnnouncementEntity announcement1 = announcement.get();
+        List<Long> longs = userCount.get(announcementId);
+        announcement1.setISaw(longs.size());
+        repository.save(announcement1);
+
+        return longs.size();
     }
 }

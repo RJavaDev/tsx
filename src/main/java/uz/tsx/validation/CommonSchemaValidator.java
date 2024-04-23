@@ -191,9 +191,11 @@ public class CommonSchemaValidator {
         String nameUz = newUpdateObject.getNameUz();
         String nameRu = newUpdateObject.getNameRu();
 
-        if(Objects.nonNull(nameEn) && Objects.nonNull(nameRu) && Objects.nonNull(nameUz)){
+        if(Objects.nonNull(nameEn)){
             categoryDB.setNameEn(nameEn);
+        } else if (Objects.nonNull(nameRu)) {
             categoryDB.setNameRu(nameRu);
+        }else if (Objects.nonNull(nameUz)){
             categoryDB.setNameUz(nameUz);
         }
 

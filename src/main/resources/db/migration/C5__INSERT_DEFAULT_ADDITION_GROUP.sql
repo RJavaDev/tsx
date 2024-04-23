@@ -108,7 +108,6 @@ VALUES
     ('CREATED', NOW(), 'Brand_7', 'Марка_7', 'Brend_7', function_getid('Мотоциклы'), 3),
     ('CREATED', NOW(), 'Mileage 2', 'Пробег 2', 'Kilometr 2', function_getid('Мотоциклы'), 2),
     ('CREATED', NOW(), 'Year of issue 2', 'Год выпуска 2', 'Chiqarilgan yili 2', function_getid('Мотоциклы'), 1),
-    ('CREATED', NOW(), 'Type', 'Тип', 'Turi', function_getid('Мотоциклы'), 3),
     ('CREATED', NOW(), 'Engine capacity 2', 'Объем двигателя 2', 'Dvigatel quvvati 2', function_getid('Мотоциклы'), 2),
     ('CREATED', NOW(), 'Type', 'Тип', 'Turi', function_getid('Мотоциклы'), 2);
 
@@ -131,7 +130,7 @@ VALUES
 -- tsx_add_group default 2.2.1
 INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
 VALUES
-    ('CREATED', NOW(), 'Type of business', 'Вид бизнеса', 'Biznes turi', function_getid('Недвижимость'), 0),
+    ('CREATED', NOW(), 'Type of business 24', 'Вид бизнеса 24', 'Biznes turi 24', function_getid('Недвижимость'), 0),
     ('CREATED', NOW(), 'State 2', 'Состояние 2', 'Davlat 2', function_getid('Посуточная аренда'), 0),
     ('CREATED', NOW(), 'Number of beds', 'Количества спалных мест', 'To''shaklar soni', function_getid('Посуточная аренда'), 3),
     ('CREATED', NOW(), 'Regulations', 'Парвила', 'Qoidalar', function_getid('Посуточная аренда'), 3),
@@ -203,7 +202,7 @@ VALUES
 -- tsx_add_group default  2.5.1
 INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
 VALUES
-    ('CREATED', NOW(), 'Type', 'Тип', 'Turi', function_getid('Гаражи / стоянки'), 0),
+    ('CREATED', NOW(), 'Type 2', 'Тип 2', 'Turi 2', function_getid('Гаражи / стоянки'), 0),
     ('CREATED', NOW(), 'Purpose 2', 'Назначение 2', 'Maqsad 2', function_getid('Гаражи / стоянки'), 3),
     ('CREATED', NOW(), 'Parking spaces', 'Машиномест', 'Avtoturargohlar', function_getid('Гаражи / стоянки'), 3),
     ('CREATED', NOW(), 'Square', 'Площадь', 'Kvadrat', function_getid('Гаражи / стоянки'), 2),
@@ -239,5 +238,165 @@ VALUES
 -- tsx_add_group default  2.7.1
 INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
 VALUES
+    ('CREATED', NOW(), 'Type of business 2', 'Вид бизнеса 2', 'Biznes turi 2', function_getid('Транспорт'), 0),
     ('CREATED', NOW(), 'Subcategories 2', 'Подкатегории 2', 'Pastki toifalar 2', function_getid('Декор окон'), 3),
     ('CREATED', NOW(), 'State 12', 'Состояние 12', 'Holati 12', function_getid('Предметы интерьера'), 0);
+
+-- tsx_add_group default  3.1.1
+INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
+VALUES
+    ('CREATED', NOW(), 'Type of business 3', 'Вид бизнеса 3', 'Biznes turi 3', function_getid('Электроника'), 0),
+    ('CREATED', NOW(), 'Subcategories 3', 'Подкатегории 3', 'Pastki toifalar 3', function_getid('Аксессуары и  комплектуюшие'), 3),
+    ('CREATED', NOW(), 'Subcategories 4', 'Подкатегории 4', 'Pastki toifalar 4', function_getid('Мобильные телефоны'), 3),
+    ('CREATED', NOW(), 'Subcategories 5', 'Подкатегории 5', 'Pastki toifalar 5', function_getid('Стационарные телефоны'), 3),
+    ('CREATED', NOW(), 'Screen diagonal', 'Другое', 'Ekran diagonali', function_getid('Ноутбуки'), 3),
+    ('CREATED', NOW(), 'Laptop brand*', 'Марка ноутбука*', 'Noutbuk brendi*', function_getid('Ноутбуки'), 3),
+    ('CREATED', NOW(), 'Types of Accessories', 'Типы аксесуаров', 'Aksessuarlar turlari', function_getid('Аксессуары2'), 3),
+    ('CREATED', NOW(), 'Types of components', 'Типы комплектующих', 'Komponentlar turlari', function_getid('Комплектующие'), 3),
+    ('CREATED', NOW(), 'Monitor brand', 'Марка монитора', 'Monitor brendi', function_getid('Мониторы'), 3),
+    ('CREATED', NOW(), 'Types of consumables', 'Типы расходников', 'Sarf materiallari turlari', function_getid('Внешние накопители'), 3),
+    ('CREATED', NOW(), 'Types of consumables 2', 'Типы расходников 2', 'Sarf materiallari turlari 2', function_getid('Расходные материалы'), 3),
+    ('CREATED', NOW(), 'Camera brand', 'Марка фотоапаратаов', 'Kamera brendi', function_getid('Цифровые фотоаппараты'), 3),
+    ('CREATED', NOW(), 'Camcorder brand', 'Марка видеокамеры', 'Videokamera brendi', function_getid('Видеокамеры'), 3),
+    ('CREATED', NOW(), 'Camcorder brand 2', 'Марка видеокамеры 2', 'Videokamera brendi 2', function_getid('Объективы'), 3),
+    ('CREATED', NOW(), 'Types of accessories', 'Виды аксесуаров', 'Aksessuarlar turlari', function_getid('Аксессуары для фото / видеокамер'), 3),
+    ('CREATED', NOW(), 'Player brand ', 'Марка плеера', 'O''yinchi brendi', function_getid('Медиа проигрыватели'), 3),
+    ('CREATED', NOW(), 'Player brand 2', 'Марка плеера 2', 'O''yinchi brendi 2', function_getid('Телевизоры'), 3),
+    ('CREATED', NOW(), 'Type 3', 'Тип 3', 'Turi 3', function_getid('Телевизоры'), 0),
+    ('CREATED', NOW(), 'Player brand 3', 'Марка плеера 3', 'O''yinchi brendi 3', function_getid('Mp3 плееры'), 3),
+    ('CREATED', NOW(), 'Music center brand', 'Марка музыкального центра', 'Musiqa markazi brendi', function_getid('Музыкальные центры'), 3),
+    ('CREATED', NOW(), 'Brand 10', 'Марка 10', 'Brand 10', function_getid('Усилители / ресиверы'), 3),
+    ('CREATED', NOW(), 'Brand 11', 'Марка 11', 'Brand 11', function_getid('Cd / md / виниловые проигрыватели'), 3),
+    ('CREATED', NOW(), 'Brand 12', 'Марка 12', 'Brand 12', function_getid('Техника для дома'), 3),
+    ('CREATED', NOW(), 'Brand 13', 'Марка 13', 'Brand 13', function_getid('Техника для кухни'), 3),
+    ('CREATED', NOW(), 'State 13', 'Состояние 13', 'Holati 13', function_getid('Электроника'), 0);
+
+-- tsx_add_group default  4.1.1
+INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
+VALUES
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа розничная торговля / Продажи'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа розничная торговля / Продажи'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа розничная торговля / Продажи'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа транспорт / логистика'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа транспорт / логистика'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа транспорт / логистика'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа строительство'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа строительство'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа строительство'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа юриспруденция и бухгалтерия'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа юриспруденция и бухгалтерия'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа юриспруденция и бухгалтерия'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа охрана / безопасность'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа охрана / безопасность'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа охрана / безопасность'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа домашний персонал'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа домашний персонал'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа домашний персонал'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа красота / фитнес / спорт'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа красота / фитнес / спорт'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа красота / фитнес / спорт'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа туризм / отдых / развлечения'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа туризм / отдых / развлечения'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа туризм / отдых / развлечения'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа образование'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа образование'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа образование'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа культура / искусство'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа культура / искусство'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа культура / искусство'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа медицина / фармация'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа медицина / фармация'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа медицина / фармация'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа "IТ" / телеком / компьютеры'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа "IТ" / телеком / компьютеры'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа "IТ" / телеком / компьютеры'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа недвижимость'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа недвижимость'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа недвижимость'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа маркетинг / реклама / дизайн'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа маркетинг / реклама / дизайн'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа маркетинг / реклама / дизайн'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа производство / энергетика'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа производство / энергетика'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа производство / энергетика'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа секретариат / АХО'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа секретариат / АХО'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа секретариат / АХО'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа начало карьеры / Студенты'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа начало карьеры / Студенты'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа начало карьеры / Студенты'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа сервис и быт'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа сервис и быт'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа сервис и быт'), 0),
+    ('CREATED', NOW(), 'Kind of work*', 'Тип работы*', 'Ish turi*', function_getid('Работа другие сферы занятий'), 0),
+    ('CREATED', NOW(), 'Employment type*', 'Тип занятости*', 'Bandlik turi*', function_getid('Работа другие сферы занятий'), 0),
+    ('CREATED', NOW(), 'Link to resume submission form', 'Ссылка на форму подачи резюме', 'Taqdim etish shaklini davom ettirish uchun havola', function_getid('Работа другие сферы занятий'), 0),
+
+    ('CREATED', NOW(), 'Type of business 4', 'Вид бизнеса 4', 'Biznes turi 4', function_getid('Услуги строительство / ремонт / уборка'), 0),
+    ('CREATED', NOW(), 'Type of business 5', 'Вид бизнеса 5', 'Biznes turi 5', function_getid('Услуги обслуживание, ремонт техники'), 0),
+    ('CREATED', NOW(), 'Type of business 6', 'Вид бизнеса 6', 'Biznes turi 6', function_getid('Услуги финансовые услуги / партнерство'), 0),
+    ('CREATED', NOW(), 'Type of business 7', 'Вид бизнеса 7', 'Biznes turi 7', function_getid('Услуги перевозки / аренда транспорта'), 0),
+    ('CREATED', NOW(), 'Type of business 8', 'Вид бизнеса 8', 'Biznes turi 8', function_getid('Услуги перевозки / аренда транспорта'), 0),
+    ('CREATED', NOW(), 'Type of business 9', 'Вид бизнеса 9', 'Biznes turi 9', function_getid('Услуги реклама / полиграфия / маркетинг / интернет'), 0),
+    ('CREATED', NOW(), 'Type of business 10', 'Вид бизнеса 10', 'Biznes turi 10', function_getid('Услуги няни / сиделки'), 0),
+    ('CREATED', NOW(), 'Type of business 11', 'Вид бизнеса 11', 'Biznes turi 11', function_getid('Услуги сырьё / материалы'), 0),
+    ('CREATED', NOW(), 'Type of business 12', 'Вид бизнеса 12', 'Biznes turi 12', function_getid('Услуги красота / здоровье'), 0),
+    ('CREATED', NOW(), 'Type of business 13', 'Вид бизнеса 13', 'Biznes turi 13', function_getid('Услуги оборудование'), 0),
+    ('CREATED', NOW(), 'Type of business 14', 'Вид бизнеса 14', 'Biznes turi 14', function_getid('Услуги образование / Спорт'), 0),
+    ('CREATED', NOW(), 'Type of business 15', 'Вид бизнеса 15', 'Biznes turi 15', function_getid('Услуги для животных'), 0),
+    ('CREATED', NOW(), 'Type of business 16', 'Вид бизнеса 16', 'Biznes turi 16', function_getid('Услуги продажа бизнеса'), 0),
+    ('CREATED', NOW(), 'Type of business 17', 'Вид бизнеса 17', 'Biznes turi 17', function_getid('Услуги развлечения / Искусство / Фото / Видео'), 0),
+    ('CREATED', NOW(), 'Type of business 18', 'Вид бизнеса 18', 'Biznes turi 18', function_getid('Услуги туризм'), 0),
+    ('CREATED', NOW(), 'Type of business 19', 'Вид бизнеса 19', 'Biznes turi 19', function_getid('Услуги переводчиков / набор текста'), 0),
+    ('CREATED', NOW(), 'Type of business 20', 'Вид бизнеса 20', 'Biznes turi 20', function_getid('Авто / мото услуги'), 0),
+    ('CREATED', NOW(), 'Type of business 21', 'Вид бизнеса 21', 'Biznes turi 21', function_getid('Юридические услуги'), 0),
+    ('CREATED', NOW(), 'Type of business 22', 'Вид бизнеса 22', 'Biznes turi 22', function_getid('Услуги прокат товаров'), 0),
+    ('CREATED', NOW(), 'Type of business 23', 'Вид бизнеса 23', 'Biznes turi 23', function_getid('Прочие услуги'), 0),
+('CREATED', NOW(), 'Subcategories 6', 'Подкатегории 6', 'Pastki toifalar 6', function_getid('Уборка / Вывоз мусора / Дезинфекция'), 3);
+
+-- tsx_add_group default  5.1.1
+INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
+VALUES
+    ('CREATED', NOW(), 'Type of business 25', 'Вид бизнеса 25', 'Biznes turi 25', function_getid('Одежда и текстил'), 0),
+    ('CREATED', NOW(), 'State 14', 'Состояние 14', 'Holati 14', function_getid('Одежда и текстил'), 0),
+    ('CREATED', NOW(), 'Size', 'Размер', 'Hajmi', function_getid('Женская обувь'), 2),
+    ('CREATED', NOW(), 'Size 1', 'Размер 1', 'Hajmi 1', function_getid('Обувь для мальчиков'), 2),
+    ('CREATED', NOW(), 'Size 2', 'Размер 2', 'Hajmi 2', function_getid('Обувь для девочек'), 2),
+    ('CREATED', NOW(), 'Size 3', 'Размер 3', 'Hajmi 3', function_getid('Обувь для малышей'), 2),
+    ('CREATED', NOW(), 'Size 4', 'Размер 4', 'Hajmi 4', function_getid('Головные уборы'), 2),
+    ('CREATED', NOW(), 'Subcategories 8', 'Подкатегории 8', 'Pastki toifalar 8', function_getid('Ювелирные изделия'), 3),
+    ('CREATED', NOW(), 'Subcategories 7', 'Подкатегории 7', 'Pastki toifalar 7', function_getid('Текстиль'), 3);
+
+
+-- tsx_add_group default  6.1.1
+INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
+VALUES
+    ('CREATED', NOW(), 'Type of business 25', 'Вид бизнеса 25', 'Biznes turi 25', function_getid('Животные'), 0),
+    ('CREATED', NOW(), 'State 15', 'Состояние 15', 'Holati 15', function_getid('Собаки'), 0),
+    ('CREATED', NOW(), 'Dog breed*', 'Порода собаки*', 'It zodi', function_getid('Собаки'), 3),
+    ('CREATED', NOW(), 'State 16', 'Состояние 16', 'Holati 16', function_getid('Кошки'), 0),
+    ('CREATED', NOW(), 'Cat breed*', 'Порода кошки*', 'Mushik zodi', function_getid('Кошки'), 3);
+
+-- tsx_add_group default  7.1.1
+INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
+VALUES
+    ('CREATED', NOW(), 'Type of business 26', 'Вид бизнеса 26', 'Biznes turi 26', function_getid('Строительства'), 0),
+    ('CREATED', NOW(), 'State 16', 'Состояние 16', 'Holati 16', function_getid('Строительства'), 0);
+
+-- tsx_add_group default  8.1.1
+INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
+VALUES
+    ('CREATED', NOW(), 'Type of business 27', 'Вид бизнеса 27', 'Biznes turi 27', function_getid('Продукты питания'), 0),
+('CREATED', NOW(), 'Types', 'Типы ', 'Turlari', function_getid('Продукты питания'), 3);
+
+-- tsx_add_group default  9.1.1
+INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
+VALUES
+    ('CREATED', NOW(), 'Type of business 28', 'Вид бизнеса 28', 'Biznes turi 28', function_getid('Строительства'), 0),
+    ('CREATED', NOW(), 'State 17', 'Состояние 17', 'Holati 17', function_getid('Строительства'), 0),
+    ('CREATED', NOW(), 'Subcategories 9', 'Подкатегории 9', 'Pastki toifalar 9', function_getid('Коллекционирование'), 3),
+    ('CREATED', NOW(), 'Brand 14', 'Марка 14', 'Brand 14', function_getid('Гитары'), 3),
+    ('CREATED', NOW(), 'Brand 15', 'Марка 15', 'Brand 15', function_getid('Синтезаторы'), 3),
+    ('CREATED', NOW(), 'Subcategories 10', 'Подкатегории 10', 'Pastki toifalar 10', function_getid('Студийное оборудование'), 3);
+
+

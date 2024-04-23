@@ -16,6 +16,9 @@ public interface RegionRepository extends JpaRepository<RegionEntity,Long> {
     @Query(value = "SELECT tsxr.* FROM tsx_region tsxr WHERE tsxr.name_en=:regionName",nativeQuery = true)
     RegionEntity findByRegionName(@Param("regionName")String regionName);
 
+    @Query(value = "SELECT tsxr.* FROM tsx_region tsxr WHERE (tsxr.name_en=:nameEn OR tsxr.name_ru =:nameRu OR tsxr.name_uz = :nameUz) AND (:regionId IS NULL OR tsxr.id<>:regionId)",nativeQuery = true)
+    List<RegionEntity> findByRegionName(@Param("regionId") Long id, @Param("nameEn")String nameEn, @Param("nameRu")String nameRu, @Param("nameUz")String nameUz);
+
     @Query(value = "SELECT tsxr.* FROM tsx_region tsxr WHERE tsxr.id=:regionId AND tsxr.status <> 'DELETED'", nativeQuery = true)
     Optional<RegionEntity> findByRegionId(@Param("regionId") Long regionId);
 

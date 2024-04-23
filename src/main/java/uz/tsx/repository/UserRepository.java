@@ -20,9 +20,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query(value = "SELECT * FROM tsx_user du WHERE du.email_or_phone = :username", nativeQuery = true)
     List<UserEntity> findByUsernameOriginalDB(@Param("username") String username);
 
-    @Query(value = "SELECT tsxu.id, tsxu.created_date, tsxu.status, tsxu.firstname, tsxu.lastname, tsxu.email_or_phone, " +
-            " tsxu.updated_date, tsxu.password, tsxu.attach_id, tsxu.region_id, cast(tsxu.role_enum_list as text) as role_enum_list,  " +
-            " get_region_address(tsxu.region_id) AS address,tsxa.path, tsxa.type " +
+    @Query(value = "SELECT tsxu.*, get_region_address(tsxu.region_id) AS address,tsxa.path, tsxa.type\n" +
             "            FROM tsx_user tsxu\n" +
             "            LEFT JOIN tsx_attach tsxa ON tsxu.attach_id = tsxa.id\n" +
             "            WHERE tsxu.id = :userId AND tsxu.status <> 'DELETED'\n" +

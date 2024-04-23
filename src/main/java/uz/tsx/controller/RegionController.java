@@ -116,11 +116,11 @@ public class RegionController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "This method for Post", description = "This method user update")
-    @PatchMapping("/update/{id}")
-    public ApiResponse<Object> update(@RequestBody RegionUpdateRequestDto regionDto, @PathVariable Long id) {
+    @PatchMapping("/update")
+    public ApiResponse<Object> update(@RequestBody RegionUpdateRequestDto regionDto) {
 
         RegionEntity regionEntity = RegionConvert.convertToEntity(regionDto);
-        boolean isUpdate = regionService.update(regionEntity, id);
+        boolean isUpdate = regionService.update(regionEntity);
 
         return ApiResponse.build()
                 .code(ResponseCode.OK)

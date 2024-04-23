@@ -17,13 +17,13 @@ import java.util.List;
 public class RegionDto extends BaseDto {
 
     @NotBlank(message = "name must not be empty")
-    private String name_uz;
+    private String nameUz;
 
     @NotBlank(message = "name must not be empty")
-    private String name_en;
+    private String nameEn;
 
     @NotBlank(message = "name must not be empty")
-    private String name_ru;
+    private String nameRu;
 
     private Long parentId;
 
