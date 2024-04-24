@@ -1,4 +1,3 @@
 #!/bin/bash
 
-nohub ./mvnw spring-boot : run > log.txt 2>&1 &
-echo $! > ./pid.file
+nohup java -jar /tsx/tsx-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > /tsx/log.txt 2>&1 &
