@@ -14,7 +14,7 @@ public class AnnounceOptionSelector extends AnnounceOptionDto {
     public String getOptionListUrl() {
         String url = "";
         if(getOptionGroupId() != null) {
-            url += "/tsx_option/list?groupId=" + getOptionGroupId();
+            url += "/api/v1/tsx-option/list?groupId=" + getOptionGroupId();
         }
         return url;
     }

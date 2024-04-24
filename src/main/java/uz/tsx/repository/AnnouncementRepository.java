@@ -17,13 +17,14 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
     @Query(value = "from AnnouncementEntity ae where ae.status <> 'DELETED'")
     Page<AnnouncementEntity> findPage(Pageable pageable);
 
-    @Query(value = "SELECT a.id, a.created_date AS createdDate, a.title, ac.longitude, ac.latitude, ac.phone, ac.gmail, ac.address, \n" +
-                   "       ap.price, ap.is_free AS isFree, ap.is_deal AS isDeal, ap.is_exchange AS isExchange, c.id AS currencyId, c.code AS currencyCode\n" +
-                   "    FROM tsx_announcement a\n" +
-                   "    LEFT JOIN tsx_announcement_price ap ON a.price_tag_id = ap.id\n" +
-                   "    LEFT JOIN tsx_announcement_contact ac ON a.contact_info_id = ac.id\n" +
-                   "    LEFT JOIN tsx_currency c ON ap.currency_id = c.id\n" +
-                   "    WHERE a.status <> 'DELETED' ORDER BY a.id DESC",
+    @Query(value = "SELECT a.id, a.created_date AS createdDate,aa.attach_id AS attachId, a.title, ac.longitude, ac.latitude, ac.phone, ac.gmail, ac.address,\n" +
+            "                     ap.price, ap.is_free AS isFree, ap.is_deal AS isDeal, ap.is_exchange AS isExchange, c.id AS currencyId, c.code AS currencyCode\n" +
+            "                   FROM tsx_announcement a\n" +
+            "                   LEFT JOIN tsx_announcement_price ap ON a.price_tag_id = ap.id\n" +
+            "                   LEFT JOIN tsx_announcement_contact ac ON a.contact_info_id = ac.id\n" +
+            "                   LEFT JOIN tsx_currency c ON ap.currency_id = c.id\n" +
+            "                   LEFT JOIN announcement_attach aa ON a.id = aa.announcement_id\n" +
+            "                   WHERE a.status <> 'DELETED' ORDER BY a.id DESC",
             countQuery = "SELECT count(*) FROM tsx_announcement WHERE status <> 'DELETED'",
             nativeQuery = true)
     Page<AnnouncementInterface> findPageInterface(Pageable pageable);

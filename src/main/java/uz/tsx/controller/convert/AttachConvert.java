@@ -7,10 +7,7 @@ import uz.tsx.entity.AttachEntity;
 import uz.tsx.exception.OriginalFileNameNullException;
 
 import java.io.File;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 import static uz.tsx.constants.Characters.FOLDER_BOUNDARY;
 import static uz.tsx.service.AttachService.SUFFIX_MINI_IMG;
@@ -124,6 +121,29 @@ public class AttachConvert {
             return attachList.stream().map(AttachConvert::convertToAttachUrlDto).toList();
         }
         return null;
+    }
+    public List<String>convertToAttachUrlMiniDto(List<AttachUrlResponse> mini){
+        List<String> minlist=new ArrayList<>();
+        if (Objects.nonNull(mini)){
+          for (AttachUrlResponse min:mini){
+              if (Objects.nonNull(min.getMinFile())){
+                  minlist.add(min.getMinFile());
+              }
+          }
+        }
+        return minlist;
+    }
+
+    public List<String>convertToAttachUrlOriginDto(List<AttachUrlResponse> origin){
+        List<String> originlist=new ArrayList<>();
+        if (Objects.nonNull(origin)){
+            for (AttachUrlResponse min:origin){
+                if (Objects.nonNull(min.getOriginFile())){
+                    originlist.add(min.getOriginFile());
+                }
+            }
+        }
+        return originlist;
     }
 
 
