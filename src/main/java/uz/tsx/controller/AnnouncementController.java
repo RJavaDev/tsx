@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -26,18 +27,12 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/announcement")
+@RequiredArgsConstructor
 @Tag(name = "Announcement Controller", description = "Operations related to announcements")
 public class AnnouncementController {
 
     private final AnnouncementService announcementService;
-    private final AnnouncementContactService contactService;
-    private final AnnouncementPriceService priceService;
 
-    public AnnouncementController(AnnouncementService announcementService, AnnouncementContactService contactService, AnnouncementPriceService priceService) {
-        this.announcementService = announcementService;
-        this.contactService = contactService;
-        this.priceService = priceService;
-    }
 
 //    @PostMapping("/create")
 //    @Operation(summary = "Create new announcement", description = "Create a new announcement.")
@@ -54,9 +49,7 @@ public class AnnouncementController {
 
         AnnouncementEntity newAnnouncementEntity = announcementService.createNewAnnouncement(entity);
 
-        AnnouncementContactDto contactDto = contactService.getById(newAnnouncementEntity.getCategoryId());
-        AnnouncementPriceDto priceDto = priceService.getById(newAnnouncementEntity.getPriceTagId());
-        AnnouncementDto announcementDto = AnnouncementConvert.convertToDto(newAnnouncementEntity,contactDto,priceDto);
+        AnnouncementDto announcementDto = AnnouncementConvert.convertToDto(newAnnouncementEntity);
 
         return ApiResponse.build()
                 .message(ResponseMessage.OK)
@@ -90,9 +83,7 @@ public class AnnouncementController {
     public ApiResponse<Object> getById(@PathVariable Long id, HttpServletRequest httpServletRequest) {
         announcementService.iSaw(id,httpServletRequest);
         AnnouncementEntity entity = announcementService.getById(id);
-        AnnouncementContactDto contactDto = contactService.getById(entity.getCategoryId());
-        AnnouncementPriceDto priceDto = priceService.getById(entity.getPriceTagId());
-        AnnouncementDto announcementDto = AnnouncementConvert.convertToDto(entity,contactDto,priceDto);
+        AnnouncementDto announcementDto = AnnouncementConvert.convertToDto(entity);
 
         return ApiResponse.build()
                 .message(ResponseMessage.OK)
