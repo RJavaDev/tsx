@@ -39,7 +39,7 @@ public class LikeServiceImpl implements LikeService {
     public List<UserInterface> myGetUsers(Long announcementId) {
 
         return repository.myGetUsers(SecurityUtils.getUserId(), announcementId)
-                    .stream().map(id -> userServiceImpl.getById(id)).toList();
+                    .stream().map(userServiceImpl::getById).toList();
     }
 
     @Override

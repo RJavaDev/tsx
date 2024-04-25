@@ -166,6 +166,11 @@ public class AttachServiceImpl implements AttachService {
     }
 
     @Override
+    public AttachEntity getById(String id) {
+        return repository.findById(id).get();
+    }
+
+    @Override
     public List<AttachEntity> saveImgFiles(MultipartFile[] files) {                      // save files and return attaches
         List<AttachEntity> attachEntities = new ArrayList<>();
         for (MultipartFile file : files) {

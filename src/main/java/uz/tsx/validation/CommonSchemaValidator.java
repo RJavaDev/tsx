@@ -6,7 +6,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import uz.tsx.controller.convert.AnnouncementConvert;
 import uz.tsx.entity.*;
+import uz.tsx.entity.announcement.AnnouncementContactEntity;
 import uz.tsx.entity.announcement.AnnouncementEntity;
 import uz.tsx.entity.announcement.additionInfo.AdditionComboValueEntity;
 import uz.tsx.entity.announcement.additionInfo.AdditionGroupEntity;
@@ -45,6 +47,8 @@ public class CommonSchemaValidator {
     private final CurrencyRepository currencyRepository;
 
     private final AnnouncementRepository announcementRepository;
+
+    private final AnnouncementContactRepository contactRepository;
 
 
     private void throwIdIsEmpty(String attachId) {
@@ -236,6 +240,21 @@ public class CommonSchemaValidator {
         return optionGroupRepository.getOption(id).orElseThrow(() -> new NotFoundException(id + " option group not found"));
     }
 
+    public OptionGroupEntity validateOptionGroupUpdate(OptionGroupEntity optionGroup){
+        OptionGroupEntity optionGroupDb = validateOptionGroup(optionGroup.getId());
+        if (Objects.nonNull(optionGroup.getNameEn())){
+            optionGroupDb.setNameEn(optionGroup.getNameEn());
+        }
+        if (Objects.nonNull(optionGroup.getNameRu())){
+            optionGroupDb.setNameRu(optionGroup.getNameRu());
+        }
+        if (Objects.nonNull(optionGroup.getNameUz())){
+            optionGroupDb.setNameUz(optionGroup.getNameUz());
+        }
+
+        return optionGroupDb;
+    }
+
     public OptionEntity validateOption(Long id) {
         validateID(id);
         return optionRepository.getOptionById(id);
@@ -268,9 +287,13 @@ public class CommonSchemaValidator {
         String nameEn = entity.getNameEn();
         String nameRu = entity.getNameRu();
         String nameUz = entity.getNameUz();
-        if (Objects.nonNull(nameEn) && Objects.nonNull(nameRu) && Objects.nonNull(nameUz)) {
+        if (Objects.nonNull(nameEn)) {
             entityDB.setNameEn(nameEn);
+        }
+        if (Objects.nonNull(nameRu)){
             entityDB.setNameRu(nameRu);
+        }
+        if (Objects.nonNull(nameUz)){
             entityDB.setNameUz(nameUz);
         }
 
@@ -307,9 +330,13 @@ public class CommonSchemaValidator {
         String nameRu = updateEntity.getNameRu();
         String nameEn = updateEntity.getNameEn();
 
-        if (Objects.nonNull(nameEn) && Objects.nonNull(nameRu) && Objects.nonNull(nameUz)) {
+        if (Objects.nonNull(nameEn)) {
             entityDB.setNameEn(nameEn);
+        }
+        if (Objects.nonNull(nameRu)){
             entityDB.setNameRu(nameRu);
+        }
+        if (Objects.nonNull(nameUz)){
             entityDB.setNameUz(nameUz);
         }
 
@@ -335,5 +362,10 @@ public class CommonSchemaValidator {
         validateID(announceId);
         return announcementRepository.getAnnouncementById(announceId).
                 orElseThrow(() -> new IllegalStateException("Announce is not found"));
+    }
+    public AnnouncementContactEntity validateAnnouncementContactId(Long id){
+        validateID(id);
+        return contactRepository.findBy(id)
+                .orElseThrow(()->new NotFoundException("Announce is not found"));
     }
 }

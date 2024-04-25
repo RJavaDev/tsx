@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uz.tsx.common.util.SecurityUtils;
+import uz.tsx.controller.convert.AttachConvert;
 import uz.tsx.dto.CurrencyDto;
 import uz.tsx.dto.announcement.AnnouncementContactDto;
 import uz.tsx.dto.announcement.AnnouncementDto;
@@ -22,6 +23,7 @@ import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
 import uz.tsx.dto.dtoUtil.DataTable;
 import uz.tsx.dto.dtoUtil.HttpResponse;
 import uz.tsx.dto.dtoUtil.PageParam;
+import uz.tsx.dto.response.AttachUrlResponse;
 import uz.tsx.entity.AttachEntity;
 import uz.tsx.entity.announcement.AnnouncementContactEntity;
 import uz.tsx.entity.UserEntity;
@@ -50,6 +52,8 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     private final AnnouncementPriceService announcementPriceService;
     private final CategoryService categoryService;
     private final AttachService attachService;
+    private final AnnouncementContactService contactService;
+    private final AnnouncementPriceService priceService;
 
     private final Map<Long,List<Long>> userCount=new HashMap<>();
 
@@ -80,6 +84,18 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     public List<AnnouncementDto> findAllAnnouncements() {
         List<AnnouncementEntity> list = repository.findAllBy();
         List<AnnouncementDto> announcementDtos = list.stream().map(AnnouncementEntity::toDto).toList();
+
+         for (AnnouncementDto dto:announcementDtos){
+             if (Objects.nonNull(dto)){
+                 AnnouncementEntity announcement1 = repository.findById(dto.getId()).get();
+                 List<AttachUrlResponse> attachUrlResponses = AttachConvert.convertToAttachUrlDto(announcement1.getAttachPhotos());
+                 dto.setAttachPhotosUrl(AttachConvert.convertToAttachUrlOriginDto(attachUrlResponses));
+                 dto.setAttachMiniPhotosUrl(AttachConvert.convertToAttachUrlMiniDto(attachUrlResponses));
+                 dto.setAttachUrlResponses(attachUrlResponses);
+                 dto.setContactInfo(contactService.getById(announcement1.getContactInfoId()));
+                 dto.setPriceTag(priceService.getById(announcement1.getPriceTagId()));
+             }
+         }
 
         List<Long> groupIds = new ArrayList<>();
         List<Long> optionIds = new ArrayList<>();
@@ -264,9 +280,26 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             AnnouncementDto dto = new AnnouncementDto();
             AnnouncementPriceDto priceDto = new AnnouncementPriceDto();
             AnnouncementContactDto contactDto = new AnnouncementContactDto();
+            List<AttachUrlResponse> attachUrlResponses=new ArrayList<>();
+            List<String> originDto =new ArrayList<>();
+            List<String> urlMiniDto =new ArrayList<>();
+            if (Objects.nonNull(aInterface.getAttachId())){
+                AttachEntity attach = attachService.getById(aInterface.getAttachId());
+                List<AttachUrlResponse> attachUrlResponses1 = AttachConvert.convertToAttachUrlDto(List.of(attach));
+                List<String> originDto1 = AttachConvert.convertToAttachUrlOriginDto(attachUrlResponses);
+                List<String> urlMiniDto2 = AttachConvert.convertToAttachUrlMiniDto(attachUrlResponses);
+               originDto=originDto1;
+               urlMiniDto=urlMiniDto2;
+                attachUrlResponses=attachUrlResponses1;
+            }
+
+
+
             BeanUtils.copyProperties(aInterface, dto);
             BeanUtils.copyProperties(aInterface, priceDto, "id");
             BeanUtils.copyProperties(aInterface, contactDto, "id");
+            BeanUtils.copyProperties(aInterface, attachUrlResponses);
+
 
             if(Validation.checkId(aInterface.getCurrencyId())) {
                 CurrencyDto cDto = new CurrencyDto();
@@ -275,7 +308,9 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                 priceDto.setCurrencyId(aInterface.getCurrencyId());
                 priceDto.setCurrency(cDto);
             }
-
+            dto.setAttachPhotosUrl(originDto);
+            dto.setAttachMiniPhotosUrl(urlMiniDto);
+            dto.setAttachUrlResponses(attachUrlResponses);
             dto.setPriceTag(priceDto);
             dto.setContactInfo(contactDto);
             return dto;

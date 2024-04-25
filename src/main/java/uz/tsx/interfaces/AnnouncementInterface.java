@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 public interface AnnouncementInterface {
     Long getId();
+    String getAttachId();
     String getTitle();
     LocalDateTime getCreatedDate();
     Double getLongitude();

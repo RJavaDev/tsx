@@ -12,6 +12,8 @@ import uz.tsx.dto.announcement.announcementCreated.AnnouncementCreatedDto;
 import uz.tsx.dto.announcement.option.AnnounceOptionDto;
 import uz.tsx.dto.announcement.selector.AnnounceOptionSelector;
 import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
+import uz.tsx.dto.response.AttachUrlResponse;
+import uz.tsx.entity.announcement.AnnouncementContactEntity;
 import uz.tsx.entity.announcement.AnnouncementEntity;
 import uz.tsx.interfaces.AnnouncementInterface;
 
@@ -44,6 +46,21 @@ public class AnnouncementConvert {
         dto.setContactInfo(AnnouncementContactConvert.convertToDto(newAnnouncementEntity.getContactInfo()));
         dto.setPriceTag(AnnouncementPriceConvert.convertToDto(newAnnouncementEntity.getPriceTag()));
         dto.setAttachUrlResponses(AttachConvert.convertToAttachUrlDto(newAnnouncementEntity.getAttachPhotos()));
+
+        return dto;
+    }
+
+
+    public AnnouncementDto convertToDto(AnnouncementEntity newAnnouncementEntity,AnnouncementContactDto contact,AnnouncementPriceDto priceTag){
+        AnnouncementDto dto = newAnnouncementEntity.toDto();
+        List<AttachUrlResponse> attachUrlResponses = AttachConvert.convertToAttachUrlDto(newAnnouncementEntity.getAttachPhotos());
+        dto.setPriceTag(priceTag);
+        dto.setContactInfo(contact);
+        dto.setAttachPhotosUrl(AttachConvert.convertToAttachUrlOriginDto(attachUrlResponses));
+        dto.setAttachMiniPhotosUrl(AttachConvert.convertToAttachUrlMiniDto(attachUrlResponses));
+        dto.setAdditionalInfos(announceAdditionInfoToSelector(newAnnouncementEntity.getAdditionalInfos()));
+        dto.setAdditionalOptions(announceOptionDtoToSelector(newAnnouncementEntity.getAdditionalOptions()));
+        dto.setAttachUrlResponses(attachUrlResponses);
 
         return dto;
     }

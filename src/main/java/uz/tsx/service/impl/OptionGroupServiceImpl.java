@@ -32,8 +32,9 @@ public class OptionGroupServiceImpl implements OptionGroupService {
     @Override
     public boolean update(OptionGroupEntity entity) {
         schemaValidator.validateOptionGroupId(entity.getId());
-        entity.forUpdate(SecurityUtils.getUserId());
-        repository.save(entity);
+        OptionGroupEntity optionGroupEntity = schemaValidator.validateOptionGroupUpdate(entity);
+        optionGroupEntity.forUpdate(SecurityUtils.getUserId());
+        repository.save(optionGroupEntity);
         return true;
     }
 
