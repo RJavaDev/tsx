@@ -63,10 +63,8 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         AnnouncementContactEntity contactInfoEntity = announcementContactService.addNewAnnounceContact(entity.getContactInfo());
         AnnouncementPriceEntity priceEntity = announcementPriceService.addNewAnnouncementPrice(entity.getPriceTag());
 
-        entity.setContactInfo(contactInfoEntity);
-        entity.setPriceTag(priceEntity);
-
-
+        entity.setContactInfoId(contactInfoEntity.getId());
+        entity.setPriceTagId(priceEntity.getId());
 
         entity.setISaw(1);
         entity.forCreate(SecurityUtils.getUserId());
