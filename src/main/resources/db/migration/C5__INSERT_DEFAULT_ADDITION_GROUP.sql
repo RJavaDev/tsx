@@ -394,17 +394,17 @@ INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, categ
 VALUES
     ('CREATED', NOW(), 'Type of business 28', 'Вид бизнеса 28', 'Biznes turi 28', function_getid('Развлечение'), 0),
     ('CREATED', NOW(), 'State 17', 'Состояние 17', 'Holati 17', function_getid('Музыкальные инструменты'), 0),
-    ('CREATED', NOW(), 'State 18', 'Состояние 18', 'Holati 18', function_getid('Спорт / отдых'), 0),
-    ('CREATED', NOW(), 'State 19', 'Состояние 19', 'Holati 19', function_getid('Книги / журналы'), 0),
-    ('CREATED', NOW(), 'State 20', 'Состояние 20', 'Holati 20', function_getid('CD / DVD / пластинки / кассеты'), 0),
+    ('CREATED', NOW(), 'State 18', 'Состояние 18', 'Holati 18', function_getid('Спорт/отдых'), 0),
+    ('CREATED', NOW(), 'State 19', 'Состояние 19', 'Holati 19', function_getid('Книги/журналы'), 0),
+    ('CREATED', NOW(), 'State 20', 'Состояние 20', 'Holati 20', function_getid('CD/DVD/пластинки/кассеты'), 0),
     ('CREATED', NOW(), 'Subcategories 9', 'Подкатегории 9', 'Pastki toifalar 9', function_getid('Коллекционирование'), 3),
     ('CREATED', NOW(), 'Brand 14', 'Марка 14', 'Brand 14', function_getid('Гитары'), 3),
     ('CREATED', NOW(), 'Brand 15', 'Марка 15', 'Brand 15', function_getid('Синтезаторы'), 3),
     ('CREATED', NOW(), 'Subcategories 10', 'Подкатегории 10', 'Pastki toifalar 10', function_getid('Студийное оборудование'), 3),
     ('CREATED', NOW(), 'Subcategories 11', 'Подкатегории 11', 'Pastki toifalar 11', function_getid('Вело'), 3),
-    ('CREATED', NOW(), 'Subcategories 11', 'Подкатегории 11', 'Pastki toifalar 11', function_getid('Лыжи / сноуборды'), 3),
-    ('CREATED', NOW(), 'Subcategories 11', 'Подкатегории 11', 'Pastki toifalar 11', function_getid('Коньки'), 3),
-    ('CREATED', NOW(), 'Subcategories 11', 'Подкатегории 11', 'Pastki toifalar 11', function_getid('Атлетика / фитнес'), 3),
+    ('CREATED', NOW(), 'Subcategories 12', 'Подкатегории 12', 'Pastki toifalar 12', function_getid('Лыжи/сноуборды'), 3),
+    ('CREATED', NOW(), 'Subcategories 13', 'Подкатегории 13', 'Pastki toifalar 13', function_getid('Коньки'), 3),
+    ('CREATED', NOW(), 'Subcategories 14', 'Подкатегории 14', 'Pastki toifalar 14', function_getid('Атлетика/фитнес'), 3),
     ('CREATED', NOW(), 'Types of tourism', 'Виды туризма', 'Turizm turlari', function_getid('Товары для туризма'), 3);
 
 
