@@ -68,11 +68,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         AnnouncementPriceEntity priceEntity = announcementPriceService.addNewAnnouncementPrice(entity.getPriceTag());
 
         entity.setContactInfoId(contactInfoEntity.getId());
-        entity.setContactInfo(contactInfoEntity);
         entity.setPriceTagId(priceEntity.getId());
-        entity.setPriceTag(priceEntity);
-
-
 
         entity.setISaw(1);
         entity.forCreate(SecurityUtils.getUserId());
@@ -112,7 +108,6 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                 dto.getAdditionalOptions().forEach(additionOption -> optionIds.add(additionOption.getOptionId()));
             }
         }
-
 
         Map<Long, AnnounceAdditionGroupDto> groupIdToValueMap = findAdditionInfoGroups(groupIds);
         fillAnnounceAdditionGroup(announcementDtos, groupIdToValueMap);

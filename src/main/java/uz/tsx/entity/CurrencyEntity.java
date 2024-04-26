@@ -6,6 +6,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import uz.tsx.constants.TableNames;
+import uz.tsx.dto.CategoryDto;
+import uz.tsx.dto.CurrencyDto;
 import uz.tsx.entity.base.BaseEntity;
 
 @Entity
@@ -19,4 +21,8 @@ public class CurrencyEntity extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String code;   // uzs, usd
+
+    public CurrencyDto toDto(String... ignoreProperties){
+        return toDto(this, new CurrencyDto(), ignoreProperties);
+    }
 }

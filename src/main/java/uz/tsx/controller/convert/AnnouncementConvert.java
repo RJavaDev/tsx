@@ -43,6 +43,8 @@ public class AnnouncementConvert {
         AnnouncementDto dto = newAnnouncementEntity.toDto();
         dto.setAdditionalInfos(announceAdditionInfoToSelector(newAnnouncementEntity.getAdditionalInfos()));
         dto.setAdditionalOptions(announceOptionDtoToSelector(newAnnouncementEntity.getAdditionalOptions()));
+        dto.setContactInfo(AnnouncementContactConvert.convertToDto(newAnnouncementEntity.getContactInfo()));
+        dto.setPriceTag(AnnouncementPriceConvert.convertToDto(newAnnouncementEntity.getPriceTag()));
         dto.setAttachUrlResponses(AttachConvert.convertToAttachUrlDto(newAnnouncementEntity.getAttachPhotos()));
 
         return dto;
