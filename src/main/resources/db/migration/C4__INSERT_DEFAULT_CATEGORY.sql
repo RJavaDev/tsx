@@ -108,27 +108,27 @@ VALUES
        ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('Apartments_')),
        ('CREATED', now(), 'Exchange', 'Обмен', 'Ayirboshlash', function_getid('Apartments_'));
 
--- -- create default 1.2.4 category
--- INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
--- VALUES
---        ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara', function_getid('At home')),
---        ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('At home')),
---        ('CREATED', now(),  'Exchange', 'Обмен', 'Ayirboshlash', function_getid('At home'));
---
--- -- create default 1.2.5 category
--- INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
--- VALUES ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara', function_getid('Earth')),
---        ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('Earth'));
---
--- -- create default 1.2.6 category
--- INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
--- VALUES ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara', function_getid('Garages/parking lots')),
---        ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('Garages/parking lots'));
---
--- -- create default 1.2.7 category
--- INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
--- VALUES ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara', function_getid('Commercial premises')),
---        ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('Commercial premises'));
+-- create default 1.2.4 category
+INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
+VALUES
+       ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara', function_getid('At home')),
+       ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('At home')),
+       ('CREATED', now(),  'Exchange', 'Обмен', 'Ayirboshlash', function_getid('At home'));
+
+-- create default 1.2.5 category
+INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
+VALUES ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara', function_getid('Earth')),
+       ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('Earth'));
+
+-- create default 1.2.6 category
+INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
+VALUES ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara', function_getid('Garages/parking lots')),
+       ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('Garages/parking lots'));
+
+-- create default 1.2.7 category
+INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
+VALUES ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara', function_getid('Commercial premises')),
+       ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('Commercial premises'));
 
 -- create default 1.2.8 category
 INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
