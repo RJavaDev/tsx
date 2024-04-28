@@ -22,9 +22,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import uz.tsx.common.handler.pojo.FieldErrorResponse;
 import uz.tsx.common.handler.pojo.TraceableErrorResponse;
-import uz.tsx.dto.dtoUtil.ApiResponse;
-import uz.tsx.dto.dtoUtil.ResponseCode;
-import uz.tsx.dto.dtoUtil.ResponseMessage;
 import uz.tsx.exception.*;
 
 import java.lang.reflect.InvocationTargetException;

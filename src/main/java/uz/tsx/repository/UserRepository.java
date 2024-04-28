@@ -14,8 +14,11 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    @Query(value = "SELECT tsxu.* FROM tsx_user tsxu WHERE tsxu.email_or_phone = :username AND tsxu.status <> 'DELETED'", nativeQuery = true)
+    @Query(value = "SELECT tsxu.* FROM tsx_user tsxu WHERE tsxu.email_or_phone = :username AND tsxu.status <> 'PASSIVE'", nativeQuery = true)
     Optional<UserEntity> getByUsername(@Param("username") String username);
+
+    @Query(value = "SELECT tsxu.* FROM tsx_user tsxu WHERE tsxu.email_or_phone = :username", nativeQuery = true)
+    Optional<UserEntity> getByUsernameOriginDB(@Param("username") String username);
 
     @Query(value = "SELECT * FROM tsx_user du WHERE du.email_or_phone = :username", nativeQuery = true)
     List<UserEntity> findByUsernameOriginalDB(@Param("username") String username);
@@ -32,7 +35,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             " get_region_address(tsxu.region_id) AS address,tsxa.path, tsxa.type " +
             "            FROM tsx_user tsxu" +
             "            LEFT JOIN tsx_attach tsxa ON tsxu.attach_id = tsxa.id " +
-            "            WHERE tsxu.email_or_phone = :username AND tsxu.status <> 'DELETED'\n", nativeQuery = true)
+            "            WHERE tsxu.email_or_phone = :username AND tsxu.status <> 'PASSIVE'\n", nativeQuery = true)
     Optional<UserInterface> getUserByUsername(@Param("username") String username);
 
     @Query(value = "SELECT tsxu.id, tsxu.created_date, tsxu.status, tsxu.firstname, tsxu.lastname, tsxu.email_or_phone, " +

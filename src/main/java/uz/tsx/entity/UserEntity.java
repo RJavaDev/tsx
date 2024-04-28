@@ -2,14 +2,13 @@ package uz.tsx.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import uz.tsx.constants.ByLoginEnumType;
 import uz.tsx.constants.TableNames;
 import uz.tsx.dto.UserDto;
 import uz.tsx.entity.base.BaseEntity;
@@ -47,6 +46,9 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
     @Column(name = "last_active_date")
     private Date lastActiveDate;
+
+    @Enumerated(EnumType.STRING)
+    private ByLoginEnumType byLogin;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
