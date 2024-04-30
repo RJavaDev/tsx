@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.tsx.common.util.SecurityUtils;
 import uz.tsx.config.token.JwtService;
+import uz.tsx.constants.Characters;
 import uz.tsx.constants.EntityStatus;
 import uz.tsx.controller.convert.TokenResponseConvert;
 import uz.tsx.dto.request.LoginRequestDto;
@@ -18,8 +19,10 @@ import uz.tsx.interfaces.UserInterface;
 import uz.tsx.repository.UserRepository;
 import uz.tsx.service.AuthenticationService;
 import uz.tsx.validation.CommonSchemaValidator;
+import uz.tsx.validation.UserValidation;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -45,13 +48,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public TokenResponseDto authenticate(LoginRequestDto request) {
 
-        UserInterface userDB = verifyUserInterface(request.getEmailOrPhone(), request.getPassword());
+        String emailOrPhone = request.getEmailOrPhone();
+
+        if(!UserValidation.isUserEmailAddress(emailOrPhone)){
+            String phoneNumberByPattern = UserValidation.getPhoneNumberByPattern(emailOrPhone);
+            if(Objects.nonNull(phoneNumberByPattern)){
+                emailOrPhone = Characters.PHONE_NUMBER_PREFIX + phoneNumberByPattern;
+            }
+        }
+
+        UserInterface userDB = verifyUserInterface(emailOrPhone, request.getPassword());
         String jwt = jwtService.generateToken(userDB);
 
         return TokenResponseConvert.from(jwt, userDB);
     }
 
     private UserEntity saveUser(UserEntity user) throws UserDataException {
+
+        UserValidation.validateUsername(user);
 
         commonSchemaValidator.userPasswordAndPhoneNumberCheck(user.getUsername());
 

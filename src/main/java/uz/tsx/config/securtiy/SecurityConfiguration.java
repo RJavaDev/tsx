@@ -50,7 +50,7 @@ public class SecurityConfiguration {
             "/api/v1/addition-combo-value/get/**",
             "/api/v1/announce-addition-group/**",
             "/api/v1/announcement/**",
-            "/**"
+            "/api/v1/sms/**"
     };
 
     @Bean

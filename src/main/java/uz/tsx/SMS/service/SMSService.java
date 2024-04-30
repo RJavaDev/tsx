@@ -48,8 +48,8 @@ public class SMSService {
 
     public String sendSMS(String phoneNumber, String code) {
         WebClient.Builder client = WebClient.builder();
-
-        SMSModel smsModel = new SMSModel(phoneNumber, code);
+        String text = String.format("tez-sotish.uz uchun tastiqlash kodi:%s", code);
+        SMSModel smsModel = new SMSModel(phoneNumber, text);
 
         String headerToken = EskizToken.getToken();
         String res=null;

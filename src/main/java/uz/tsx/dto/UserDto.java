@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uz.tsx.constants.ByLoginEnumType;
 import uz.tsx.dto.base.BaseDto;
 import uz.tsx.dto.response.AttachUrlResponse;
 import uz.tsx.entity.UserEntity;
@@ -30,6 +31,8 @@ public class UserDto extends BaseDto {
     private AttachUrlResponse attach;
 
     private List<RoleEnum> roleEnumList;
+
+    private ByLoginEnumType byLogin;
     public UserEntity toEntity( String... ignoreProperties) {
         return super.toEntity(this, new UserEntity(), ignoreProperties);
     }
