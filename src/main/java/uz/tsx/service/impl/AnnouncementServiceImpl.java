@@ -1,6 +1,5 @@
 package uz.tsx.service.impl;
 
-import com.fasterxml.jackson.databind.DatabindContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import uz.tsx.dto.announcement.option.OptionDto;
 import uz.tsx.dto.announcement.selector.AnnounceOptionSelector;
 import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
 import uz.tsx.dto.dtoUtil.DataTable;
-import uz.tsx.dto.dtoUtil.HttpResponse;
 import uz.tsx.dto.dtoUtil.PageParam;
 import uz.tsx.dto.response.AttachUrlResponse;
 import uz.tsx.entity.AttachEntity;
@@ -66,10 +64,12 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
         AnnouncementContactEntity contactInfoEntity = announcementContactService.addNewAnnounceContact(entity.getContactInfo());
         AnnouncementPriceEntity priceEntity = announcementPriceService.addNewAnnouncementPrice(entity.getPriceTag());
-
+        priceEntity.setCurrency();
         entity.setContactInfoId(contactInfoEntity.getId());
         entity.setPriceTagId(priceEntity.getId());
+        entity.setPriceTag(priceEntity);
 
+        entity.setContactInfo(contactInfoEntity);
         entity.setISaw(1);
         entity.forCreate(SecurityUtils.getUserId());
         AnnouncementEntity save = repository.save(entity);
@@ -351,6 +351,37 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         return repository.getAnnouncementPage(PageRequest.of(pageParam.getPage() - 1, pageParam.getSize()));
     }
 
+    @Override
+    public List<AnnouncementEntity> getAnnouncementListByCategory(Long categoryId, PageParam pageParam) {
+        Page<AnnouncementInterface> announcementByCategoryId = repository.getAnnouncementByCategoryId(categoryId, PageRequest.of(pageParam.getPage() - 1, pageParam.getSize()));
+       return announcementByCategoryId.stream().map(announcementInterface -> {
+            AnnouncementEntity announcement=new AnnouncementEntity();
+            AnnouncementPriceEntity price = new AnnouncementPriceEntity();
+
+
+            if (Objects.nonNull(announcementInterface.getAttachId())){
+                AttachEntity attach = attachService.getById(announcementInterface.getAttachId());
+
+                announcement.setAttachPhotos(List.of(attach));
+            }
+            if(Validation.checkId(announcementInterface.getCurrencyId())) {
+                CurrencyDto cDto = new CurrencyDto();
+                cDto.setId(announcementInterface.getCurrencyId());
+                cDto.setCode(announcementInterface.getCurrencyCode());
+                price.setCurrencyId(announcementInterface.getCurrencyId());
+                price.setCurrency(cDto.toEntity());
+            }
+            announcement.setTitle(announcementInterface.getTitle());
+            announcement.setId(announcementInterface.getId());
+            announcement.setISaw(announcementInterface.getISaw());
+            announcement.setPriceTag(price);
+
+            return announcement;
+
+        }).toList();
+
+
+    }
 
     @Override
     public Integer iSaw(Long announcementId, HttpServletRequest httpServletRequest){
