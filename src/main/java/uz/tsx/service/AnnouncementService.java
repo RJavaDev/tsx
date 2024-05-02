@@ -33,5 +33,5 @@ public interface AnnouncementService {
 
     Integer iSaw (Long id, HttpServletRequest httpServletRequest);
 
-    List<AnnouncementEntity> getAnnouncementListByCategory(Long categoryId, PageParam pageParam);
+    DataTable<AnnouncementEntity> getAnnouncementListByCategory(Long categoryId, PageParam pageParam);
 }

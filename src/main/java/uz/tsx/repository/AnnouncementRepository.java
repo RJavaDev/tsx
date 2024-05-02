@@ -45,12 +45,38 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             nativeQuery = true)
     Page<AnnouncementEntity> getAnnouncementPage(Pageable pageable);
 
-    @Query(value = "SELECT a.id, a.created_date AS createdDate,aa.attach_id AS attachId, i_saw,a.title,\n" +
-            "                                 ap.price, ap.is_free AS isFree, ap.is_deal AS isDeal, ap.is_exchange AS isExchange, c.id AS currencyId, c.code AS currencyCode\n" +
-            "                             FROM tsx_announcement a\n" +
-            "                                      LEFT JOIN tsx_announcement_price ap ON a.price_tag_id = ap.id\n" +
-            "                                      LEFT JOIN announcement_attach aa ON a.id = aa.announcement_id\n" +
-            "                                      LEFT JOIN tsx_currency c ON ap.currency_id = c.id\n" +
-            "WHERE a.status <> 'DELETED' AND a.category_id= function_by_category(5) ORDER BY a.id DESC",nativeQuery = true)
+    @Query(value = "SELECT a.id, a.created_date AS createdDate, aa.attach_id AS attachId, a.i_saw AS ISaw, a.title, ac.longitude, ac.latitude, ac.phone, ac.gmail, ac.address,\n" +
+            "       ap.price, ap.is_free AS isFree, ap.is_deal AS isDeal, ap.is_exchange AS isExchange, c.id AS currencyId, c.code AS currencyCode\n" +
+            "FROM tsx_announcement a\n" +
+            "         LEFT JOIN tsx_announcement_price ap ON a.price_tag_id = ap.id\n" +
+            "                   LEFT JOIN tsx_announcement_contact ac ON a.contact_info_id = ac.id\n" +
+            "         LEFT JOIN announcement_attach aa ON a.id = aa.announcement_id\n" +
+            "         LEFT JOIN tsx_currency c ON ap.currency_id = c.id\n" +
+            "         INNER JOIN  (SELECT *\n" +
+            "                     FROM (\n" +
+            "                              WITH RECURSIVE category_parentId AS (\n" +
+            "                                  SELECT\n" +
+            "                                      tsxr_parent.id,\n" +
+            "                                      tsxr_parent.parent_id,\n" +
+            "                                      0 AS level\n" +
+            "                                  FROM tsx_category tsxr_parent\n" +
+            "                                  WHERE tsxr_parent.id = :categoryId-- Use the function parameter here\n" +
+            "                                  UNION ALL\n" +
+            "                                  SELECT\n" +
+            "                                      tsx_child.id,\n" +
+            "                                      tsx_child.parent_id,\n" +
+            "                                      level + 1\n" +
+            "                                  FROM tsx_category tsx_child\n" +
+            "                                           INNER JOIN category_parentId rn ON rn.id = tsx_child.parent_id\n" +
+            "                              )\n" +
+            "                              SELECT category_parentId.id\n" +
+            "                              FROM category_parentId\n" +
+            "                              ORDER BY category_parentId.level ASC\n" +
+            "                          ) AS user_address\n" +
+            "\n" +
+            "\n" +
+            ") as f on f.id=a.category_id\n" +
+            "WHERE a.status <> 'DELETED'\n" +
+            "ORDER BY a.id DESC;",  countQuery = "SELECT count(*) FROM tsx_announcement WHERE status <> 'DELETED'",nativeQuery = true)
     Page<AnnouncementInterface> getAnnouncementByCategoryId(Long categoryId, PageRequest of);
 }

@@ -127,18 +127,15 @@ public class AnnouncementController {
                 .body(dtoList)
                 .code(ResponseCode.OK);
     }
-    @GetMapping("/getAnnouncementList")
-    public ApiResponse<Object>getAnnouncementList(@RequestParam("categoryId") Long categoryId,@RequestBody(required = false) PageParam pageParam){
+    @PostMapping("/getAnnouncementList/{categoryId}")
+    public HttpResponse<DataTable<AnnouncementDto>>getAnnouncementList(@PathVariable Long categoryId,@RequestBody(required = false) PageParam pageParam){
         if (pageParam == null) {
             pageParam = new PageParam();
         }
-        List<AnnouncementEntity> pageAnnouncementData = announcementService.getAnnouncementListByCategory(categoryId,pageParam);
-        List<AnnouncementDto> dtoList = AnnouncementConvert.convertToDto(pageAnnouncementData);
+        DataTable<AnnouncementEntity> pageAnnouncementData = announcementService.getAnnouncementListByCategory(categoryId,pageParam);
+        DataTable<AnnouncementDto> dtoList = AnnouncementConvert.convertToDto(pageAnnouncementData);
 
-        return ApiResponse.build()
-                .message(ResponseMessage.OK)
-                .body(dtoList)
-                .code(ResponseCode.OK);
+        return HttpResponse.build(true, "OK",dtoList,HttpResponse.Status.OK.getCode());
     }
 
 

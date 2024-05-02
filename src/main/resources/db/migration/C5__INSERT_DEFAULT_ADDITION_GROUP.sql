@@ -187,12 +187,12 @@ VALUES
     ('CREATED', NOW(), 'Gas', 'Газ', 'Gaz', function_getid('Дома'), 0),
     ('CREATED', NOW(), 'Water', 'Вода', 'Suv', function_getid('Дома'), 0),
     ('CREATED', NOW(), 'In the house/on the plot there is', 'В доме / на участка есть', 'Uyda/uchastkada bor', function_getid('Дома'), 3),
-    ('CREATED', NOW(), 'Mood', 'Расположение', 'Kayfiyat', function_getid('Дома'), 3);
+    ('CREATED', NOW(), 'Mood', 'Расположение', 'Kayfiyat', function_getid('Дома'), 0);
 
 -- tsx_add_group default  2.4.1
 INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
 VALUES
-    ('CREATED', NOW(), 'Plaza', 'Площад', 'Plaza', function_getid('Земля'), 0),
+    ('CREATED', NOW(), 'Plaza', 'Площад', 'Plaza', function_getid('Земля'), 2),
     ('CREATED', NOW(), 'Purpose', 'Назначение', 'Maqsad', function_getid('Земля'), 3),
     ('CREATED', NOW(), 'Mood 2', 'Расположение 2', 'Kayfiyat 2', function_getid('Земля'), 0),
     ('CREATED', NOW(), 'Communications', 'Коммуникации', 'Aloqa', function_getid('Земля'), 3),
