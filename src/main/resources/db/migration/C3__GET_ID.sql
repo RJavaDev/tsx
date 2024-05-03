@@ -13,7 +13,7 @@ CREATE OR REPLACE FUNCTION function_get_add_group_id(NAMES CHARACTER VARYING) RE
 AS
 $$
 
-SELECT  id FROM tsx_add_group WHERE name_en = names OR name_ru = names;
+SELECT  id FROM tsx_add_group WHERE name_en = names OR name_ru = names OR name_uz= names;
 
 
 
