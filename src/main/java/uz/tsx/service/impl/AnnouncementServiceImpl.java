@@ -1,6 +1,5 @@
 package uz.tsx.service.impl;
 
-import com.fasterxml.jackson.databind.DatabindContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import uz.tsx.dto.announcement.option.OptionDto;
 import uz.tsx.dto.announcement.selector.AnnounceOptionSelector;
 import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
 import uz.tsx.dto.dtoUtil.DataTable;
-import uz.tsx.dto.dtoUtil.HttpResponse;
 import uz.tsx.dto.dtoUtil.PageParam;
 import uz.tsx.dto.response.AttachUrlResponse;
 import uz.tsx.entity.AttachEntity;
@@ -66,10 +64,11 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
         AnnouncementContactEntity contactInfoEntity = announcementContactService.addNewAnnounceContact(entity.getContactInfo());
         AnnouncementPriceEntity priceEntity = announcementPriceService.addNewAnnouncementPrice(entity.getPriceTag());
-
         entity.setContactInfoId(contactInfoEntity.getId());
         entity.setPriceTagId(priceEntity.getId());
+        entity.setPriceTag(priceEntity);
 
+        entity.setContactInfo(contactInfoEntity);
         entity.setISaw(1);
         entity.forCreate(SecurityUtils.getUserId());
         AnnouncementEntity save = repository.save(entity);
@@ -351,6 +350,47 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         return repository.getAnnouncementPage(PageRequest.of(pageParam.getPage() - 1, pageParam.getSize()));
     }
 
+    @Override
+    public DataTable<AnnouncementEntity> getAnnouncementListByCategory(Long categoryId, PageParam pageParam) {
+        Page<AnnouncementInterface> announcementByCategoryId = repository.getAnnouncementByCategoryId(categoryId, PageRequest.of(pageParam.getPage() - 1, pageParam.getSize()));
+        List<AnnouncementEntity> list = announcementByCategoryId.stream().map(announcementInterface -> {
+            AnnouncementEntity announcement = new AnnouncementEntity();
+            AnnouncementPriceEntity price = new AnnouncementPriceEntity();
+            AnnouncementContactEntity contact = new AnnouncementContactEntity();
+
+            if (Objects.nonNull(announcementInterface.getAttachId())) {
+                AttachEntity attach = attachService.getById(announcementInterface.getAttachId());
+
+                announcement.setAttachPhotos(List.of(attach));
+            }
+            if (Objects.nonNull(announcementInterface.getCurrencyId())) {
+                CurrencyDto cDto = new CurrencyDto();
+                cDto.setId(announcementInterface.getCurrencyId());
+                cDto.setCode(announcementInterface.getCurrencyCode());
+                price.setCurrencyId(announcementInterface.getCurrencyId());
+                price.setCurrency(cDto.toEntity());
+                price.setPrice(announcementInterface.getPrice());
+            }
+
+            contact.setLatitude(announcementInterface.getLatitude());
+            contact.setGmail(announcementInterface.getGmail());
+            contact.setAddress(announcementInterface.getAddress());
+            contact.setPhone(announcementInterface.getPhone());
+            announcement.setTitle(announcementInterface.getTitle());
+            announcement.setId(announcementInterface.getId());
+            announcement.setISaw(announcementInterface.getISaw());
+            announcement.setPriceTag(price);
+            announcement.setContactInfo(contact);
+
+            return announcement;
+
+        }).toList();
+        DataTable<AnnouncementEntity> datatable = new DataTable<>();
+        datatable.setTotal((int) announcementByCategoryId.getTotalElements());
+        datatable.setRows(list);
+
+        return datatable;
+    }
 
     @Override
     public Integer iSaw(Long announcementId, HttpServletRequest httpServletRequest){

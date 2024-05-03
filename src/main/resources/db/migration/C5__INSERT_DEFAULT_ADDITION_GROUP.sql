@@ -187,12 +187,12 @@ VALUES
     ('CREATED', NOW(), 'Gas', 'Газ', 'Gaz', function_getid('Дома'), 0),
     ('CREATED', NOW(), 'Water', 'Вода', 'Suv', function_getid('Дома'), 0),
     ('CREATED', NOW(), 'In the house/on the plot there is', 'В доме / на участка есть', 'Uyda/uchastkada bor', function_getid('Дома'), 3),
-    ('CREATED', NOW(), 'Mood', 'Расположение', 'Kayfiyat', function_getid('Дома'), 3);
+    ('CREATED', NOW(), 'Mood', 'Расположение', 'Kayfiyat', function_getid('Дома'), 0);
 
 -- tsx_add_group default  2.4.1
 INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
 VALUES
-    ('CREATED', NOW(), 'Plaza', 'Площад', 'Plaza', function_getid('Земля'), 0),
+    ('CREATED', NOW(), 'Plaza', 'Площад', 'Plaza', function_getid('Земля'), 2),
     ('CREATED', NOW(), 'Purpose', 'Назначение', 'Maqsad', function_getid('Земля'), 3),
     ('CREATED', NOW(), 'Mood 2', 'Расположение 2', 'Kayfiyat 2', function_getid('Земля'), 0),
     ('CREATED', NOW(), 'Communications', 'Коммуникации', 'Aloqa', function_getid('Земля'), 3),
@@ -259,12 +259,12 @@ VALUES
     ('CREATED', NOW(), 'Camera brand', 'Марка фотоапаратаов', 'Kamera brendi', function_getid('Цифровые фотоаппараты'), 3),
     ('CREATED', NOW(), 'Camcorder brand', 'Марка видеокамеры', 'Videokamera brendi', function_getid('Видеокамеры'), 3),
     ('CREATED', NOW(), 'Camcorder brand 2', 'Марка видеокамеры 2', 'Videokamera brendi 2', function_getid('Объективы'), 3),
-    ('CREATED', NOW(), 'Types of accessories', 'Виды аксесуаров', 'Aksessuarlar turlari', function_getid('Аксессуары для фото / видеокамер'), 3),
+    ('CREATED', NOW(), 'Types of accessories', 'Виды аксесуаров', 'Aksessuarlar turlari', function_getid('Аксессуары для фото видеокамер'), 3),
     ('CREATED', NOW(), 'Player brand ', 'Марка плеера', 'O''yinchi brendi', function_getid('Медиа проигрыватели'), 3),
     ('CREATED', NOW(), 'Player brand 2', 'Марка плеера 2', 'O''yinchi brendi 2', function_getid('Телевизоры'), 3),
     ('CREATED', NOW(), 'Type 3', 'Тип 3', 'Turi 3', function_getid('Телевизоры'), 0),
-    ('CREATED', NOW(), 'Player brand 3', 'Марка плеера 3', 'O''yinchi brendi 3', function_getid('Mp3 плееры'), 3),
-    ('CREATED', NOW(), 'Music center brand', 'Марка музыкального центра', 'Musiqa markazi brendi', function_getid('Музыкальные центры'), 3),
+    ('CREATED', NOW(), 'Player brand 3', 'Марка плеера 3', 'O''yinchi brendi 3', function_getid('MP3 плееры'), 3),
+    ('CREATED', NOW(), 'Music center brand', 'Марка музыкального центра', 'Musiqa markazi brendi', function_getid('Музыкалные центры'), 3),
     ('CREATED', NOW(), 'Brand 10', 'Марка 10', 'Brand 10', function_getid('Усилители / ресиверы'), 3),
     ('CREATED', NOW(), 'Brand 11', 'Марка 11', 'Brand 11', function_getid('Cd / md / виниловые проигрыватели'), 3),
     ('CREATED', NOW(), 'Brand 12', 'Марка 12', 'Brand 12', function_getid('Техника для дома'), 3),
@@ -392,11 +392,19 @@ VALUES
 -- tsx_add_group default  9.1.1
 INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
 VALUES
-    ('CREATED', NOW(), 'Type of business 28', 'Вид бизнеса 28', 'Biznes turi 28', function_getid('Строительства'), 0),
-    ('CREATED', NOW(), 'State 17', 'Состояние 17', 'Holati 17', function_getid('Строительства'), 0),
+    ('CREATED', NOW(), 'Type of business 28', 'Вид бизнеса 28', 'Biznes turi 28', function_getid('Развлечение'), 0),
+    ('CREATED', NOW(), 'State 17', 'Состояние 17', 'Holati 17', function_getid('Музыкальные инструменты'), 0),
+    ('CREATED', NOW(), 'State 18', 'Состояние 18', 'Holati 18', function_getid('Спорт/отдых'), 0),
+    ('CREATED', NOW(), 'State 19', 'Состояние 19', 'Holati 19', function_getid('Книги/журналы'), 0),
+    ('CREATED', NOW(), 'State 20', 'Состояние 20', 'Holati 20', function_getid('CD/DVD/пластинки/кассеты'), 0),
     ('CREATED', NOW(), 'Subcategories 9', 'Подкатегории 9', 'Pastki toifalar 9', function_getid('Коллекционирование'), 3),
     ('CREATED', NOW(), 'Brand 14', 'Марка 14', 'Brand 14', function_getid('Гитары'), 3),
     ('CREATED', NOW(), 'Brand 15', 'Марка 15', 'Brand 15', function_getid('Синтезаторы'), 3),
-    ('CREATED', NOW(), 'Subcategories 10', 'Подкатегории 10', 'Pastki toifalar 10', function_getid('Студийное оборудование'), 3);
+    ('CREATED', NOW(), 'Subcategories 10', 'Подкатегории 10', 'Pastki toifalar 10', function_getid('Студийное оборудование'), 3),
+    ('CREATED', NOW(), 'Subcategories 11', 'Подкатегории 11', 'Pastki toifalar 11', function_getid('Вело'), 3),
+    ('CREATED', NOW(), 'Subcategories 12', 'Подкатегории 12', 'Pastki toifalar 12', function_getid('Лыжи/сноуборды'), 3),
+    ('CREATED', NOW(), 'Subcategories 13', 'Подкатегории 13', 'Pastki toifalar 13', function_getid('Коньки'), 3),
+    ('CREATED', NOW(), 'Subcategories 14', 'Подкатегории 14', 'Pastki toifalar 14', function_getid('Атлетика/фитнес'), 3),
+    ('CREATED', NOW(), 'Types of tourism', 'Виды туризма', 'Turizm turlari', function_getid('Товары для туризма'), 3);
 
 

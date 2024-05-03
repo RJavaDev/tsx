@@ -12,6 +12,7 @@ import uz.tsx.dto.announcement.announcementCreated.AnnouncementCreatedDto;
 import uz.tsx.dto.announcement.option.AnnounceOptionDto;
 import uz.tsx.dto.announcement.selector.AnnounceOptionSelector;
 import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
+import uz.tsx.dto.dtoUtil.DataTable;
 import uz.tsx.dto.response.AttachUrlResponse;
 import uz.tsx.entity.announcement.AnnouncementContactEntity;
 import uz.tsx.entity.announcement.AnnouncementEntity;
@@ -151,5 +152,14 @@ public class AnnouncementConvert {
 
     public List<AnnouncementDto> convertToDto(Page<AnnouncementEntity> pageHomeData) {
         return pageHomeData.stream().map(AnnouncementConvert::convertToDto).toList();
+    }
+
+    public DataTable<AnnouncementDto>convertToDto(DataTable<AnnouncementEntity> announcementEntityList){
+        DataTable<AnnouncementDto> announcementDto= new DataTable<>();
+        List<AnnouncementDto> list = announcementEntityList.getRows().stream().map(
+                AnnouncementConvert::convertToDto).toList();
+        announcementDto.setRows(list);
+        announcementDto.setTotal(announcementEntityList.getTotal());
+        return announcementDto;
     }
 }

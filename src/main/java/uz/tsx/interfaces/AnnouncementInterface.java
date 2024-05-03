@@ -19,4 +19,6 @@ public interface AnnouncementInterface {
     Boolean getIsDeal();
     Boolean getIsFree();
     Boolean getIsExchange();
+    Integer getISaw();
+
 }

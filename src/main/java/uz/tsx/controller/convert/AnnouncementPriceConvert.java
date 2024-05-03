@@ -29,7 +29,10 @@ public class AnnouncementPriceConvert {
 
         dto.setId(priceTag.getId());
         dto.setCurrencyId(priceTag.getCurrencyId());
-        dto.setCurrency(priceTag.getCurrency().toDto());
+        if (Objects.nonNull(priceTag.getCurrency())){
+            dto.setCurrency(priceTag.getCurrency().toDto());
+        }
+
         dto.setPrice(priceTag.getPrice());
         dto.setIsDeal(priceTag.getIsDeal());
         dto.setIsFree(priceTag.getIsFree());

@@ -1,20 +1,28 @@
 --create default attach
 INSERT INTO tsx_attach (id, content_type, created_date, origin_name, path, size, type)
-VALUES ('06e74d93-a22c-466f-977b-8f2510eca4c8', 'image/jpeg', now(), 'medium_news_size_duncan-git-header.jpg', 'images/category',
-        308630, 'jpg');
+VALUES
+    ('80e2f6e1-7b3f-4ee7-adca-786fef1aac45', 'image/png', now(), 'medium_news_size_duncan-git-header.png', 'category/',308630, 'png'),
+    ('6ffe1f5e-ed80-4977-b489-40fa6fea694f', 'image/png', now(), '7d092ea2c340b2ceac32524fab56158f.png', 'category/',231741, 'png'),
+    ('2a28166a-815e-4025-a70c-f8d77514b98d', 'image/png', now(), '7849964466a5e1bb1beb6b6186e4255b.png', 'category/',273717, 'png'),
+    ('c743e2f6-c8d9-459a-8429-88e3b3d81371', 'image/png', now(), 'a98d12c5908c3210ba7c79db812b0bce.png', 'category/',581255, 'png'),
+    ('f2e13a4e-a3b6-45f4-a9f1-0636b375c5ab', 'image/png', now(), '531bcfdac9797fa6b8ed0b3e184f52be.png', 'category/',572156, 'png'),
+    ('c8516ed2-cfad-49a3-9c9f-32f5f5881e9a', 'image/png', now(), '6ef6a46dda03a4471a9acf3c1f63a4a1.png', 'category/',612490, 'png'),
+    ('b6b85ff9-d89d-4060-b386-e1c478a04d21', 'image/png', now(), '5365ef97882b8cfee5366757a72be0cc.png', 'category/',133128, 'png'),
+    ('7d847954-6702-4c33-8697-1065f0e4182b', 'image/png', now(), '223ab3bab211e729ff69dbd5e0b05c3e.png', 'category/',91288, 'png'),
+    ('69c12a4c-35b6-4764-b9fe-e0110880542c', 'image/png', now(), 'b78ab39bc70d80d00422359ab680ec1a.png', 'category/',357811, 'png');
 
 -- create default 1 category
 INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, attach_id)
 VALUES
-       ('CREATED', now(), 'Transportation', 'Транспорт', 'Transport', '06e74d93-a22c-466f-977b-8f2510eca4c8'),
-       ('CREATED', now(), 'Real estate', 'Недвижимость', 'Ko''chmas mulk', '06e74d93-a22c-466f-977b-8f2510eca4c8'),
-       ('CREATED', now(), 'Work and services', 'Работа и услуги', 'Ish va xizmatlar', '06e74d93-a22c-466f-977b-8f2510eca4c8'),
-       ('CREATED', now(), 'Animals', 'Животные', 'Hayvonlar', '06e74d93-a22c-466f-977b-8f2510eca4c8'),
-       ('CREATED', now(), 'Electronics', 'Электроника', 'Elektronika', '06e74d93-a22c-466f-977b-8f2510eca4c8'),
-       ('CREATED', now(), 'Clothing and textiles', 'Одежда и текстил', 'Kiyim va to''qimachilik', '06e74d93-a22c-466f-977b-8f2510eca4c8'),
-       ('CREATED', now(), 'Construction', 'Строительства', 'Qurilish', '06e74d93-a22c-466f-977b-8f2510eca4c8'),
-       ('CREATED', now(), 'Food', 'Продукты питания', 'Oziq-ovqat maxsulotlari', '06e74d93-a22c-466f-977b-8f2510eca4c8'),
-       ('CREATED', now(), 'Entertainment', 'Развлечение', 'O''yin-kulgi','06e74d93-a22c-466f-977b-8f2510eca4c8');
+       ('CREATED', now(), 'Transportation', 'Транспорт', 'Transport', '80e2f6e1-7b3f-4ee7-adca-786fef1aac45'),
+       ('CREATED', now(), 'Real estate', 'Недвижимость', 'Ko''chmas mulk', 'c743e2f6-c8d9-459a-8429-88e3b3d81371'),
+       ('CREATED', now(), 'Work and services', 'Работа и услуги', 'Ish va xizmatlar', '69c12a4c-35b6-4764-b9fe-e0110880542c'),
+       ('CREATED', now(), 'Animals', 'Животные', 'Hayvonlar', '7d847954-6702-4c33-8697-1065f0e4182b'),
+       ('CREATED', now(), 'Electronics', 'Электроника', 'Elektronika', 'b6b85ff9-d89d-4060-b386-e1c478a04d21'),
+       ('CREATED', now(), 'Clothing and textiles', 'Одежда и текстил', 'Kiyim va to''qimachilik', '6ffe1f5e-ed80-4977-b489-40fa6fea694f'),
+       ('CREATED', now(), 'Construction', 'Строительства', 'Qurilish', '2a28166a-815e-4025-a70c-f8d77514b98d'),
+       ('CREATED', now(), 'Food', 'Продукты питания', 'Oziq-ovqat maxsulotlari', 'c8516ed2-cfad-49a3-9c9f-32f5f5881e9a'),
+       ('CREATED', now(), 'Entertainment', 'Развлечение', 'O''yin-kulgi','f2e13a4e-a3b6-45f4-a9f1-0636b375c5ab');
 
 -- create default 1.1 category
 INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
@@ -108,27 +116,27 @@ VALUES
        ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('Apartments_')),
        ('CREATED', now(), 'Exchange', 'Обмен', 'Ayirboshlash', function_getid('Apartments_'));
 
--- -- create default 1.2.4 category
--- INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
--- VALUES
---        ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara', function_getid('At home')),
---        ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('At home')),
---        ('CREATED', now(),  'Exchange', 'Обмен', 'Ayirboshlash', function_getid('At home'));
---
--- -- create default 1.2.5 category
--- INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
--- VALUES ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara', function_getid('Earth')),
---        ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('Earth'));
---
--- -- create default 1.2.6 category
--- INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
--- VALUES ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara', function_getid('Garages/parking lots')),
---        ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('Garages/parking lots'));
---
--- -- create default 1.2.7 category
--- INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
--- VALUES ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara', function_getid('Commercial premises')),
---        ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('Commercial premises'));
+-- create default 1.2.4 category
+INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
+VALUES
+       ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara', function_getid('At home')),
+       ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('At home')),
+       ('CREATED', now(),  'Exchange', 'Обмен', 'Ayirboshlash', function_getid('At home'));
+
+-- create default 1.2.5 category
+INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
+VALUES ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara', function_getid('Earth')),
+       ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('Earth'));
+
+-- create default 1.2.6 category
+INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
+VALUES ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara', function_getid('Garages/parking lots')),
+       ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('Garages/parking lots'));
+
+-- create default 1.2.7 category
+INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
+VALUES ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara', function_getid('Commercial premises')),
+       ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('Commercial premises'));
 
 -- create default 1.2.8 category
 INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)

@@ -127,6 +127,16 @@ public class AnnouncementController {
                 .body(dtoList)
                 .code(ResponseCode.OK);
     }
+    @PostMapping("/getAnnouncementList/{categoryId}")
+    public HttpResponse<DataTable<AnnouncementDto>>getAnnouncementList(@PathVariable Long categoryId,@RequestBody(required = false) PageParam pageParam){
+        if (pageParam == null) {
+            pageParam = new PageParam();
+        }
+        DataTable<AnnouncementEntity> pageAnnouncementData = announcementService.getAnnouncementListByCategory(categoryId,pageParam);
+        DataTable<AnnouncementDto> dtoList = AnnouncementConvert.convertToDto(pageAnnouncementData);
+
+        return HttpResponse.build(true, "OK",dtoList,HttpResponse.Status.OK.getCode());
+    }
 
 
 }
