@@ -149,7 +149,7 @@ public class AttachServiceImpl implements AttachService {
 
     @Override
     public String getMinAttachImgName(String originName) {
-        return new StringBuilder(originName).insert(originName.lastIndexOf("."), SUFFIX_MINI_IMG).toString();
+        return new StringBuilder(originName).insert(originName.lastIndexOf("."), SUFFIX_MINI_IMG_200).toString();
     }
 
     private void fileSaveToSystem(MultipartFile file, String pathFolder, String fileName, String type){
@@ -158,8 +158,8 @@ public class AttachServiceImpl implements AttachService {
             Files.copy(file.getInputStream(), Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder ).resolve(newFileName), StandardCopyOption.REPLACE_EXISTING);
 
             if (Objects.requireNonNull(file.getContentType()).startsWith("image")) {
-                String newImgHeight48File = fileName + SUFFIX_MINI_IMG + "." + type;
-                Thumbnails.of(file.getInputStream()).height(48).toFile(Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder).resolve(newImgHeight48File).toAbsolutePath().toString());
+                String newImgHeight48File = fileName + SUFFIX_MINI_IMG_200 + "." + type;
+                Thumbnails.of(file.getInputStream()).height(200).toFile(Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder).resolve(newImgHeight48File).toAbsolutePath().toString());
             }
 
         } catch (IOException ignore) {}
@@ -183,7 +183,7 @@ public class AttachServiceImpl implements AttachService {
                 attach.setOriginName(newFileName);
 
                 if (Objects.requireNonNull(file.getContentType()).startsWith("image")) {
-                    String newImgHeight48File = new StringBuilder(newFileName).insert(newFileName.lastIndexOf("."), SUFFIX_MINI_IMG).toString();
+                    String newImgHeight48File = new StringBuilder(newFileName).insert(newFileName.lastIndexOf("."), SUFFIX_MINI_IMG_48).toString();
                     Thumbnails.of(file.getInputStream()).height(48).toFile(Paths.get(ATTACH_UPLOAD_FOLDER).resolve(newImgHeight48File).toAbsolutePath().toString());
                     attach.setMiniName(newImgHeight48File);
                 }
