@@ -14,6 +14,7 @@ public class TsxApplication {
         SpringApplication.run(TsxApplication.class, args);
         TelegramBotsApi telegramBotsApi=new TelegramBotsApi(DefaultBotSession.class);
         telegramBotsApi.registerBot(new TsxBot());
+
     }
 
 }
