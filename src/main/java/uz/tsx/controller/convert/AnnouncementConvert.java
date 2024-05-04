@@ -72,9 +72,14 @@ public class AnnouncementConvert {
         AnnouncementPriceDto priceDto = new AnnouncementPriceDto();
         CurrencyDto currencyDto = new CurrencyDto();
 
+        if (Objects.nonNull(interfaceDB.getAttachId())){
+            AttachUrlResponse urlResponse = AttachConvert.convertToAttachUrlDto(interfaceDB.getAttachId(), interfaceDB.getAttachPath(), interfaceDB.getAttachType());
+            dto.setAttachUrlResponses(List.of(urlResponse));
+        }
+
         dto.setId(interfaceDB.getId());
         dto.setTitle(interfaceDB.getTitle());
-        dto.setCreatedDate(interfaceDB.getCreatedDate());
+        dto.setCreateDateTime(interfaceDB.getCreatedDate());
 
         contactDto.setLongitude(interfaceDB.getLongitude());
         contactDto.setLatitude(interfaceDB.getLatitude());
@@ -155,6 +160,14 @@ public class AnnouncementConvert {
     }
 
     public DataTable<AnnouncementDto>convertToDto(DataTable<AnnouncementEntity> announcementEntityList){
+        DataTable<AnnouncementDto> announcementDto= new DataTable<>();
+        List<AnnouncementDto> list = announcementEntityList.getRows().stream().map(
+                AnnouncementConvert::convertToDto).toList();
+        announcementDto.setRows(list);
+        announcementDto.setTotal(announcementEntityList.getTotal());
+        return announcementDto;
+    }
+    public DataTable<AnnouncementDto>convertInterfaceToDto(DataTable<AnnouncementInterface> announcementEntityList){
         DataTable<AnnouncementDto> announcementDto= new DataTable<>();
         List<AnnouncementDto> list = announcementEntityList.getRows().stream().map(
                 AnnouncementConvert::convertToDto).toList();

@@ -20,5 +20,6 @@ public interface AnnouncementInterface {
     Boolean getIsFree();
     Boolean getIsExchange();
     Integer getISaw();
-
+    String getAttachType();
+    String getAttachPath();
 }

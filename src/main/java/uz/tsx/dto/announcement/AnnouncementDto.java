@@ -8,6 +8,7 @@ import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
 import uz.tsx.dto.base.BaseDto;
 import uz.tsx.dto.response.AttachUrlResponse;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Getter
@@ -43,6 +44,7 @@ public class AnnouncementDto extends BaseDto {
 
     private Map<Long, List<Long>> selectedOptionsByGroup;               // 1 -> [2, 3, 4]    1 - groupId, [2,3,4] - optionIds     ## 0 mean NO-GROUP options
 
+    private LocalDateTime createDateTime=this.getCreatedDate();
     public Map<Long, List<Long>> getSelectedOptionsByGroup() {
         if(additionalOptions == null || additionalOptions.isEmpty())
             return null;

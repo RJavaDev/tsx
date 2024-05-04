@@ -17,6 +17,7 @@ import uz.tsx.dto.announcement.AnnouncementPriceDto;
 import uz.tsx.dto.announcement.announcementCreated.AnnouncementCreatedDto;
 import uz.tsx.dto.dtoUtil.*;
 import uz.tsx.entity.announcement.AnnouncementEntity;
+import uz.tsx.interfaces.AnnouncementInterface;
 import uz.tsx.service.AnnouncementContactService;
 import uz.tsx.service.AnnouncementPriceService;
 import uz.tsx.service.AnnouncementService;
@@ -127,13 +128,13 @@ public class AnnouncementController {
                 .body(dtoList)
                 .code(ResponseCode.OK);
     }
-    @PostMapping("/getAnnouncementList/{categoryId}")
+    @PostMapping("/get/list/{categoryId}")
     public HttpResponse<DataTable<AnnouncementDto>>getAnnouncementList(@PathVariable Long categoryId,@RequestBody(required = false) PageParam pageParam){
         if (pageParam == null) {
             pageParam = new PageParam();
         }
-        DataTable<AnnouncementEntity> pageAnnouncementData = announcementService.getAnnouncementListByCategory(categoryId,pageParam);
-        DataTable<AnnouncementDto> dtoList = AnnouncementConvert.convertToDto(pageAnnouncementData);
+        DataTable<AnnouncementInterface> pageAnnouncementData = announcementService.getAnnouncementListByCategory(categoryId,pageParam);
+        DataTable<AnnouncementDto> dtoList = AnnouncementConvert.convertInterfaceToDto(pageAnnouncementData);
 
         return HttpResponse.build(true, "OK",dtoList,HttpResponse.Status.OK.getCode());
     }

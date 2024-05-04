@@ -351,43 +351,11 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
-    public DataTable<AnnouncementEntity> getAnnouncementListByCategory(Long categoryId, PageParam pageParam) {
+    public DataTable<AnnouncementInterface> getAnnouncementListByCategory(Long categoryId, PageParam pageParam) {
         Page<AnnouncementInterface> announcementByCategoryId = repository.getAnnouncementByCategoryId(categoryId, PageRequest.of(pageParam.getPage() - 1, pageParam.getSize()));
-        List<AnnouncementEntity> list = announcementByCategoryId.stream().map(announcementInterface -> {
-            AnnouncementEntity announcement = new AnnouncementEntity();
-            AnnouncementPriceEntity price = new AnnouncementPriceEntity();
-            AnnouncementContactEntity contact = new AnnouncementContactEntity();
-
-            if (Objects.nonNull(announcementInterface.getAttachId())) {
-                AttachEntity attach = attachService.getById(announcementInterface.getAttachId());
-
-                announcement.setAttachPhotos(List.of(attach));
-            }
-            if (Objects.nonNull(announcementInterface.getCurrencyId())) {
-                CurrencyDto cDto = new CurrencyDto();
-                cDto.setId(announcementInterface.getCurrencyId());
-                cDto.setCode(announcementInterface.getCurrencyCode());
-                price.setCurrencyId(announcementInterface.getCurrencyId());
-                price.setCurrency(cDto.toEntity());
-                price.setPrice(announcementInterface.getPrice());
-            }
-
-            contact.setLatitude(announcementInterface.getLatitude());
-            contact.setGmail(announcementInterface.getGmail());
-            contact.setAddress(announcementInterface.getAddress());
-            contact.setPhone(announcementInterface.getPhone());
-            announcement.setTitle(announcementInterface.getTitle());
-            announcement.setId(announcementInterface.getId());
-            announcement.setISaw(announcementInterface.getISaw());
-            announcement.setPriceTag(price);
-            announcement.setContactInfo(contact);
-
-            return announcement;
-
-        }).toList();
-        DataTable<AnnouncementEntity> datatable = new DataTable<>();
+        DataTable<AnnouncementInterface> datatable = new DataTable<>();
         datatable.setTotal((int) announcementByCategoryId.getTotalElements());
-        datatable.setRows(list);
+        datatable.setRows(announcementByCategoryId.stream().toList());
 
         return datatable;
     }
