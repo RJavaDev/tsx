@@ -16,10 +16,10 @@ public class FilterForm implements Serializable {
     @Serial
     private static final long serialVersionUID = -1183975305038088044L;
 
-    @Schema(description = "Starting index for data retrieval", example = "0")
+    @Schema(description = "Starting index for data retrieval", example = "1")
     private Integer start;
 
-    @Schema(description = "Number of items to retrieve", example = "10")
+    @Schema(description = "Number of items to retrieve", example = "25")
     private Integer length;
 
     @Schema(description = "Additional filters for data retrieval", example = "{\"startDate\":\"18-06-2023\", \"endDate\":\"18-07-2023\"}")

@@ -15,5 +15,7 @@ public class AnnouncementContactCreateDto {
 
     private String gmail;
 
+    private Long regionId;
+
     private String address;
 }

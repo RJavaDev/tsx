@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import uz.tsx.entity.announcement.AnnouncementEntity;
 import uz.tsx.interfaces.AnnouncementInterface;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,4 +80,110 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "WHERE a.status <> 'DELETED'\n" +
             "ORDER BY a.id DESC;",  countQuery = "SELECT count(*) FROM tsx_announcement WHERE status <> 'DELETED'",nativeQuery = true)
     Page<AnnouncementInterface> getAnnouncementByCategoryId(Long categoryId, PageRequest of);
+
+    @Query(value = "SELECT\n" +
+            "    tsxa.id,\n" +
+            "    tsxa.created_date AS createdDate,\n" +
+            "    MAX(tsxphoto.id) AS attachId,\n" +
+            "    MAX(tsxphoto.path) AS attachPath,\n" +
+            "    MAX(tsxphoto.type) AS attachType,\n" +
+            "    tsxa.i_saw AS ISaw,\n" +
+            "    tsxa.title,\n" +
+            "    tsxac.longitude,\n" +
+            "    tsxac.latitude,\n" +
+            "    tsxac.phone,\n" +
+            "    tsxac.gmail,\n" +
+            "    tsxac.address,\n" +
+            "    ap.price,\n" +
+            "    ap.is_free AS isFree,\n" +
+            "    ap.is_deal AS isDeal,\n" +
+            "    ap.is_exchange AS isExchange,\n" +
+            "    c.id AS currencyId,\n" +
+            "    c.code AS currencyCode\n" +
+            "FROM tsx_announcement tsxa\n" +
+            "         LEFT JOIN (\n" +
+            "    SELECT DISTINCT ON (aa.announcement_id)\n" +
+            "        aa.announcement_id,\n" +
+            "        tsxphoto.id,\n" +
+            "        tsxphoto.path,\n" +
+            "        tsxphoto.type\n" +
+            "    FROM announcement_attach aa\n" +
+            "             LEFT JOIN tsx_attach tsxphoto ON tsxphoto.id = aa.attach_id\n" +
+            ") tsxphoto ON tsxa.id = tsxphoto.announcement_id\n" +
+            "         LEFT JOIN tsx_announcement_price ap ON tsxa.price_tag_id = ap.id\n" +
+            "         LEFT JOIN tsx_announcement_contact tsxac ON tsxa.contact_info_id = tsxac.id\n" +
+            "         LEFT JOIN tsx_currency c ON ap.currency_id = c.id\n" +
+            "WHERE\n" +
+            "    (:categoryId IS NULL OR tsxa.category_id = (\n" +
+            "        SELECT id\n" +
+            "        FROM ( WITH RECURSIVE category_parentId AS (\n" +
+            "            SELECT\n" +
+            "                tsxr_parent.id,\n" +
+            "                tsxr_parent.parent_id\n" +
+            "            FROM\n" +
+            "                tsx_category tsxr_parent\n" +
+            "            WHERE\n" +
+            "                tsxr_parent.id = :categoryId\n" +
+            "            UNION ALL\n" +
+            "            SELECT\n" +
+            "                tsx_child.id,\n" +
+            "                tsx_child.parent_id\n" +
+            "            FROM\n" +
+            "                tsx_category tsx_child\n" +
+            "\n" +
+            "                    INNER JOIN category_parentId rn ON rn.id = tsx_child.parent_id\n" +
+            "        )\n" +
+            "               SELECT\n" +
+            "                   category_parentId.id\n" +
+            "               FROM\n" +
+            "                   category_parentId\n" +
+            "             ) as category where category.id = tsxa.category_id))\n" +
+            "\n" +
+            "\n" +
+            "  AND (:regionId IS NULL OR tsxac.region_id = (\n" +
+            "    SELECT id\n" +
+            "    FROM ( WITH RECURSIVE region_parentId AS (\n" +
+            "        SELECT\n" +
+            "            tsxr_parent.id,\n" +
+            "            tsxr_parent.parent_id\n" +
+            "        FROM\n" +
+            "            tsx_region tsxr_parent\n" +
+            "        WHERE\n" +
+            "            tsxr_parent.id = :regionId\n" +
+            "        UNION ALL\n" +
+            "        SELECT\n" +
+            "            tsx_child.id,\n" +
+            "            tsx_child.parent_id\n" +
+            "        FROM\n" +
+            "            tsx_region tsx_child\n" +
+            "                INNER JOIN region_parentId rn ON rn.id = tsx_child.parent_id\n" +
+            "    )\n" +
+            "           SELECT\n" +
+            "               region_parentId.id\n" +
+            "           FROM\n" +
+            "               region_parentId\n" +
+            "         ) as region WHERE region.id = tsxac.region_id)\n" +
+            "    )\n" +
+            "  AND tsxa.created_date BETWEEN\n" +
+            "    COALESCE(:startDate, CAST('2024-05-04 13:44:38' AS TIMESTAMP WITHOUT TIME ZONE))\n" +
+            "    AND COALESCE(:endDate, NOW())\n" +
+            "    AND (:searchTitle IS NULL OR similarity(tsxa.title, :searchTitle) > 0.3)\n" +
+            "GROUP BY\n" +
+            "    tsxa.id,\n" +
+            "    tsxa.created_date,\n" +
+            "    tsxa.i_saw,\n" +
+            "    tsxa.title,\n" +
+            "    tsxac.longitude,\n" +
+            "    tsxac.latitude,\n" +
+            "    tsxac.phone,\n" +
+            "    tsxac.gmail,\n" +
+            "    tsxac.address,\n" +
+            "    ap.price,\n" +
+            "    ap.is_free,\n" +
+            "    ap.is_deal,\n" +
+            "    ap.is_exchange,\n" +
+            "    c.id,\n" +
+            "    c.code\n" +
+            "ORDER BY similarity(tsxa.title, :searchTitle) DESC", nativeQuery = true)
+    Page<AnnouncementInterface> searchAnnouncementAndFilter(@Param("searchTitle")String searchTitle, @Param("regionId")Long regionId, @Param("categoryId")Long categoryId, @Param("startDate")Date startDate, @Param("endDate")Date endDate, Pageable pageable);
 }

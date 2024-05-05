@@ -4,9 +4,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 import uz.tsx.dto.announcement.AnnouncementDto;
+import uz.tsx.dto.dtoUtil.BigDataTable;
 import uz.tsx.dto.dtoUtil.DataTable;
+import uz.tsx.dto.dtoUtil.FilterForm;
 import uz.tsx.dto.dtoUtil.PageParam;
 import uz.tsx.entity.announcement.AnnouncementEntity;
+import uz.tsx.interfaces.AnnouncementInterface;
 
 import java.util.List;
 import java.util.Map;
@@ -34,4 +37,6 @@ public interface AnnouncementService {
     Integer iSaw (Long id, HttpServletRequest httpServletRequest);
 
     DataTable<AnnouncementEntity> getAnnouncementListByCategory(Long categoryId, PageParam pageParam);
+
+    BigDataTable<AnnouncementInterface> searchAnnouncementAndFilter(FilterForm filter);
 }

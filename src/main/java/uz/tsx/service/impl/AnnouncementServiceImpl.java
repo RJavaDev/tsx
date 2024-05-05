@@ -4,11 +4,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import uz.tsx.common.util.DateUtil;
 import uz.tsx.common.util.SecurityUtils;
 import uz.tsx.controller.convert.AttachConvert;
 import uz.tsx.dto.CurrencyDto;
@@ -19,7 +23,9 @@ import uz.tsx.dto.announcement.additionInfo.AnnounceAdditionGroupDto;
 import uz.tsx.dto.announcement.option.OptionDto;
 import uz.tsx.dto.announcement.selector.AnnounceOptionSelector;
 import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
+import uz.tsx.dto.dtoUtil.BigDataTable;
 import uz.tsx.dto.dtoUtil.DataTable;
+import uz.tsx.dto.dtoUtil.FilterForm;
 import uz.tsx.dto.dtoUtil.PageParam;
 import uz.tsx.dto.response.AttachUrlResponse;
 import uz.tsx.entity.AttachEntity;
@@ -37,6 +43,7 @@ import uz.tsx.service.*;
 import uz.tsx.validation.CommonSchemaValidator;
 import uz.tsx.validation.Validation;
 
+import java.text.ParseException;
 import java.util.*;
 
 @Service
@@ -393,6 +400,62 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
+    public BigDataTable<AnnouncementInterface> searchAnnouncementAndFilter(FilterForm filter) {
+
+        Pageable pageable = pageable(filter);
+        Map<String, Object> filterMap = filter.getFilter();
+
+        String announcementName = null;
+        Long categoryId = null;
+        Long regionId = null;
+        Date startDate = null;
+        Date endDate = null;
+        if(Objects.nonNull(filterMap)){
+
+            if(filterMap.containsKey("announcementName")){
+                announcementName = MapUtils.getString(filterMap, "announcementName");
+            }
+            if(filterMap.containsKey("announcementName")){
+                regionId = MapUtils.getLong(filterMap, "regionId");
+            }
+            if(filterMap.containsKey("announcementName")){
+                categoryId = MapUtils.getLong(filterMap, "categoryId");
+            }
+
+            if (filterMap.containsKey("startDate")) {
+                try {
+                    startDate = DateUtils.parseDate((MapUtils.getString(filterMap, "startDate")), DateUtil.PATTERN3);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+            }
+            if (filterMap.containsKey("endDate")) {
+                try {
+                    endDate = DateUtils.parseDate((MapUtils.getString(filterMap, "endDate")), DateUtil.PATTERN3);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        Page<AnnouncementInterface> announcementInterfaceList = repository.searchAnnouncementAndFilter(announcementName, regionId, categoryId, startDate, endDate, pageable);
+        List<AnnouncementInterface> announcementInterfaceListContent = announcementInterfaceList.getContent();
+
+        announcementInterfaceList.getTotalPages();
+
+        BigDataTable<AnnouncementInterface> dataTable = new BigDataTable<>();
+
+        dataTable.setRows(announcementInterfaceListContent);
+        dataTable.setTotal(announcementInterfaceList.getTotalElements());
+        dataTable.setTotalPage(announcementInterfaceList.getTotalPages());
+
+        return dataTable;
+
+    }
+
+    @Override
     public Integer iSaw(Long announcementId, HttpServletRequest httpServletRequest){
         UserEntity user = SecurityUtils.getUser();
         Long id=1L;
@@ -449,5 +512,25 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         repository.save(announcement1);
 
         return longs.size();
+    }
+
+    private String[] searchProductNameToArray(String productName) {
+        String[] categoryNameList = productName.split(" ");
+
+        for (byte i = 0; i < categoryNameList.length; i++) {
+            categoryNameList[i] = "%" + categoryNameList[i] + "%";
+        }
+        return categoryNameList;
+    }
+
+    public Sort orderSortField(String field) {
+        return Sort.by(Sort.Order.by(field));
+    }
+
+    public Pageable pageable(Sort sort, FilterForm filterForm) {
+        return PageRequest.of(filterForm.getStart() / filterForm.getLength(), filterForm.getLength(), sort);
+    }
+    public Pageable pageable(FilterForm filterForm) {
+        return PageRequest.of(filterForm.getStart() / filterForm.getLength(), filterForm.getLength());
     }
 }
