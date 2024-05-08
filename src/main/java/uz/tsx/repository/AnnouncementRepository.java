@@ -121,7 +121,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "                     FROM\n" +
             "                         tsx_category tsxr_parent\n" +
             "                     WHERE\n" +
-            "                         tsxr_parent.id = :categoryId \n" +
+            "                         tsxr_parent.id =:categoryId \n" +
             "                     UNION ALL\n" +
             "                     SELECT\n" +
             "                         tsx_child.id,\n" +
