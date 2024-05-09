@@ -9,7 +9,8 @@ import uz.tsx.entity.AttachEntity;
 import java.util.List;
 
 public interface AttachService {
-    String SUFFIX_MINI_IMG = "_h48";
+    String SUFFIX_MINI_IMG_200 = "_h200";
+    String SUFFIX_MINI_IMG_48 = "_h48";
 
     AttachEntity saveAttach(MultipartFile file);
 

@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.*;
 
 import static uz.tsx.constants.Characters.FOLDER_BOUNDARY;
-import static uz.tsx.service.AttachService.SUFFIX_MINI_IMG;
+import static uz.tsx.service.AttachService.SUFFIX_MINI_IMG_200;
 
 @UtilityClass
 public class AttachConvert {
@@ -99,7 +99,7 @@ public class AttachConvert {
         AttachUrlResponse url = new AttachUrlResponse();
 
         url.setOriginFile(ATTACH_PATH + path + attachId + "." + type);
-        url.setMinFile(ATTACH_PATH + path + attachId + SUFFIX_MINI_IMG + "." + type);
+        url.setMinFile(ATTACH_PATH + path + attachId + SUFFIX_MINI_IMG_200 + "." + type);
 
         return url;
     }
@@ -109,7 +109,7 @@ public class AttachConvert {
             AttachUrlResponse url = new AttachUrlResponse();
 
             url.setOriginFile(ATTACH_PATH + attach.getPath() + attach.getId() + "." + attach.getType());
-            url.setMinFile(ATTACH_PATH + attach.getPath() + attach.getId() + SUFFIX_MINI_IMG + "." + attach.getType());
+            url.setMinFile(ATTACH_PATH + attach.getPath() + attach.getId() + SUFFIX_MINI_IMG_200 + "." + attach.getType());
 
             return url;
         }
