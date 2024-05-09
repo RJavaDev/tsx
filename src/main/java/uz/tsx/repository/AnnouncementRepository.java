@@ -41,7 +41,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
     Optional<AnnouncementEntity> getAnnouncementById(@Param("announceId") Long announceId);
 
     @Query(value = "SELECT tsxa.* FROM tsx_announcement tsxa " +
-            "WHERE tsxa.status <> 'DE LETE' " +
+            "WHERE tsxa.status <> 'DELETED' " +
             "ORDER BY tsxa.id DESC",
             nativeQuery = true)
     Page<AnnouncementEntity> getAnnouncementPage(Pageable pageable);

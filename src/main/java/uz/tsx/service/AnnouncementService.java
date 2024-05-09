@@ -36,7 +36,7 @@ public interface AnnouncementService {
 
     Integer iSaw (Long id, HttpServletRequest httpServletRequest);
 
-    DataTable<AnnouncementEntity> getAnnouncementListByCategory(Long categoryId, PageParam pageParam);
+    BigDataTable<AnnouncementInterface> getAnnouncementListByCategory(Long categoryId, PageParam pageParam);
 
     BigDataTable<AnnouncementInterface> searchAnnouncementAndFilter(FilterForm filter);
 }

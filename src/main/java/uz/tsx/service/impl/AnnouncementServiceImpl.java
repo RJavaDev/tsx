@@ -95,8 +95,6 @@ public class AnnouncementServiceImpl implements AnnouncementService {
              if (Objects.nonNull(dto)){
                  AnnouncementEntity announcement1 = repository.findById(dto.getId()).get();
                  List<AttachUrlResponse> attachUrlResponses = AttachConvert.convertToAttachUrlDto(announcement1.getAttachPhotos());
-                 dto.setAttachPhotosUrl(AttachConvert.convertToAttachUrlOriginDto(attachUrlResponses));
-                 dto.setAttachMiniPhotosUrl(AttachConvert.convertToAttachUrlMiniDto(attachUrlResponses));
                  dto.setAttachUrlResponses(attachUrlResponses);
                  dto.setContactInfo(contactService.getById(announcement1.getContactInfoId()));
                  dto.setPriceTag(priceService.getById(announcement1.getPriceTagId()));
@@ -358,11 +356,14 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
-    public DataTable<AnnouncementInterface> getAnnouncementListByCategory(Long categoryId, PageParam pageParam) {
+    public BigDataTable<AnnouncementInterface> getAnnouncementListByCategory(Long categoryId, PageParam pageParam) {
+
         Page<AnnouncementInterface> announcementByCategoryId = repository.getAnnouncementByCategoryId(categoryId, PageRequest.of(pageParam.getPage() - 1, pageParam.getSize()));
-        DataTable<AnnouncementInterface> datatable = new DataTable<>();
-        datatable.setTotal((int) announcementByCategoryId.getTotalElements());
-        datatable.setRows(announcementByCategoryId.stream().toList());
+        BigDataTable<AnnouncementInterface> datatable = new BigDataTable<>();
+
+        datatable.setTotal(announcementByCategoryId.getTotalElements());
+        datatable.setRows(announcementByCategoryId.getContent());
+        datatable.setTotalPage(announcementByCategoryId.getTotalPages());
 
         return datatable;
     }

@@ -12,6 +12,7 @@ import uz.tsx.dto.announcement.announcementCreated.AnnouncementCreatedDto;
 import uz.tsx.dto.announcement.option.AnnounceOptionDto;
 import uz.tsx.dto.announcement.selector.AnnounceOptionSelector;
 import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
+import uz.tsx.dto.dtoUtil.BigDataTable;
 import uz.tsx.dto.dtoUtil.DataTable;
 import uz.tsx.dto.response.AttachUrlResponse;
 import uz.tsx.entity.announcement.AnnouncementContactEntity;
@@ -167,12 +168,15 @@ public class AnnouncementConvert {
         announcementDto.setTotal(announcementEntityList.getTotal());
         return announcementDto;
     }
-    public DataTable<AnnouncementDto>convertInterfaceToDto(DataTable<AnnouncementInterface> announcementEntityList){
-        DataTable<AnnouncementDto> announcementDto= new DataTable<>();
-        List<AnnouncementDto> list = announcementEntityList.getRows().stream().map(
-                AnnouncementConvert::convertToDto).toList();
+    public BigDataTable<AnnouncementDto>convertInterfaceToDto(BigDataTable<AnnouncementInterface> announcementEntityList){
+
+        BigDataTable<AnnouncementDto> announcementDto= new BigDataTable<>();
+        List<AnnouncementDto> list = announcementEntityList.getRows().stream().map(AnnouncementConvert::convertToDto).toList();
+
         announcementDto.setRows(list);
         announcementDto.setTotal(announcementEntityList.getTotal());
+        announcementDto.setTotalPage(announcementEntityList.getTotalPage());
+
         return announcementDto;
     }
 }
