@@ -11,4 +11,6 @@ public interface AnnounceAdditionComboValueService extends BaseInterface<Additio
     boolean update(AdditionComboValueEntity updateEntity);
 
     List<AdditionComboValueEntity> getComboValueByGroupId(Long id);
+
+    List<AdditionComboValueEntity> additionComboValueListByGroupId(Long groupId);
 }
