@@ -6,7 +6,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
-import uz.tsx.controller.convert.AnnouncementConvert;
 import uz.tsx.entity.*;
 import uz.tsx.entity.announcement.AnnouncementContactEntity;
 import uz.tsx.entity.announcement.AnnouncementEntity;
@@ -367,5 +366,10 @@ public class CommonSchemaValidator {
         validateID(id);
         return contactRepository.findBy(id)
                 .orElseThrow(()->new NotFoundException("Announce is not found"));
+    }
+
+    public void validateUserBotPhoneNumber(String phoneNumber) {
+     userRepository.getUserByPhoneNumber(phoneNumber).
+                orElseThrow(() -> new IllegalStateException("User is not found"));
     }
 }
