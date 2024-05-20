@@ -368,8 +368,8 @@ public class CommonSchemaValidator {
                 .orElseThrow(()->new NotFoundException("Announce is not found"));
     }
 
-    public void validateUserBotPhoneNumber(String phoneNumber) {
-     userRepository.getUserByPhoneNumber(phoneNumber).
+    public UserEntity validateUserBotPhoneNumber(String phoneNumber) {
+     return userRepository.getUserByPhoneNumber(phoneNumber).
                 orElseThrow(() -> new IllegalStateException("User is not found"));
     }
 }

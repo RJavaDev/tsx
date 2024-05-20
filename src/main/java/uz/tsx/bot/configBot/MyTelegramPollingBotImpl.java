@@ -28,10 +28,10 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
 
-    String BOT_TOKEN ="7022773757:AAGkwgMhmTZzJcClTIsl3HaT5srh0BWxQLM";
-    String BOT_USERNAME ="@Tez_Sotish_Xizmatibot";
+    String BOT_TOKEN ="6324307720:AAGBgwwyXDLfQrzA-7HaFbgfv7hBey9u3aU";
+    String BOT_USERNAME ="@BotABUSAXIY_bot";
 
-
+    Boolean password=false;
     private final   UserBotServiceImpl userBotService;
 
     private final AnnouncementServiceImpl announcementService;
@@ -60,17 +60,39 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             text=message.getText();
         }
         if (text.equals(StatusMessage.START)) {
+            if (userBotService.getUserById(chatId)){
+                ReplyKeyboardMarkup replyKeyboardMarkup = markupHandler.replyKeyboardMarkup(List.of("ADD"), 1);
+                myExecute(replyKeyboardMarkup,chatId);
+            }
             ReplyKeyboardMarkup replyKeyboardMarkup = markupHandler.replyKeyboardMarkup(List.of(StatusMessage.MENU, StatusMessage.SETTINGS, StatusMessage.MYADS), 2);
+            String languageCode = message.getFrom().getLanguageCode();
+            userBotService.createBot(chatId,languageCode);
             myExecute(replyKeyboardMarkup,StatusMessage.HI+message.getFrom().getFirstName(),chatId);
+        } else if (text.equals("Mening e'lonlarim \uD83D\uDCDC")){
+            getUserPhoneNumber(message);
+        }
+        else if (text.equals("ADD")){
+
         }else if (update.hasMessage() && update.getMessage().hasContact()) {
             Contact contact = update.getMessage().getContact();
             String phoneNumber = contact.getPhoneNumber();
-            if (userBotService.add(phoneNumber,message.getFrom().getFirstName())){
+            if (userBotService.add(chatId,phoneNumber,message.getFrom().getFirstName())){
+                password=true;
                 myExecute(StatusMessage.PASSWORD,chatId);
+            }else {
+                ReplyKeyboardMarkup replyKeyboardMarkup = markupHandler.replyKeyboardMarkup(List.of("ADD"), 1);
+                myExecute(replyKeyboardMarkup,"✅",chatId);
             }
-        }else if (text.equals("Mening e'lonlarim \uD83D\uDCDC")){
-            getUserPhoneNumber(message);
-           }
+        }else if (password && update.hasMessage() && update.getMessage().getText()!=null) {
+            String passwordText = update.getMessage().getText();
+            if ( password){
+                ReplyKeyboardMarkup replyKeyboardMarkup = markupHandler.replyKeyboardMarkup(List.of("ADD"), 1);
+                password=false;
+                userBotService.addPassword(chatId,passwordText);
+                myExecute(replyKeyboardMarkup,"✅",chatId);
+            }
+        }
+
     }
 
     public void getUserPhoneNumber( Message message) {
@@ -95,6 +117,11 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
      private void myExecute(ReplyKeyboardMarkup r, String text, Long chatId) throws TelegramApiException {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setText(text);
+        sendMessage.setChatId(chatId.toString());
+        sendMessage.setReplyMarkup(r);
+        execute(sendMessage);
+    }   private void myExecute(ReplyKeyboardMarkup r, Long chatId) throws TelegramApiException {
+        SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId.toString());
         sendMessage.setReplyMarkup(r);
         execute(sendMessage);
