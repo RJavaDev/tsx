@@ -106,12 +106,11 @@ public class AnnouncementController {
     }
 
     @GetMapping("/home")
-    public ApiResponse<Object> getHomePageAnnouncement(@RequestBody(required = false) PageParam pageParam) {
-        if (pageParam == null) {
-            pageParam = new PageParam();
-        }
-        Page<AnnouncementEntity> pageHomeData = service.getPageHomeData(pageParam);
-        List<AnnouncementDto> dtoList = AnnouncementConvert.convertToDto(pageHomeData);
+    public ApiResponse<Object> getHomePageAnnouncement(@RequestParam(value = "page", defaultValue = "1", required = false) Integer page,
+                                                       @RequestParam(value = "size", defaultValue = "6", required = false) Integer size) {
+
+        BigDataTable<AnnouncementInterface> pageHomeData = service.getPageHomeData(page, size);
+        BigDataTable<AnnouncementDto> dtoList = AnnouncementConvert.convertInterfaceToDto(pageHomeData);
 
         return ApiResponse.build()
                 .message(ResponseMessage.OK)

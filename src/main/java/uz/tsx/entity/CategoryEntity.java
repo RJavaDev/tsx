@@ -55,7 +55,8 @@ public class CategoryEntity extends BaseEntity {
             dto.setChildren(
                     this.getChildren().stream()
                             .map(CategoryEntity::getDto)
-                            .filter(p -> p.getStatus() != EntityStatus.DELETED).collect(Collectors.toList()));
+                            .filter(p -> p.getStatus() != EntityStatus.DELETED)
+                            .collect(Collectors.toList()));
         }
         return dto;
     }

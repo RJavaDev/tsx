@@ -32,7 +32,7 @@ public interface AnnouncementService {
 
     AnnouncementEntity getById(Long id);
 
-    Page<AnnouncementEntity> getPageHomeData(PageParam pageParam);
+    BigDataTable<AnnouncementInterface> getPageHomeData(Integer page, Integer size);
 
     Integer iSaw (Long id, HttpServletRequest httpServletRequest);
 

@@ -48,4 +48,7 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
 
     @Query(value = "SELECT COUNT(tsxc.id) > 0 FROM tsx_category tsxc WHERE tsxc.id = :categoryId AND tsxc.status <> 'DELETED'", nativeQuery = true)
     boolean doesCategoryExistById(@Param("categoryId") Long categoryId);
+
+    @Query(value = "SELECT btsc.* FROM tsx_category btsc WHERE btsc.parent_id IS NULL AND btsc.status <> 'DELETED'", nativeQuery = true)
+    List<CategoryEntity> getAllParentIsNull();
 }

@@ -40,11 +40,35 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
     @Query(value = "SELECT tsxa.* FROM tsx_announcement tsxa WHERE tsxa.id = :announceId AND tsxa.status <> 'DELETE'", nativeQuery = true)
     Optional<AnnouncementEntity> getAnnouncementById(@Param("announceId") Long announceId);
 
-    @Query(value = "SELECT tsxa.* FROM tsx_announcement tsxa " +
-            "WHERE tsxa.status <> 'DELETED' " +
-            "ORDER BY tsxa.id DESC",
+    @Query(value = "SELECT DISTINCT\n" +
+            "    a.id,\n" +
+            "    a.created_date AS createdDate,\n" +
+            "    MAX(tsxa.id) AS attachId,\n" +
+            "    MAX(tsxa.path) AS attachPath,\n" +
+            "    MAX(tsxa.type) AS attachType,\n" +
+            "    a.i_saw AS ISaw,\n" +
+            "    a.title,\n" +
+            "    ac.address,\n" +
+            "    ap.price,\n" +
+            "    c.id AS currencyId,\n" +
+            "    c.code AS currencyCode\n" +
+            "FROM\n" +
+            "    tsx_announcement a\n" +
+            "        LEFT JOIN tsx_announcement_price ap ON a.price_tag_id = ap.id\n" +
+            "        LEFT JOIN tsx_announcement_contact ac ON a.contact_info_id = ac.id\n" +
+            "        LEFT JOIN announcement_attach aa ON a.id = aa.announcement_id\n" +
+            "        LEFT JOIN tsx_attach tsxa ON tsxa.id = aa.attach_id\n" +
+            "        LEFT JOIN tsx_currency c ON ap.currency_id = c.id\n" +
+            "WHERE\n" +
+            "    a.status <> 'DELETED'\n" +
+            "GROUP BY\n" +
+            "    a.id,\n" +
+            "    c.id,\n" +
+            "    ac.address,\n" +
+            "    ap.price\n" +
+            "ORDER BY a.id DESC",
             nativeQuery = true)
-    Page<AnnouncementEntity> getAnnouncementPage(Pageable pageable);
+    Page<AnnouncementInterface> getAnnouncementPage(Pageable pageable);
 
     @Query(value = "SELECT DISTINCT\n" +
             "    a.id,\n" +
@@ -137,7 +161,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "                 FROM\n" +
             "                     category_parentId\n" +
             "                 ORDER BY\n" +
-            "                     category_parentId.level ASC\n" +
+            "                     category_parentId.level\n" +
             "             ) AS user_address\n" +
             "    ) AS f ON f.id = a.category_id\n" +
             "WHERE\n" +
@@ -230,7 +254,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "  AND tsxa.created_date BETWEEN\n" +
             "    COALESCE(:startDate, CAST('2024-05-04 13:44:38' AS TIMESTAMP WITHOUT TIME ZONE))\n" +
             "    AND COALESCE(:endDate, NOW())\n" +
-            "    AND (:searchTitle IS NULL OR similarity(tsxa.title, :searchTitle) > 0.3)\n" +
+            "    AND (:searchTitle IS NULL OR similarity(tsxa.title, :searchTitle) > 0.2)\n" +
             "GROUP BY\n" +
             "    tsxa.id,\n" +
             "    tsxa.created_date,\n" +

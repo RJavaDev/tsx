@@ -110,6 +110,14 @@ public class CategoryConvert {
                 .filter(p -> p.getStatus() != EntityStatus.DELETED).toList();
     }
 
+    public List<CategoryDto> fromTreeThreeLevel(List<CategoryEntity> categoryList){
+        return categoryList.stream().map((category)->{
+            CategoryDto dto = fromNoTree(category);
+            dto.setChildren(category.getChildren().stream().map(CategoryConvert::fromOneLevelChild).toList());
+            return dto; })
+                .filter(p -> p.getStatus() != EntityStatus.DELETED).toList();
+    }
+
     public List<CategoryResponseDto> fromOpenDataNoChild(List<CategoryEntity> categoryList){
         return categoryList.stream().map(CategoryConvert::fromOpenDataNoChild).toList();
     }

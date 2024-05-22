@@ -92,6 +92,10 @@ public class CategoryServiceImpl implements CategoryService {
         return dto;
     }
 
+    @Override
+    public List<CategoryEntity> getAllParentIsNull() {
+        return repository.getAllParentIsNull();
+    }
 
 
     private CategoryEntity childIdAndParentIdVerify(CategoryEntity category, Long categoryId) {

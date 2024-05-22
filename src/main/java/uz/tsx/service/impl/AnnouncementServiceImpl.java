@@ -351,8 +351,17 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
-    public Page<AnnouncementEntity> getPageHomeData(PageParam pageParam){
-        return repository.getAnnouncementPage(PageRequest.of(pageParam.getPage() - 1, pageParam.getSize()));
+    public BigDataTable<AnnouncementInterface> getPageHomeData(Integer page, Integer size){
+
+        Page<AnnouncementInterface> announcementInterfaceHome = repository.getAnnouncementPage(PageRequest.of(page - 1, size));
+
+        BigDataTable<AnnouncementInterface> interfaceDataTable = new BigDataTable<>();
+
+        interfaceDataTable.setTotal(announcementInterfaceHome.getTotalElements());
+        interfaceDataTable.setRows(announcementInterfaceHome.getContent());
+        interfaceDataTable.setTotalPage(announcementInterfaceHome.getTotalPages());
+
+        return interfaceDataTable;
     }
 
     @Override
@@ -371,23 +380,23 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     public BigDataTable<AnnouncementInterface> searchAnnouncementAndFilter(FilterForm filter) {
 
-        Pageable pageable = pageable(filter);
+        Pageable pageable = PageRequest.of(filter.getPage() - 1, filter.getSize());
         Map<String, Object> filterMap = filter.getFilter();
 
-        String announcementName = null;
+        String title = null;
         Long categoryId = null;
         Long regionId = null;
         Date startDate = null;
         Date endDate = null;
         if(Objects.nonNull(filterMap)){
 
-            if(filterMap.containsKey("announcementName")){
-                announcementName = MapUtils.getString(filterMap, "announcementName");
+            if(filterMap.containsKey("title")){
+                title = MapUtils.getString(filterMap, "title");
             }
-            if(filterMap.containsKey("announcementName")){
+            if(filterMap.containsKey("regionId")){
                 regionId = MapUtils.getLong(filterMap, "regionId");
             }
-            if(filterMap.containsKey("announcementName")){
+            if(filterMap.containsKey("categoryId")){
                 categoryId = MapUtils.getLong(filterMap, "categoryId");
             }
 
@@ -409,7 +418,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             }
         }
 
-        Page<AnnouncementInterface> announcementInterfaceList = repository.searchAnnouncementAndFilter(announcementName, regionId, categoryId, startDate, endDate, pageable);
+        Page<AnnouncementInterface> announcementInterfaceList = repository.searchAnnouncementAndFilter(title, regionId, categoryId, startDate, endDate, pageable);
         List<AnnouncementInterface> announcementInterfaceListContent = announcementInterfaceList.getContent();
 
         announcementInterfaceList.getTotalPages();
@@ -494,12 +503,5 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     public Sort orderSortField(String field) {
         return Sort.by(Sort.Order.by(field));
-    }
-
-    public Pageable pageable(Sort sort, FilterForm filterForm) {
-        return PageRequest.of(filterForm.getStart() / filterForm.getLength(), filterForm.getLength(), sort);
-    }
-    public Pageable pageable(FilterForm filterForm) {
-        return PageRequest.of(filterForm.getStart() / filterForm.getLength(), filterForm.getLength());
     }
 }
