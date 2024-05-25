@@ -16,10 +16,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiValidationException;
 import uz.tsx.bot.constantsBot.StatusMessage;
 import uz.tsx.bot.dto.CategoryDto;
 import uz.tsx.bot.handler.MarkupHandler;
+import uz.tsx.bot.handler.UserStateHandler;
 import uz.tsx.bot.serviceBot.impl.CategoryBotServiceImpl;
 import uz.tsx.bot.serviceBot.impl.UserBotServiceImpl;
 import uz.tsx.service.impl.AnnouncementServiceImpl;
@@ -53,7 +53,6 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         MarkupHandler markupHandler = new MarkupHandler();
-
         if (update.hasMessage()) {
             Message message = update.getMessage();
             Long chatId = message.getChatId();
@@ -74,7 +73,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                 getUserPhoneNumber(message);
             } else if (text.equals("ADD")) {
                 List<CategoryDto> dto = categoryBotService.getCategory();
-                InlineKeyboardMarkup categoryInlineKeyboardMarkup = markupHandler.getCategoryInlineKeyboardMarkup1(dto, 2);
+                InlineKeyboardMarkup categoryInlineKeyboardMarkup = markupHandler.getCategoryInlineKeyboardMarkup(dto, 2,chatId);
                 myExecute(categoryInlineKeyboardMarkup, chatId);
             } else if (update.hasMessage() && update.getMessage().hasContact()) {
                 Contact contact = update.getMessage().getContact();
@@ -99,15 +98,18 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
         else if (update.hasCallbackQuery()){
             String data = update.getCallbackQuery().getData();
             Message message = update.getCallbackQuery().getMessage();
+            Long chatIdQuery = update.getCallbackQuery().getMessage().getChatId();
+            if (data.equals("back_action")){
+                InlineKeyboardMarkup userState = UserStateHandler.getUserState(chatIdQuery);
+                myExecute(userState,chatIdQuery,message.getMessageId());
+            }
             String[] split = data.split(":");
             String category = split[1].substring(1, 9);
-            Long chatIdQuery = update.getCallbackQuery().getMessage().getChatId();
             if (category.equals("category")){
                 String id = split[2].substring(1, split[2].length() - 2);
                 List<CategoryDto>categoryDtoList=categoryBotService.getCategoryListById(Long.valueOf(id));
-                InlineKeyboardMarkup categoryInlineKeyboardMarkup = markupHandler.getCategoryInlineKeyboardMarkup1(categoryDtoList, 2);
+                InlineKeyboardMarkup categoryInlineKeyboardMarkup = markupHandler.getCategoryInlineKeyboardMarkup(categoryDtoList, 2,chatIdQuery);
                 myExecute(categoryInlineKeyboardMarkup, chatIdQuery,message.getMessageId());
-
             }
         }
     }
@@ -153,7 +155,6 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
     }
     private void myExecute(InlineKeyboardMarkup i, Long chatId,Integer massage) throws TelegramApiException {
         EditMessageText sendMessage=new EditMessageText();
-//        SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId.toString());
         sendMessage.setMessageId(massage);
         sendMessage.setText("CATEGORY");

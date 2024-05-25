@@ -112,7 +112,7 @@ VALUES ('CREATED', now(), 'Hostels', 'Хостелы', 'Mehmonxonalar',  functio
 -- create default 1.2.3 category
 INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
 VALUES
-      ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara',  function_getid('Apartment_')),
+      ('CREATED', now(), 'Long-term rent', 'Аренда долгосрочня', 'Uzoq muddatli ijara',  function_getid('Apartments_')),
        ('CREATED', now(), 'Sale', 'Продожа', 'Sotish', function_getid('Apartments_')),
        ('CREATED', now(), 'Exchange', 'Обмен', 'Ayirboshlash', function_getid('Apartments_'));
 
@@ -239,19 +239,19 @@ VALUES ('CREATED', now(), 'Dogs', 'Собаки', 'Itlar', function_getid('Anima
 -- create default 1.5.0 category
 INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
 VALUES
-    ('CREATED', now(), 'Audio equipment', 'Аудиотехника', 'Audio uskunalar', function_getid('Electronics')),
-    ('CREATED', now(), 'Games and game consoles', 'Игры и игровые приставки', 'O''yinlar va o''yin konsollari', function_getid('Electronics')),
-    ('CREATED', now(), 'Computers', 'Компьютеры', 'Kompyuterlar', function_getid('Electronics')),
-    ('CREATED', now(), 'Individual care', 'Индивидуальный уход', 'Shaxsiy g''amxo''rlik', function_getid('Electronics')),
-    ('CREATED', now(), 'TV/video equipment', 'Тв / видеотехника', 'Televizor/video uskunalari', function_getid('Electronics')),
-    ('CREATED', now(), 'Phones', 'Телефоны', 'Telefonlar', function_getid('Electronics')),
-    ('CREATED', now(), 'Home Appliances', 'Техника для дома', 'Maishiy texnika1', function_getid('Electronics')),
-    ('CREATED', now(), 'Kitchen appliances', 'Техника для кухни', 'Oshxona jihozlari', function_getid('Electronics')),
-    ('CREATED', now(), 'Photo/video', 'Фото / видео', 'Foto/video', function_getid('Electronics')),
-    ('CREATED', now(), 'PTV video equipment', 'Тв видеотехника', 'Televizion video uskunalar', function_getid('Electronics')),
-    ('CREATED', now(), 'Accessories and components', 'Аксессуары и  комплектуюшие', 'Aksessuarlar va komponentlar', function_getid('Electronics')),
-    ('CREATED', now(), 'Climatic equipment', 'Климатическое  оборудовование', 'Iqlim uskunalari', function_getid('Electronics')),
-    ('CREATED', now(), 'Other electronics', 'Прочая электроника', 'Boshqa elektronika', function_getid('Electronics'));
+    ('CREATED', now(), 'Audio equipment', 'Аудиотехника', 'Audio uskunalar', function_getid('Электроника')),
+    ('CREATED', now(), 'Games and game consoles', 'Игры и игровые приставки', 'O''yinlar va o''yin konsollari', function_getid('Электроника')),
+    ('CREATED', now(), 'Computers', 'Компьютеры', 'Kompyuterlar', function_getid('Электроника')),
+    ('CREATED', now(), 'Individual care', 'Индивидуальный уход', 'Shaxsiy g''amxo''rlik', function_getid('Электроника')),
+    ('CREATED', now(), 'TV/video equipment', 'Тв / видеотехника', 'Televizor/video uskunalari', function_getid('Электроника')),
+    ('CREATED', now(), 'Phones', 'Телефоны', 'Telefonlar', function_getid('Электроника')),
+    ('CREATED', now(), 'Home Appliances', 'Техника для дома', 'Maishiy texnika1', function_getid('Электроника')),
+    ('CREATED', now(), 'Kitchen appliances', 'Техника для кухни', 'Oshxona jihozlari', function_getid('Электроника')),
+    ('CREATED', now(), 'Photo/video', 'Фото / видео', 'Foto/video', function_getid('Электроника')),
+    ('CREATED', now(), 'PTV video equipment', 'Тв видеотехника', 'Televizion video uskunalar', function_getid('Электроника')),
+    ('CREATED', now(), 'Accessories and components', 'Аксессуары и  комплектуюшие', 'Aksessuarlar va komponentlar', function_getid('Электроника')),
+    ('CREATED', now(), 'Climatic equipment', 'Климатическое  оборудовование', 'Iqlim uskunalari', function_getid('Электроника')),
+    ('CREATED', now(), 'Other electronics', 'Прочая электроника', 'Boshqa elektronika', function_getid('Электроника'));
 
 -- create default 1.5.1 category
 INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
@@ -311,11 +311,11 @@ VALUES ('CREATED', now(), 'Accessories for TV/Video Equipment', 'Аксессу�
 -- create default 1.5.6 category
 INSERT INTO tsx_category (status, created_date, name_en, name_ru, name_uz, parent_id)
 VALUES
-    ('CREATED', NOW(), 'Accessories', 'Аксессуары', 'Aksessuarlar', function_getid('Tелефоны')),
-    ('CREATED', NOW(), 'Mobile Phones', 'Мобильные телефоны', 'Mobil telefonlar', function_getid('Tелефоны')),
-    ('CREATED', NOW(), 'SIM Cards Tariffs Numbers', 'Сим карты тарифы номера', 'SIM kartlar tariflari raqamlari', function_getid('Tелефоны')),
-    ('CREATED', NOW(), 'Landline Phones', 'Стационарные телефоны', 'Qo''ng''iroq telefonlari', function_getid('Tелефоны')),
-    ('CREATED', NOW(), 'Other Phones', 'Прочие телефоны', 'Boshqa telefonlar', function_getid('Tелефоны'));
+    ('CREATED', NOW(), 'Accessories', 'Аксессуары', 'Aksessuarlar', function_getid('Телефоны')),
+    ('CREATED', NOW(), 'Mobile Phones', 'Мобильные телефоны', 'Mobil telefonlar', function_getid('Телефоны')),
+    ('CREATED', NOW(), 'SIM Cards Tariffs Numbers', 'Сим карты тарифы номера', 'SIM kartlar tariflari raqamlari', function_getid('Телефоны')),
+    ('CREATED', NOW(), 'Landline Phones', 'Стационарные телефоны', 'Qo''ng''iroq telefonlari', function_getid('Телефоны')),
+    ('CREATED', NOW(), 'Other Phones', 'Прочие телефоны', 'Boshqa telefonlar', function_getid('Телефоны'));
 
 -- create default 1.5.7 category
 INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)

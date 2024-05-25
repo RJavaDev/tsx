@@ -40,7 +40,7 @@ public class MarkupHandler {
         }
         return null;
     }
-    public InlineKeyboardMarkup getCategoryInlineKeyboardMarkup1(List<CategoryDto> categoryList, int n) throws JsonProcessingException {
+    public InlineKeyboardMarkup getCategoryInlineKeyboardMarkup(List<CategoryDto> categoryList, int n,Long chatId) throws JsonProcessingException {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         inlineKeyboardMarkup.setKeyboard(rows);
@@ -53,19 +53,25 @@ public class MarkupHandler {
             Map<String, String> callbackData = new HashMap<>();
             callbackData.put("id", category.getId().toString());
             callbackData.put("taype", "category");
-            String categoryDtoJson = objectMapper.writeValueAsString(callbackData);
+            String callbackDataJson = objectMapper.writeValueAsString(callbackData);
             InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton(category.getName());
-            inlineKeyboardButton.setCallbackData(categoryDtoJson);
+            inlineKeyboardButton.setCallbackData(callbackDataJson);
             row.add(inlineKeyboardButton);
             if ((i + 1) % n == 0) {
                 rows.add(row);
                 row = new ArrayList<>();
             }
         }
-        if (row.size() > 0) {
+        if (!row.isEmpty()) {
             rows.add(row);
         }
 
+        List<InlineKeyboardButton> backRow = new ArrayList<>();
+        InlineKeyboardButton backButton = new InlineKeyboardButton("Back ⏮");
+        backButton.setCallbackData("back_action");
+        backRow.add(backButton);
+        rows.add(backRow);
+        UserStateHandler.setUserState(chatId,inlineKeyboardMarkup);
         return inlineKeyboardMarkup;
     }
 
