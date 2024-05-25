@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import uz.tsx.bot.dto.CategoryDto;
+import uz.tsx.bot.dto.RegionDto;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,12 +35,6 @@ public class MarkupHandler {
         return r;
     }
 
-    private String getKey(Map<String, InlineKeyboardMarkup> map) {
-        for (Map.Entry<String, InlineKeyboardMarkup> pair : map.entrySet()) {
-            return pair.getKey();
-        }
-        return null;
-    }
     public InlineKeyboardMarkup getCategoryInlineKeyboardMarkup(List<CategoryDto> categoryList, int n,Long chatId) throws JsonProcessingException {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
@@ -67,8 +62,43 @@ public class MarkupHandler {
         }
 
         List<InlineKeyboardButton> backRow = new ArrayList<>();
-        InlineKeyboardButton backButton = new InlineKeyboardButton("Back ⏮");
-        backButton.setCallbackData("back_action");
+        InlineKeyboardButton backButton = new InlineKeyboardButton("Orqaga qaytish ⏮");
+        backButton.setCallbackData("category");
+        backRow.add(backButton);
+        rows.add(backRow);
+        UserStateHandler.setUserState(chatId,inlineKeyboardMarkup);
+        return inlineKeyboardMarkup;
+    }
+
+    public InlineKeyboardMarkup getRegionInlineKeyboardMarkup(List<RegionDto> regionList, int n, Long chatId) throws JsonProcessingException {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        inlineKeyboardMarkup.setKeyboard(rows);
+
+        List<InlineKeyboardButton> row = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        for (int i = 0; i < regionList.size(); i++) {
+            RegionDto regionDto = regionList.get(i);
+            Map<String, String> callbackData = new HashMap<>();
+            callbackData.put("id", regionDto.getId().toString());
+            callbackData.put("taype", "region");
+            String callbackDataJson = objectMapper.writeValueAsString(callbackData);
+            InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton(regionDto.getName());
+            inlineKeyboardButton.setCallbackData(callbackDataJson);
+            row.add(inlineKeyboardButton);
+            if ((i + 1) % n == 0) {
+                rows.add(row);
+                row = new ArrayList<>();
+            }
+        }
+        if (!row.isEmpty()) {
+            rows.add(row);
+        }
+
+        List<InlineKeyboardButton> backRow = new ArrayList<>();
+        InlineKeyboardButton backButton = new InlineKeyboardButton("Orqaga qaytish ⏮");
+        backButton.setCallbackData("region");
         backRow.add(backButton);
         rows.add(backRow);
         UserStateHandler.setUserState(chatId,inlineKeyboardMarkup);

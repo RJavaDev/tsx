@@ -1,7 +1,6 @@
 package uz.tsx.bot.configBot;
 
 
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
@@ -18,9 +17,11 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import uz.tsx.bot.constantsBot.StatusMessage;
 import uz.tsx.bot.dto.CategoryDto;
+import uz.tsx.bot.dto.RegionDto;
 import uz.tsx.bot.handler.MarkupHandler;
 import uz.tsx.bot.handler.UserStateHandler;
 import uz.tsx.bot.serviceBot.impl.CategoryBotServiceImpl;
+import uz.tsx.bot.serviceBot.impl.RegionBotServiceImpl;
 import uz.tsx.bot.serviceBot.impl.UserBotServiceImpl;
 import uz.tsx.service.impl.AnnouncementServiceImpl;
 
@@ -40,6 +41,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
     private final UserBotServiceImpl userBotService;
     private final CategoryBotServiceImpl categoryBotService;
     private final AnnouncementServiceImpl announcementService;
+    private final RegionBotServiceImpl regionBotService;
     @Override
     public String getBotUsername() {
         return BOT_USERNAME;
@@ -62,10 +64,10 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             }
             if (text.equals(StatusMessage.START)) {
                 if (userBotService.getUserById(chatId)) {
-                    ReplyKeyboardMarkup replyKeyboardMarkup = markupHandler.replyKeyboardMarkup(List.of("ADD"), 1);
+                    ReplyKeyboardMarkup replyKeyboardMarkup = markupHandler.replyKeyboardMarkup(List.of("ADD","Orqaga qaytish ⏮"), 1);
                     myExecute(replyKeyboardMarkup, chatId);
                 }
-                ReplyKeyboardMarkup replyKeyboardMarkup = markupHandler.replyKeyboardMarkup(List.of(StatusMessage.MENU, StatusMessage.SETTINGS, StatusMessage.MYADS), 2);
+                ReplyKeyboardMarkup replyKeyboardMarkup = markupHandler.replyKeyboardMarkup(List.of(StatusMessage.MENU, StatusMessage.SETTINGS, StatusMessage.MYADS,"Orqaga qaytish ⏮"), 2);
                 String languageCode = message.getFrom().getLanguageCode();
                 userBotService.createBot(chatId, languageCode);
                 myExecute(replyKeyboardMarkup, StatusMessage.HI + message.getFrom().getFirstName(), chatId);
@@ -99,17 +101,35 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             String data = update.getCallbackQuery().getData();
             Message message = update.getCallbackQuery().getMessage();
             Long chatIdQuery = update.getCallbackQuery().getMessage().getChatId();
-            if (data.equals("back_action")){
+            if (data.equals("category")){
                 InlineKeyboardMarkup userState = UserStateHandler.getUserState(chatIdQuery);
-                myExecute(userState,chatIdQuery,message.getMessageId());
+                myExecute(userState,"Category",chatIdQuery,message.getMessageId());
+            }
+            if (data.equals("region")){
+                InlineKeyboardMarkup userState = UserStateHandler.getUserState(chatIdQuery);
+                myExecute(userState,"Region",chatIdQuery,message.getMessageId());
             }
             String[] split = data.split(":");
             String category = split[1].substring(1, 9);
+            String region = split[1].substring(1, 7);
             if (category.equals("category")){
                 String id = split[2].substring(1, split[2].length() - 2);
                 List<CategoryDto>categoryDtoList=categoryBotService.getCategoryListById(Long.valueOf(id));
                 InlineKeyboardMarkup categoryInlineKeyboardMarkup = markupHandler.getCategoryInlineKeyboardMarkup(categoryDtoList, 2,chatIdQuery);
-                myExecute(categoryInlineKeyboardMarkup, chatIdQuery,message.getMessageId());
+                if (categoryDtoList.isEmpty()){
+                    List<RegionDto> regionList = regionBotService.getRegionList();
+                    InlineKeyboardMarkup regionInlineKeyboardMarkup = markupHandler.getRegionInlineKeyboardMarkup(regionList, 2, chatIdQuery);
+                    myExecute(regionInlineKeyboardMarkup,"Region",chatIdQuery,message.getMessageId());
+                }else {
+
+                    myExecute(categoryInlineKeyboardMarkup,"Category", chatIdQuery,message.getMessageId());
+                }
+            }
+            else if (region.equals("region")){
+                String regionId = split[2].substring(1, split[2].length() - 2);
+                List<RegionDto> regionList = regionBotService.getRegionListById(Long.valueOf(regionId));
+                InlineKeyboardMarkup regionInlineKeyboardMarkup = markupHandler.getRegionInlineKeyboardMarkup(regionList, 2, chatIdQuery);
+                myExecute(regionInlineKeyboardMarkup,"Region",chatIdQuery,message.getMessageId());
             }
         }
     }
@@ -153,11 +173,11 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
         sendMessage.setReplyMarkup(r);
         execute(sendMessage);
     }
-    private void myExecute(InlineKeyboardMarkup i, Long chatId,Integer massage) throws TelegramApiException {
+    private void myExecute(InlineKeyboardMarkup i,String text, Long chatId,Integer massage) throws TelegramApiException {
         EditMessageText sendMessage=new EditMessageText();
         sendMessage.setChatId(chatId.toString());
         sendMessage.setMessageId(massage);
-        sendMessage.setText("CATEGORY");
+        sendMessage.setText(text);
         sendMessage.setReplyMarkup(i);
         execute(sendMessage);
     }
