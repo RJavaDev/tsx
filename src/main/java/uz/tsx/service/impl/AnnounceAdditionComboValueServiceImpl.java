@@ -62,4 +62,11 @@ public class AnnounceAdditionComboValueServiceImpl implements AnnounceAdditionCo
         schemaValidator.validateAdditionComboValueId(id);
         repository.delete(id);
     }
+
+    @Override
+    public List<AdditionComboValueEntity> additionComboValueListByGroupId(Long groupId) {
+        schemaValidator.validateAdditionGroup(groupId);
+       return repository.additionComboValueListByGroupId(groupId);
+
+    }
 }

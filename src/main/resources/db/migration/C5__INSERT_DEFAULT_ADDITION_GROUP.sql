@@ -238,7 +238,7 @@ VALUES
 -- tsx_add_group default  2.7.1
 INSERT INTO tsx_add_group(status, created_date, name_en, name_ru, name_uz, category_id, type)
 VALUES
-    ('CREATED', NOW(), 'Type of business 2', 'Вид бизнеса 2', 'Biznes turi 2', function_getid('Транспорт'), 0),
+--     ('CREATED', NOW(), 'Type of business 2', 'Вид бизнеса 2', 'Biznes turi 2', function_getid('Недвижимость'), 0),
     ('CREATED', NOW(), 'Subcategories 2', 'Подкатегории 2', 'Pastki toifalar 2', function_getid('Декор окон'), 3),
     ('CREATED', NOW(), 'State 12', 'Состояние 12', 'Holati 12', function_getid('Предметы интерьера'), 0);
 

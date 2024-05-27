@@ -106,4 +106,22 @@ public class AnnounceAdditionGroupController {
                 .message(ResponseMessage.DELETE_SUCCESS_MESSAGE);
 
     }
+
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("permitAll()")
+    @GetMapping("/get-list/{categoryId}")
+    @Operation(summary = "The category will receive yaa items", description = "give a Category ID")
+    public ApiResponse<Object> getAdditionGroupByCategoryId(@RequestParam("categoryId") Long categoryId){
+
+
+        List<AdditionGroupEntity> list = service.additionGroupListByCategoryId(categoryId);
+        List<AdditionGroupDto> additionGroupDtos = AdditionGroupConvert.convertToDto(list);
+
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
+                .body(additionGroupDtos)
+                .message(ResponseMessage.OK);
+
+    }
+
 }

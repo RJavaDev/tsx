@@ -5,12 +5,15 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.tsx.controller.convert.AdditionGroupConvert;
 import uz.tsx.controller.convert.OptionConvert;
+import uz.tsx.dto.announcement.additionInfo.AdditionGroupDto;
 import uz.tsx.dto.announcement.option.OptionDto;
 import uz.tsx.dto.dtoUtil.ApiResponse;
 import uz.tsx.dto.dtoUtil.ResponseCode;
 import uz.tsx.dto.dtoUtil.ResponseMessage;
 import uz.tsx.dto.request.OptionCreateDto;
+import uz.tsx.entity.announcement.additionInfo.AdditionGroupEntity;
 import uz.tsx.entity.announcement.option.OptionEntity;
 import uz.tsx.service.OptionService;
 
@@ -93,5 +96,22 @@ public class OptionController {
                 .code(ResponseCode.OK)
                 .body(Boolean.TRUE)
                 .message(ResponseMessage.OK);
+    }
+
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("permitAll()")
+    @GetMapping("/get-list/{categoryId}")
+    @Operation(summary = "The category will receive yaa items", description = "give a Category ID")
+    public ApiResponse<Object> getOptionByCategoryId(@RequestParam("categoryId") Long categoryId){
+
+
+        List<OptionEntity> list = service.optionListByCategoryId(categoryId);
+        List<OptionDto> optionDtos = OptionConvert.convertToDto(list);
+
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
+                .body(optionDtos)
+                .message(ResponseMessage.OK);
+
     }
 }

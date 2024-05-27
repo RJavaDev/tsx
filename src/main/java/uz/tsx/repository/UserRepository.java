@@ -59,4 +59,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             "            WHERE tsxu.id = :userId AND tsxu.status <> 'DELETED'\n",
             nativeQuery = true)
     UserInterface getMe(@Param("userId") Long id);
+    @Query(value = "SELECT tsxu.* FROM tsx_user tsxu WHERE tsxu.email_or_phone = :phoneNumber AND tsxu.status <> 'DELETED'", nativeQuery = true)
+    Optional<UserEntity> getUserByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 }

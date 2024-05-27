@@ -12,6 +12,7 @@ import uz.tsx.validation.CommonSchemaValidator;
 import uz.tsx.validation.Validation;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -57,5 +58,16 @@ public class OptionServiceImpl implements OptionService {
         if(!Validation.checkId(groupId)) return null;
 
         return repository.findAllOptionsByGroupId(groupId);
+    }
+
+    @Override
+    public List<OptionEntity> optionListByCategoryId(Long categoryId) {
+        schemaValidator.validateCategory(categoryId);
+
+        List<Map<Object, Object>> maps = repository.optionListByCategoryId(categoryId);
+        if (maps==null){
+
+        }
+        return null;
     }
 }

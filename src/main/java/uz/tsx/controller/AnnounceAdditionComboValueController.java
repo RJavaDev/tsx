@@ -7,14 +7,17 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.tsx.controller.convert.AdditionGroupConvert;
 import uz.tsx.controller.convert.AnnounceAdditionComboValueConvert;
 import uz.tsx.dto.announcement.additionInfo.AdditionComboValueDto;
+import uz.tsx.dto.announcement.additionInfo.AdditionGroupDto;
 import uz.tsx.dto.dtoUtil.ApiResponse;
 import uz.tsx.dto.dtoUtil.ResponseCode;
 import uz.tsx.dto.dtoUtil.ResponseMessage;
 import uz.tsx.dto.request.AdditionComboValueCreate;
 import uz.tsx.dto.request.AdditionComboValueUpdate;
 import uz.tsx.entity.announcement.additionInfo.AdditionComboValueEntity;
+import uz.tsx.entity.announcement.additionInfo.AdditionGroupEntity;
 import uz.tsx.service.AnnounceAdditionComboValueService;
 
 import java.util.List;
@@ -96,5 +99,22 @@ public class AnnounceAdditionComboValueController {
                 .code(ResponseCode.OK)
                 .body(Boolean.TRUE)
                 .message(ResponseMessage.OK);
+    }
+
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("permitAll()")
+    @GetMapping("/get-list/{groupId}")
+    @Operation(summary = "The Addition Group will receive yaa items", description = "give a Addition Group ID")
+    public ApiResponse<Object> getAdditionGroupByCategoryId(@RequestParam("groupId") Long groupId){
+
+
+        List<AdditionComboValueEntity> list = service.additionComboValueListByGroupId(groupId);
+        List<AdditionComboValueDto> additionComboValueDtos = AnnounceAdditionComboValueConvert.convertToDto(list);
+
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
+                .body(additionComboValueDtos)
+                .message(ResponseMessage.OK);
+
     }
 }

@@ -12,4 +12,7 @@ public interface AnnounceAdditionGroupService extends BaseInterface<AdditionGrou
     List<AdditionComboValueDto> listAnnounceAdditionGroup(Long groupId);
 
     boolean update(AdditionGroupEntity entity);
+
+    List<AdditionGroupEntity> additionGroupListByCategoryId(Long categoryId);
+
 }

@@ -17,4 +17,5 @@ public interface TableNames {
     String CHAT = "tsx_chat_message";
     String CHAT_ROOM = "tsx_chatroom";
     String CHAT_USER = "tsx_chat_user";
+    String TSX_USER_BOT = "tsx_user_bot";
 }

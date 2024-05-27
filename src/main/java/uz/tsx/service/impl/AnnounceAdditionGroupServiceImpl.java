@@ -71,4 +71,11 @@ public class AnnounceAdditionGroupServiceImpl implements AnnounceAdditionGroupSe
         schemaValidator.validateAdditionGroupId(id);
         repository.delete(id);
     }
+
+    @Override
+    public List<AdditionGroupEntity> additionGroupListByCategoryId(Long categoryId) {
+        schemaValidator.doesCategoryExist(categoryId);
+        return repository.getAdditionGroupList(categoryId);
+
+    }
 }

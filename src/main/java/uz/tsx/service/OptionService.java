@@ -10,4 +10,5 @@ public interface OptionService extends BaseInterface<OptionEntity>{
 
     List<OptionEntity> findOptionsByGroupId(Long groupId);
 
+    List<OptionEntity> optionListByCategoryId(Long categoryId);
 }

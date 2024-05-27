@@ -102,4 +102,12 @@ public class UserConvert {
         return userIgnorePropertiesAdd(userCreateRequestDto.toEntity("role"), null);
     }
 
+    public UserCreateRequestDto fromBot(String phoneNumber,String firstname){
+        UserCreateRequestDto dto=new UserCreateRequestDto();
+        dto.setFirstname(firstname);
+        dto.setEmailOrPhone(phoneNumber);
+
+        return dto;
+    }
+
 }

@@ -29,4 +29,9 @@ public interface AnnounceAdditionGroupRepository extends JpaRepository<AdditionG
     @Modifying
     @Query(value = "UPDATE tsx_add_group SET status = 'DELETED' WHERE id = :additionGroupId AND status <> 'DELETED'", nativeQuery = true)
     void delete(@Param("additionGroupId") Long id);
+    @Modifying
+    @Query(value = "SELECT ta.* FROM tsx_add_group ta\n" +
+            "   LEFT JOIN tsx_category tc ON ta.category_id = tc.id\n" +
+            "WHERE ta.category_id=:categoryId AND ta.status<>'DELETED'", nativeQuery = true)
+    List<AdditionGroupEntity> getAdditionGroupList(@Param("categoryId")Long categoryId);
 }
