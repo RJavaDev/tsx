@@ -10,7 +10,7 @@ cmd="$@"
 host=$(echo $hostport | cut -d: -f1)
 port=$(echo $hostport | cut -d: -f2)
 
-until nc -z "$host" "$port"; do
+until bash -c "echo > /dev/tcp/$host/$port"; do
   >&2 echo "Postgres is unavailable - sleeping"
   sleep 1
 done
