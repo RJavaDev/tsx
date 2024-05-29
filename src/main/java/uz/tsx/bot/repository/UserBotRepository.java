@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface UserBotRepository extends JpaRepository<UserBotEntity,Long> {
 
     @Query(value = "SELECT tsxu.* FROM tsx_user_bot tsxu WHERE tsxu.chat_id = :chatId AND tsxu.status <> 'DELETED'", nativeQuery = true)
-    Optional<UserBotEntity> getUserByChatId(@Param("chatId") Long chatId);
+    Optional<UserBotEntity> getUserByChatId(@Param("chatId") String chatId);
 
     @Transactional
     @Modifying
@@ -28,5 +28,8 @@ public interface UserBotRepository extends JpaRepository<UserBotEntity,Long> {
             "UPDATE tsx_user\n" +
             "SET password = :passwordUser\n" +
             "WHERE id IN (SELECT id FROM updated_users) AND status<>'DELETED'", nativeQuery = true)
-    void userAddPassword(@Param("chatId") Long chatId,@Param("passwordUser") String passwordUser);
+    void userAddPassword(@Param("chatId") String chatId,@Param("passwordUser") String passwordUser);
+
+    @Query(value = "SELECT tsxu.state FROM tsx_user_bot tsxu WHERE tsxu.chat_id = :chatId AND tsxu.status <> 'DELETED'", nativeQuery = true)
+    String getUserState(@Param("chatId") String chatId);
 }
