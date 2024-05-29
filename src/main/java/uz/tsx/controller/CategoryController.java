@@ -98,6 +98,18 @@ public class CategoryController {
                 .body(dto)
                 .message(ResponseMessage.OK);
     }
+    @Operation(summary = "Get Category Child", description = "This method retrieves the category along with its descendants in a tree structure based on the provided ID.")
+    @GetMapping("/get/tree-three-level")
+    public ApiResponse<Object> getCategoryTreeThreeLevel() {
+
+        List<CategoryEntity> category = service.getAllParentIsNull();
+        List<CategoryDto> dto = CategoryConvert.fromTreeThreeLevel(category);
+
+        return ApiResponse.build()
+                .code(ResponseCode.OK)
+                .body(dto)
+                .message(ResponseMessage.OK);
+    }
 
     @Operation(summary = "Get All Categories with Tree Structure", description = "This method retrieves all categories in a tree structure, starting from the root category and including all its descendants.")
     @GetMapping("/get/all-tree")

@@ -17,7 +17,7 @@ public class ReplyKeyboardUtil {
         KeyboardRow row2=new KeyboardRow();
 
         WebAppInfo webAppInfo = new WebAppInfo();
-        webAppInfo.setUrl("https://olcha.uz/ru");
+        webAppInfo.setUrl("https://tsx-bot-web.netlify.app/");
 
         KeyboardButton keyboardButton = new KeyboardButton();
         keyboardButton.setText(BotConstants.MENU);
