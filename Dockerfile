@@ -21,8 +21,12 @@ WORKDIR /app
 # Copy the jar file from the build stage
 COPY --from=build /app/target/tsx-0.0.1-SNAPSHOT.jar app.jar
 
+# Copy wait-for-it script
+COPY wait-for-it.sh /app/wait-for-it.sh
+RUN chmod +x /app/wait-for-it.sh
+
 # Expose the port the application runs on
 EXPOSE 8080
 
 # Command to run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["/app/wait-for-it.sh", "db:5432", "--", "java", "-jar", "app.jar"]
