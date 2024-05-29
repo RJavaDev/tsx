@@ -9,9 +9,6 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/tsx
       - SPRING_DATASOURCE_USERNAME=myadmin
       - SPRING_DATASOURCE_PASSWORD=myadmin
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SPRING_JPA_SHOW_SQL=true
-      - SPRING_JPA_PROPERTIES_HIBERNATE_ENABLE_LAZY_LOAD_NO_TRANS=true
     depends_on:
       - db
 
