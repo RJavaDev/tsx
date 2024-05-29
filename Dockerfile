@@ -15,8 +15,8 @@ RUN mvn clean package -DskipTests
 # Runtime stage
 FROM openjdk:17-jdk-slim
 
-# Install postgresql-client to get pg_isready
-RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
+# Install postgresql-client and netcat
+RUN apt-get update && apt-get install -y postgresql-client netcat && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory inside the container
 WORKDIR /app
