@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/tsx
+      - SPRING_DATASOURCE_USERNAME=myadmin
+      - SPRING_DATASOURCE_PASSWORD=myadmin
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_ENABLE_LAZY_LOAD_NO_TRANS=true
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: tsx
+      POSTGRES_USER: myadmin
+      POSTGRES_PASSWORD: myadmin
+    ports:
+      - "5432:5432"
