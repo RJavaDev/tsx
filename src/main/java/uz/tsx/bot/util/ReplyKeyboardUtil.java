@@ -1,7 +1,9 @@
 package uz.tsx.bot.util;
 
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReplyKeyboardUtil {
-    public static ReplyKeyboard getMainMenuKeyboard() {
+    public static ReplyKeyboard getMainMenuButton() {
 
         KeyboardRow row1=new KeyboardRow();
         KeyboardRow row2=new KeyboardRow();
@@ -53,5 +55,26 @@ public class ReplyKeyboardUtil {
 
         return keyboardMarkup;
 
+    }
+
+
+    public static ReplyKeyboard getUserProfileButton() {
+        KeyboardRow row = new KeyboardRow();
+
+        row.add(new KeyboardButton(BotConstants.CREATE_NEW_ANN));
+        row.add(new KeyboardButton(BotConstants.MYANNS));
+
+        ReplyKeyboardMarkup keyboardMarkup=new ReplyKeyboardMarkup();
+        keyboardMarkup.setKeyboard(List.of(row));
+        keyboardMarkup.setResizeKeyboard(true);
+        keyboardMarkup.setSelective(true);
+
+        return keyboardMarkup;
+    }
+
+    public static void removeButton(SendMessage sendMessage) {
+        ReplyKeyboardRemove removeKeyboard = new ReplyKeyboardRemove();
+        removeKeyboard.setRemoveKeyboard(true);
+        sendMessage.setReplyMarkup(removeKeyboard);
     }
 }

@@ -17,7 +17,6 @@ import uz.tsx.entity.base.BaseEntity;
 public class UserBotEntity extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String chatId;
-    private String state;
     private String language;
 
     @OneToOne
