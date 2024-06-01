@@ -25,6 +25,5 @@ public interface Characters {
             "(90) 138 99 18",*/
     String REGEX_PHONE_NUMBER_PATTERN = "\\+?(998)?[-\\s]?\\(?(\\d{2})\\)?[-\\s]?((\\d{3})[-\\s]?(\\d{2})[-\\s]?(\\d{2}))";
 
-    String REGEX_EMAIL_PATTERN = "[ExecuteBot-Za-z0-9._%+\\-]+@[ExecuteBot-Za-z.\\-]{2,}\\.[ExecuteBot-Za-z]{2,}";
-
+    String REGEX_EMAIL_PATTERN = "[A-Za-z0-9._%+\\-]+@[A-Za-z.\\-]{2,}\\.[A-Za-z]{2,}";
 }

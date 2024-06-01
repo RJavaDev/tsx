@@ -18,7 +18,7 @@ public class AttachConvert {
 
     private static final String ATTACH_UPLOAD_FOLDER = "src/main/resources/images/";
 
-    private static final String ATTACH_PATH = "https://tsx.onrender.com/images/";
+    private static final String ATTACH_PATH = "http://localhost:8080/images/";
 
     private static final String DEFAULT_USER_IMAGE = "user/user.jpg";
 
