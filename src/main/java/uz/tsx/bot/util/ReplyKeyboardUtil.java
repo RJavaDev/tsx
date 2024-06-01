@@ -1,9 +1,7 @@
 package uz.tsx.bot.util;
 
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
@@ -47,6 +45,7 @@ public class ReplyKeyboardUtil {
         keyboardButton.setText(BotConstants.SHARE_CONTACT);
         keyboardButton.setRequestContact(true);
         row.add(keyboardButton);
+        row.add(new KeyboardButton(BotConstants.BACK_BUTTON));
 
         ReplyKeyboardMarkup keyboardMarkup=new ReplyKeyboardMarkup();
         keyboardMarkup.setKeyboard(List.of(row));
@@ -55,6 +54,17 @@ public class ReplyKeyboardUtil {
 
         return keyboardMarkup;
 
+    }
+
+    public static ReplyKeyboard getBackButton() {
+        KeyboardRow row = new KeyboardRow();
+        row.add(new KeyboardButton(BotConstants.BACK_BUTTON));
+        ReplyKeyboardMarkup keyboardMarkup=new ReplyKeyboardMarkup();
+        keyboardMarkup.setKeyboard(List.of(row));
+        keyboardMarkup.setResizeKeyboard(true);
+        keyboardMarkup.setSelective(true);
+
+        return keyboardMarkup;
     }
 
 
@@ -64,17 +74,15 @@ public class ReplyKeyboardUtil {
         row.add(new KeyboardButton(BotConstants.CREATE_NEW_ANN));
         row.add(new KeyboardButton(BotConstants.MYANNS));
 
+        KeyboardRow row1 = new KeyboardRow();
+        row1.add(new KeyboardButton(BotConstants.MAIN_MENU));
+
         ReplyKeyboardMarkup keyboardMarkup=new ReplyKeyboardMarkup();
-        keyboardMarkup.setKeyboard(List.of(row));
+        keyboardMarkup.setKeyboard(List.of(row, row1));
         keyboardMarkup.setResizeKeyboard(true);
         keyboardMarkup.setSelective(true);
 
         return keyboardMarkup;
     }
 
-    public static void removeButton(SendMessage sendMessage) {
-        ReplyKeyboardRemove removeKeyboard = new ReplyKeyboardRemove();
-        removeKeyboard.setRemoveKeyboard(true);
-        sendMessage.setReplyMarkup(removeKeyboard);
-    }
 }

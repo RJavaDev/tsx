@@ -3,15 +3,12 @@ package uz.tsx.bot.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import uz.tsx.bot.constantsBot.BotConstants;
 import uz.tsx.bot.entity.UserBotEntity;
 import uz.tsx.bot.enums.StateEnum;
 import uz.tsx.bot.repository.UserBotRepository;
 import uz.tsx.entity.UserEntity;
-import uz.tsx.exception.AuthenticationException;
 import uz.tsx.repository.UserRepository;
-import uz.tsx.validation.CommonSchemaValidator;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -23,33 +20,7 @@ public class UserBotService {
 
     private final UserBotRepository userBotRepository;
     private final UserRepository userRepository;
-    private final CommonSchemaValidator commonSchemaValidator;
     private final PasswordEncoder passwordEncoder;
-
-//    public boolean add(String chatId,String phoneNumber,String fullName){
-//        try {
-//           UserEntity user= commonSchemaValidator.validateUserBotPhoneNumber(phoneNumber);
-//           UserBotEntity botEntity = userBotRepository.getUserByChatId(chatId).get();
-//           botEntity.setUserEntity(user);
-//           botEntity.forCreate();
-//           userBotRepository.save(botEntity);
-//            return false;
-//        }catch (IllegalStateException e){
-//            UserCreateRequestDto dto = UserConvert.fromBot( phoneNumber,fullName);
-//            UserEntity userEntity = UserConvert.convertToEntity(dto);
-//            Optional<UserBotEntity> botEntity = userBotRepository.getUserByChatId(chatId);
-//            if (botEntity.isPresent()){
-//                UserEntity save = repository.save(userEntity);
-//                UserBotEntity bot = botEntity.get();
-//                bot.setUserEntity(save);
-//                userEntity.forCreate();
-//                bot.forCreate();
-//                userBotRepository.save(bot);
-//            }
-//
-//            return true;
-//        }
-//    }
 
     public Optional<UserBotEntity> getUserByChatId(String chatId) {
         return userBotRepository.getUserByChatId(chatId);
