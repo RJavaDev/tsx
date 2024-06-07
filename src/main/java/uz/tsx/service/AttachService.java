@@ -6,6 +6,7 @@ import uz.tsx.dto.response.AttachDownloadDTO;
 import uz.tsx.dto.response.AttachResponseDto;
 import uz.tsx.entity.AttachEntity;
 
+import java.io.InputStream;
 import java.util.List;
 
 public interface AttachService {
@@ -17,6 +18,8 @@ public interface AttachService {
     List<AttachEntity> saveAttach(List<MultipartFile> multipartFiles);
 
     List<AttachEntity> saveAttach(MultipartFile [] multipartFiles);
+
+    AttachEntity saveAttach(InputStream inputStream, String originalFilename, Long size, String type);
 
     AttachDownloadDTO download(String fileName);
 

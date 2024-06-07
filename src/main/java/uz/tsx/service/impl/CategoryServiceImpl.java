@@ -138,6 +138,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    @Override
     public List<CategoryEntity> getChildCategoriesByParentId(Long parentId) {
         return repository.getChildCategoriesByParentCategoryId(parentId);
     }

@@ -367,9 +367,4 @@ public class CommonSchemaValidator {
         return contactRepository.findBy(id)
                 .orElseThrow(()->new NotFoundException("Announce is not found"));
     }
-
-    public UserEntity validateUserBotPhoneNumber(String phoneNumber) {
-     return userRepository.getUserByPhoneNumber(phoneNumber).
-                orElseThrow(() -> new IllegalStateException("User is not found"));
-    }
 }

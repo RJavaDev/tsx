@@ -30,9 +30,13 @@ public interface UserBotRepository extends JpaRepository<UserBotEntity,Long> {
             "WHERE id IN (SELECT id FROM updated_users) AND status<>'DELETED'", nativeQuery = true)
     void userAddPassword(@Param("chatId") String chatId,@Param("passwordUser") String passwordUser);
 
-    @Query(value = "SELECT tsxu.state FROM tsx_user_bot tsxu WHERE tsxu.chat_id = :chatId AND tsxu.status <> 'DELETED'", nativeQuery = true)
+    @Query(value = "SELECT state FROM tsx_user_bot WHERE chat_id = :chatId AND status <> 'DELETED'", nativeQuery = true)
     String getUserState(@Param("chatId") String chatId);
 
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE tsx_user_bot SET state = :state WHERE chat_id = :chatId AND status <> 'DELETED'", nativeQuery = true)
+    void setUserState(@Param("chatId") String chatId, @Param("state") String state);
 
     // shaxsiy method test uchun
     @Transactional

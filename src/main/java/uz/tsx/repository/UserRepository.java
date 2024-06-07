@@ -60,8 +60,14 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             "            WHERE tsxu.id = :userId AND tsxu.status <> 'DELETED'\n",
             nativeQuery = true)
     UserInterface getMe(@Param("userId") Long id);
-    @Query(value = "SELECT tsxu.* FROM tsx_user tsxu WHERE tsxu.email_or_phone = :phoneNumber AND tsxu.status <> 'DELETED'", nativeQuery = true)
-    Optional<UserEntity> getUserByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+
+    @Query(value = "SELECT u.* " +
+            "FROM tsx_user u " +
+            "JOIN tsx_user_bot b ON u.id = b.user_entity_id " +
+            "WHERE u.email_or_phone = :emailOrPhone AND b.chat_id = :chatId AND b.status <> 'DELETED'",
+            nativeQuery = true)
+    Optional<UserEntity> getByPhoneNumberAndChatId(@Param("emailOrPhone") String emailOrPhone, @Param("chatId") String chatId);
+
 
     // shaxsiy method test uchun
     @Transactional

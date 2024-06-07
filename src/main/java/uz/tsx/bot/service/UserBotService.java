@@ -30,16 +30,17 @@ public class UserBotService {
         return userBotRepository.getUserByChatId(chatId).isEmpty();
     }
 
-    public boolean isUserNotExistByPhoneNumber(String phoneNumber) {
-        return userRepository.getUserByPhoneNumber(phoneNumber).isEmpty();
+    public boolean isUserNotExistByPhoneNumberAndChatId(String phoneNumber, String chatId) {
+        return userRepository.getByPhoneNumberAndChatId(phoneNumber, chatId).isEmpty();
     }
 
     public void setUserState(String chatId, StateEnum state) {
-        BotConstants.USER_STATE.put(chatId, state);
+        userBotRepository.setUserState(chatId, String.valueOf(state));
     }
 
     public StateEnum getUserState(String chatId) {
-        return BotConstants.USER_STATE.get(chatId);
+        String state = userBotRepository.getUserState(chatId);
+        return StateEnum.valueOf(state);
     }
 
     public void createBotUser(String chatId, String languageCode){
@@ -68,12 +69,12 @@ public class UserBotService {
         }
     }
 
-    public boolean login(String chatId, String password) {
-        String phoneNumber = String.valueOf(BotConstants.USER_PHONE_NUMBER.get(chatId));
-        Optional<UserEntity> userEntityOptional = userRepository.getUserByPhoneNumber(phoneNumber);
-
-        UserEntity userEntity = userEntityOptional.orElseThrow(() -> new IllegalArgumentException("User not found for phone number: " + phoneNumber));
-        return passwordEncoder.matches(password, userEntity.getPassword());
-    }
+//    public boolean login(String chatId, String password) {
+//        String phoneNumber = String.valueOf(BotConstants.USER_PHONE_NUMBER.get(chatId));
+//        Optional<UserEntity> userEntityOptional = userRepository.getUserByPhoneNumberAndChatId(phoneNumber);
+//
+//        UserEntity userEntity = userEntityOptional.orElseThrow(() -> new IllegalArgumentException("User not found for phone number: " + phoneNumber));
+//        return passwordEncoder.matches(password, userEntity.getPassword());
+//    }
 
 }
