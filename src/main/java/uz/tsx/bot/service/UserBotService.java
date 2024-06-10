@@ -64,8 +64,6 @@ public class UserBotService {
             UserBotEntity userBotEntity = userBotEntityOptional.get();
             userBotEntity.setUserEntity(savedUser);
             userBotRepository.save(userBotEntity);
-
-            BotConstants.USER_PHONE_NUMBER.remove(chatId);
         }
     }
 

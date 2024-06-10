@@ -158,7 +158,6 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
         }
         else if(text.equals("/delete")) {
             // shaxsiy method test uchun
-            BotConstants.USER_STATE.remove(chatId);
             userBotRepository.deleteUserByChatId(chatId);
             userRepository.deleteUserByPhoneNumber("+998997558142");
             sendMessage.setText("deleted");
@@ -310,7 +309,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                 userBotService.getUserByChatId(chatId).ifPresent(user ->
                     announcementContactEntity.setPhone(user.getUserEntity().getEmailOrPhone())
                 );
-                sendMessage.setText("Region tanlandi✅\n\nEndi e'lon uchun description kiriting");
+                sendMessage.setText("Region tanlandi✅\n\nEndi e'lon uchun tavsif kiriting");
             } else {
                 sendMessage.setText("Region ...");
                 sendMessage.setReplyMarkup(InlineKeyboardUtil.regionButtons(childRegionsByParentId));
@@ -321,6 +320,9 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             finish(sendMessage, chatId);
         }
         else if (key.equals("yes") && userBotService.getUserState(chatId).equals(StateEnum.FINISH)) {
+            userBotService.setUserState(chatId, StateEnum.LOGINED);
+            sendMessage.setText("Bir oz kuting ⏳");
+            sendMsg(sendMessage);
             List<AttachEntity> attachEntityList = fileService.savePhotos(photoSizeList, documentList);
             if(!attachEntityList.isEmpty()) {
                 AnnouncementContactEntity savedAnnouncementContactEntity = announcementContactService.addNewAnnounceContact(announcementContactEntity);
@@ -334,6 +336,10 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                 announcementEntity.setAttachPhotos(attachEntityList);
 
                 announcementService.createNewAnnouncement(announcementEntity);
+
+                DeleteMessage deleteMessage1 = new DeleteMessage();
+                deleteMessage1.setChatId(chatId);
+                deleteMessage1.setMessageId(message.getMessageId());
 
                 sendMessage.setText("E'lon muvaffaqiyatli yaratildi ✅");
                 sendMessage.setReplyMarkup(ReplyKeyboardUtil.getUserProfileButton());

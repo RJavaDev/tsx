@@ -16,8 +16,6 @@ public interface BotConstants {
    String CREATE_NEW_ANN = "E'lon qo'shish ➕";
    String BACK_BUTTON = "\uD83D\uDD19 Orqaga";
 
-   HashMap<String, StateEnum> USER_STATE = new HashMap<>();
-
    HashMap<String, String> USER_PHONE_NUMBER = new HashMap<>();
 
 }
