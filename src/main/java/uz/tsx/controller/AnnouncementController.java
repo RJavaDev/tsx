@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -72,7 +71,7 @@ public class AnnouncementController {
 
     @GetMapping("/get/{id}")
     public ApiResponse<Object> getById(@PathVariable Long id, HttpServletRequest httpServletRequest) {
-        service.iSaw(id,httpServletRequest);
+//        service.iSaw(id,httpServletRequest);
         AnnouncementEntity entity = service.getById(id);
         AnnouncementDto announcementDto = AnnouncementConvert.convertToDto(entity);
 
