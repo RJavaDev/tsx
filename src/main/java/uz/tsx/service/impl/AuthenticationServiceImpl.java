@@ -73,7 +73,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         userForCreate(user);
 
-        user.setStatus(EntityStatus.PASSIVE);
+        user.setStatus(EntityStatus.CREATED);
 
         return repository.save(user);
 
