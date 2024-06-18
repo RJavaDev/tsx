@@ -74,7 +74,7 @@ public class CategoryController {
     }
 
     @Operation(summary = "Get All Categories", description = "This method retrieves all categories without any tree structure.")
-    @GetMapping("/get/all")
+    @GetMapping("/get/all-for-front")
     public ApiResponse<Object> getAllCategory() {
 
         List<CategoryEntity> allCategory = service.getAll();

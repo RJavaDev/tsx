@@ -66,7 +66,7 @@ public class CategoryConvert {
 
     public CategoryDto fromNoTree(CategoryEntity category){
 
-        CategoryDto categoryDto = category.toDto("children");
+        CategoryDto categoryDto = category.getDto(false);
         AttachEntity attachId = category.getAttach();
         if(Objects.nonNull(attachId)){
             categoryDto.setAttach(AttachConvert.convertToAttachUrlDto(attachId));
@@ -123,8 +123,7 @@ public class CategoryConvert {
     }
 
     public List<CategoryDto> fromNoTree(List<CategoryEntity> categoryList){
-        return categoryList.stream().map(CategoryConvert::fromNoTree)
-                .filter(p -> p.getStatus() != EntityStatus.DELETED).toList();
+        return categoryList.stream().map(CategoryConvert::fromNoTree).toList();
     }
 
 }

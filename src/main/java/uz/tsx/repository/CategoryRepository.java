@@ -14,7 +14,7 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
     @Query(value = "SELECT btsc.* FROM tsx_category btsc WHERE btsc.id=:categoryId AND btsc.status <> 'DELETED'", nativeQuery = true)
     Optional<CategoryEntity> findByCategoryId(@Param("categoryId") Long categoryId);
 
-    @Query(value = "SELECT btsc.* FROM tsx_category btsc WHERE btsc.status <> 'DELETED'", nativeQuery = true)
+    @Query(value = "SELECT btsc.* FROM tsx_category btsc WHERE btsc.parent_id IS NULL AND btsc.status <> 'DELETED'", nativeQuery = true)
     List<CategoryEntity> findAllCategory();
 
 
