@@ -78,6 +78,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "    MAX(tsxa.type) AS attachType,\n" +
             "    a.i_saw AS ISaw,\n" +
             "    a.title,\n" +
+            "    tc.router AS router,\n" +
             "    ac.address,\n" +
             "    ap.price,\n" +
             "    c.id AS currencyId,\n" +
@@ -89,6 +90,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "        LEFT JOIN announcement_attach aa ON a.id = aa.announcement_id\n" +
             "        LEFT JOIN tsx_attach tsxa ON tsxa.id = aa.attach_id\n" +
             "        LEFT JOIN tsx_currency c ON ap.currency_id = c.id\n" +
+            "        LEFT JOIN tsx_category tc ON tc.id= :categoryId\n" +
             "        INNER JOIN (\n" +
             "        SELECT *\n" +
             "        FROM (\n" +
@@ -124,6 +126,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "    a.id, \n" +
             "    createdDate,\n" +
             "    ISaw,\n" +
+            "    router,\n" +
             "    address,\n" +
             "    price,\n" +
             "    currencyId,\n" +

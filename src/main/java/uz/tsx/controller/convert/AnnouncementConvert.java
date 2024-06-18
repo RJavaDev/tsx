@@ -81,7 +81,7 @@ public class AnnouncementConvert {
         dto.setId(interfaceDB.getId());
         dto.setTitle(interfaceDB.getTitle());
         dto.setCreateDateTime(interfaceDB.getCreatedDate());
-
+        dto.setRouter(interfaceDB.getRouter());
         contactDto.setLongitude(interfaceDB.getLongitude());
         contactDto.setLatitude(interfaceDB.getLatitude());
         contactDto.setPhone(interfaceDB.getPhone());

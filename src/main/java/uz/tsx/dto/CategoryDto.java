@@ -34,6 +34,8 @@ public class CategoryDto extends BaseDto {
 
     private AttachUrlResponse attach;
 
+    private String router;
+
     public CategoryEntity toEntity(String... ignoreProperties) {
         return super.toEntity(this, new CategoryEntity(), ignoreProperties);
     }

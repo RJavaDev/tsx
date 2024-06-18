@@ -42,6 +42,7 @@ public class CategoryEntity extends BaseEntity {
     @JoinColumn(name = "parentId", referencedColumnName = "id")
     List<CategoryEntity> children = new ArrayList<>();
 
+    private String router;
     @JsonIgnore
     public CategoryDto getDto(){
         return getDto(false);

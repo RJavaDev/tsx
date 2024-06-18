@@ -22,4 +22,5 @@ public interface AnnouncementInterface {
     Integer getISaw();
     String getAttachType();
     String getAttachPath();
+    String getRouter();
 }

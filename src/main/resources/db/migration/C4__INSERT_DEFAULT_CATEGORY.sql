@@ -12,17 +12,17 @@ VALUES
     ('69c12a4c-35b6-4764-b9fe-e0110880542c', 'image/png', now(), 'b78ab39bc70d80d00422359ab680ec1a.png', 'category/',357811, 'png');
 
 -- create default 1 category
-INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, attach_id)
+INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, router, attach_id)
 VALUES
-       ('CREATED', now(), 'Transportation', 'Транспорт', 'Transport', '80e2f6e1-7b3f-4ee7-adca-786fef1aac45'),
-       ('CREATED', now(), 'Real estate', 'Недвижимость', 'Ko''chmas mulk', 'c743e2f6-c8d9-459a-8429-88e3b3d81371'),
-       ('CREATED', now(), 'Work and services', 'Работа и услуги', 'Ish va xizmatlar', '69c12a4c-35b6-4764-b9fe-e0110880542c'),
-       ('CREATED', now(), 'Animals', 'Животные', 'Hayvonlar', '7d847954-6702-4c33-8697-1065f0e4182b'),
-       ('CREATED', now(), 'Electronics', 'Электроника', 'Elektronika', 'b6b85ff9-d89d-4060-b386-e1c478a04d21'),
-       ('CREATED', now(), 'Clothing and textiles', 'Одежда и текстил', 'Kiyim va to''qimachilik', '6ffe1f5e-ed80-4977-b489-40fa6fea694f'),
-       ('CREATED', now(), 'Construction', 'Строительства', 'Qurilish', '2a28166a-815e-4025-a70c-f8d77514b98d'),
-       ('CREATED', now(), 'Food', 'Продукты питания', 'Oziq-ovqat maxsulotlari', 'c8516ed2-cfad-49a3-9c9f-32f5f5881e9a'),
-       ('CREATED', now(), 'Entertainment', 'Развлечение', 'O''yin-kulgi','f2e13a4e-a3b6-45f4-a9f1-0636b375c5ab');
+       ('CREATED', now(), 'Transportation', 'Транспорт', 'Transport', 'transport', '80e2f6e1-7b3f-4ee7-adca-786fef1aac45'),
+       ('CREATED', now(), 'Real estate', 'Недвижимость', 'Ko''chmas mulk', 'estate','c743e2f6-c8d9-459a-8429-88e3b3d81371'),
+       ('CREATED', now(), 'Work and services', 'Работа и услуги', 'Ish va xizmatlar','work', '69c12a4c-35b6-4764-b9fe-e0110880542c'),
+       ('CREATED', now(), 'Animals', 'Животные', 'Hayvonlar','animal', '7d847954-6702-4c33-8697-1065f0e4182b'),
+       ('CREATED', now(), 'Electronics', 'Электроника', 'Elektronika','electronic', 'b6b85ff9-d89d-4060-b386-e1c478a04d21'),
+       ('CREATED', now(), 'Clothing and textiles', 'Одежда и текстил', 'Kiyim va to''qimachilik','fashion', '6ffe1f5e-ed80-4977-b489-40fa6fea694f'),
+       ('CREATED', now(), 'Construction', 'Строительства', 'Qurilish', 'construction','2a28166a-815e-4025-a70c-f8d77514b98d'),
+       ('CREATED', now(), 'Food', 'Продукты питания', 'Oziq-ovqat maxsulotlari','food', 'c8516ed2-cfad-49a3-9c9f-32f5f5881e9a'),
+       ('CREATED', now(), 'Entertainment', 'Развлечение', 'O''yin-kulgi','entertainment','f2e13a4e-a3b6-45f4-a9f1-0636b375c5ab');
 
 -- create default 1.1 category
 INSERT INTO tsx_category(status, created_date, name_en, name_ru, name_uz, parent_id)
