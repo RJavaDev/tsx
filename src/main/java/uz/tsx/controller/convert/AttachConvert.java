@@ -16,7 +16,7 @@ import static uz.tsx.service.AttachService.SUFFIX_MINI_IMG_200;
 public class AttachConvert {
 
 
-    private static final String ATTACH_UPLOAD_FOLDER = "src/main/resources/images/";
+    private static final String ATTACH_UPLOAD_FOLDER = "images/";
 
     private static final String ATTACH_PATH = "https://tez-sotish-api.uz/images/";
 

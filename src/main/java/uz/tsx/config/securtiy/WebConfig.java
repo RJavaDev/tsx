@@ -21,9 +21,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String uploadedImagesPath = "file:src/main/resources/images/";
-        registry.addResourceHandler("/images/**", "/webjars/**")
-                .addResourceLocations(uploadedImagesPath, "/webjars/")
+        registry.addResourceHandler("/images/**")
+                .addResourceLocations("file:images/")
                 .setCacheControl(CacheControl.noCache());
     }
 }
