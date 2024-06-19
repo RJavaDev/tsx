@@ -65,6 +65,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
 
     private final CommonSchemaValidator commonValidator;
+    private final AnnouncementRepository announcementRepository;
 
     @Override
     public AnnouncementEntity createNewAnnouncement(AnnouncementEntity entity) {
@@ -84,6 +85,11 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         user.add(SecurityUtils.getUserId());
         userCount.put(save.getId(), user);
         return save;
+    }
+
+    @Override
+    public List<AnnouncementEntity> getAnnouncementListByUserEntity(Long userId) {
+        return announcementRepository.getAnnouncementListByUserEntityId(userId);
     }
 
     @Override

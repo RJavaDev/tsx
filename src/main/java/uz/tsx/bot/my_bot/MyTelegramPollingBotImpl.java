@@ -34,6 +34,7 @@ import uz.tsx.entity.announcement.AnnouncementPriceEntity;
 import uz.tsx.repository.UserRepository;
 import uz.tsx.service.*;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +121,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             }
 
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -145,10 +146,18 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             sendMsg(sendMessage);
         }
         else if (userBotService.getUserState(chatId).equals(StateEnum.START) && text.equals(BotConstants.MYANNS)) {
-            userBotService.setUserState(chatId, StateEnum.MY_ANNS);
-            sendMessage.setText("Iltimos telefon raqamingizni yuboring!");
-            sendMessage.setReplyMarkup(ReplyKeyboardUtil.getContactButton());
-            sendMsg(sendMessage);
+            if (userBotService.isUserNotExistByPhoneNumberAndChatId(chatId)) {
+                userBotService.setUserState(chatId, StateEnum.MY_ANNS);
+                sendMessage.setText("Iltimos telefon raqamingizni yuboring!");
+                sendMessage.setReplyMarkup(ReplyKeyboardUtil.getContactButton());
+                sendMsg(sendMessage);
+            } else {
+                userBotService.setUserState(chatId, StateEnum.LOGINED);
+                sendMessage.setText("Sahifangizga xush kelibsiz \uD83C\uDF1F");
+                sendMessage.setReplyMarkup(ReplyKeyboardUtil.getUserProfileButton());
+                sendMsg(sendMessage);
+                getUserAnnouncements(chatId, 0);
+            }
         }
         else if (userBotService.getUserState(chatId).equals(StateEnum.MY_ANNS) && Objects.isNull(message.getContact()) && !text.equals(BotConstants.BACK_BUTTON)) {
             sendMessage.setText("Telefon raqam yuborish uchun pastdagi '<b>Share contact</b>' tugmasini bosing!");
@@ -166,24 +175,13 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
         else if (userBotService.getUserState(chatId).equals(StateEnum.ENTERED_NEW_PASS)) {
             userBotService.registerUser(chatId, BotConstants.USER_PHONE_NUMBER.get(chatId), text, message.getFrom().getFirstName());
             userBotService.setUserState(chatId, StateEnum.LOGINED);
-            sendMessage.setText("Siz muvaffaqiyatli ro'yxatdan o'tdingiz ✅");
+            sendMessage.setText("Siz muvaffaqiyatli ro'yxatdan o'tdingiz ✅ \n\nSahifangizga xush kelibsiz \\uD83C\\uDF1F");
             sendMessage.setReplyMarkup(ReplyKeyboardUtil.getUserProfileButton());
             sendMsg(sendMessage);
         }
-//        else if (userBotService.getUserState(chatId).equals(StateEnum.ENTER_LOGIN_PASS) && !text.equals(BotConstants.BACK_BUTTON)) {
-//            if(userBotService.login(chatId, text)) {
-//                userBotService.setUserState(chatId, StateEnum.LOGINED);
-//                sendMessage.setText("Sahifangizga xush kelibsiz \uD83C\uDF1F");
-//                sendMessage.setReplyMarkup(ReplyKeyboardUtil.getUserProfileButton());
-//            } else {
-//                userBotService.setUserState(chatId, StateEnum.ENTER_LOGIN_PASS);
-//                sendMessage.setText("Parol noto'g'ri. Iltimos yana urinib ko'ring!");
-//            }
-//            sendMsg(sendMessage);
-//        }
         else if (userBotService.getUserState(chatId).equals(StateEnum.LOGINED) && !text.equals(BotConstants.MAIN_MENU) && !text.equals(BotConstants.MYANNS)) {
             userBotService.setUserState(chatId, StateEnum.ENTERED_ANN_TITLE);
-            sendMessage.setText("E'lon uchun title kiriting");
+            sendMessage.setText("E'lon uchun nom kiriting");
             sendMessage.setReplyMarkup(ReplyKeyboardUtil.getBackButton());
             sendMsg(sendMessage);
         }
@@ -191,6 +189,11 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             userBotService.setUserState(chatId, StateEnum.ENTERED_ANN_CATEGORY);
             announcementEntity = new AnnouncementEntity();
             announcementEntity.setTitle(text);
+
+            userBotService.getUserByChatId(chatId).ifPresent(userByChatId -> {
+                announcementEntity.setUserEntity(userByChatId.getUserEntity());
+                announcementEntity.setUserEntityId(userByChatId.getUserEntity().getId());
+            });
 
             sendMessage.setReplyMarkup(new ReplyKeyboardRemove(true));
 
@@ -222,12 +225,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             sendMsg(sendMessage);
         }
 
-
-
-        else if ((
-                userBotService.getUserState(chatId).equals(StateEnum.MY_ANNS) ||
-                userBotService.getUserState(chatId).equals(StateEnum.ENTER_LOGIN_PASS)
-            ) && text.equals(BotConstants.BACK_BUTTON)) {
+        else if ((userBotService.getUserState(chatId).equals(StateEnum.MY_ANNS) || userBotService.getUserState(chatId).equals(StateEnum.ENTER_LOGIN_PASS)) && text.equals(BotConstants.BACK_BUTTON)) {
             sendMessage.setText("Bosh sahifa");
             userBotService.setUserState(chatId, StateEnum.START);
             sendMessage.setReplyMarkup(ReplyKeyboardUtil.getMainMenuButton());
@@ -244,14 +242,14 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             sendMessage.setText("Profil sahifasi \uD83D\uDC64");
             sendMessage.setReplyMarkup(ReplyKeyboardUtil.getUserProfileButton());
             sendMsg(sendMessage);
+            getUserAnnouncements(chatId, 0);
         }
 
     }
 
     private void handleCallback(Message message, String data) {
         String chatId = String.valueOf(message.getChatId());
-        DeleteMessage deleteMessage = new DeleteMessage(chatId, message.getMessageId());
-        sendMsg(deleteMessage);
+        Integer messageId = message.getMessageId();
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
@@ -260,6 +258,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
         String key = split[0];
 
         if(key.equals("category") && userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_CATEGORY)) {
+            deletePreviousMessage(chatId, messageId);
             userBotService.setUserState(chatId, StateEnum.ENTERED_ANN_CATEGORY);
 
             Long categoryId = Long.valueOf(data.split("-")[1]);
@@ -281,8 +280,10 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                 sendMessage.setText("Kategoriya ...");
                 sendMessage.setReplyMarkup(InlineKeyboardUtil.categoryButtons(childCategoriesByParentId));
             }
+            sendMsg(sendMessage);
         }
         else if(key.equals("currency") && userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_CURRENCY)) {
+            deletePreviousMessage(chatId, messageId);
             userBotService.setUserState(chatId, StateEnum.ENTERED_ANN_PRICE);
             String code = split[1];
 
@@ -293,8 +294,10 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             });
 
             sendMessage.setText("Narx kiriting");
+            sendMsg(sendMessage);
         }
         else if(key.equals("region") && userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_REGION)) {
+            deletePreviousMessage(chatId, messageId);
             userBotService.setUserState(chatId, StateEnum.ENTERED_ANN_REGION);
 
             Long regionId = Long.valueOf(data.split("-")[1]);
@@ -314,15 +317,20 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                 sendMessage.setText("Region ...");
                 sendMessage.setReplyMarkup(InlineKeyboardUtil.regionButtons(childRegionsByParentId));
             }
+            sendMsg(sendMessage);
         }
         else if(key.equals("finish") && userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_IMAGE)) {
+            deletePreviousMessage(chatId, messageId);
             userBotService.setUserState(chatId, StateEnum.FINISH);
             finish(sendMessage, chatId);
         }
         else if (key.equals("yes") && userBotService.getUserState(chatId).equals(StateEnum.FINISH)) {
+            deletePreviousMessage(chatId, messageId - 1);
+            deletePreviousMessage(chatId, messageId);
             userBotService.setUserState(chatId, StateEnum.LOGINED);
             sendMessage.setText("Bir oz kuting ⏳");
             sendMsg(sendMessage);
+
             List<AttachEntity> attachEntityList = fileService.savePhotos(photoSizeList, documentList);
             if(!attachEntityList.isEmpty()) {
                 AnnouncementContactEntity savedAnnouncementContactEntity = announcementContactService.addNewAnnounceContact(announcementContactEntity);
@@ -335,19 +343,25 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
 
                 announcementEntity.setAttachPhotos(attachEntityList);
 
+                announcementEntity.setIsActive(true);
+
                 announcementService.createNewAnnouncement(announcementEntity);
 
-                DeleteMessage deleteMessage1 = new DeleteMessage();
-                deleteMessage1.setChatId(chatId);
-                deleteMessage1.setMessageId(message.getMessageId());
+                deletePreviousMessage(chatId, message.getMessageId() + 1);
 
                 sendMessage.setText("E'lon muvaffaqiyatli yaratildi ✅");
                 sendMessage.setReplyMarkup(ReplyKeyboardUtil.getUserProfileButton());
             } else {
                 sendMessage.setText("E'lon yaratilmadi ❌\n\n Iltimos yana urinib ko'ring.");
             }
+            sendMsg(sendMessage);
+
+            photoSizeList.clear();
+            documentList.clear();
         }
         else if (key.equals("not") && userBotService.getUserState(chatId).equals(StateEnum.FINISH)) {
+            deletePreviousMessage(chatId, messageId - 1);
+            deletePreviousMessage(chatId, messageId);
             userBotService.setUserState(chatId, StateEnum.LOGINED);
 
             photoSizeList.clear();
@@ -355,9 +369,16 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
 
             sendMessage.setText("Profil sahifasi \uD83D\uDC64");
             sendMessage.setReplyMarkup(ReplyKeyboardUtil.getUserProfileButton());
+            sendMsg(sendMessage);
+            getUserAnnouncements(chatId, 0);
+        }
+        else if(key.equals("page")) {
+            deletePreviousMessage(chatId, message.getMessageId());
+            deletePreviousMessage(chatId, message.getMessageId() - 1);
+            int page = Integer.parseInt(split[1]);
+            getUserAnnouncements(chatId, page);
         }
 
-        sendMsg(sendMessage);
     }
 
     private void handleContact(Message message) {
@@ -371,17 +392,18 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
 
         sendMessage.setReplyMarkup(ReplyKeyboardUtil.getBackButton());
 
-        if(userBotService.isUserNotExistByPhoneNumberAndChatId(phoneNumber, chatId)) {
-            userBotService.setUserState(chatId, StateEnum.ENTERED_NEW_PASS);
-            sendMessage.setText("Yangi parolni kiriting");
-            sendMsg(sendMessage);
-        } else {
+        if(userBotService.isUserExistByPhoneNumber(phoneNumber)) {
             userBotService.setUserState(chatId, StateEnum.LOGINED);
+
+            userBotService.mergeUserAccounts(phoneNumber, chatId);
+
             sendMessage.setText("Sahifangizga xush kelibsiz \uD83C\uDF1F");
             sendMessage.setReplyMarkup(ReplyKeyboardUtil.getUserProfileButton());
-            sendMsg(sendMessage);
+        } else {
+            userBotService.setUserState(chatId, StateEnum.ENTERED_NEW_PASS);
+            sendMessage.setText("Yangi parolni kiriting");
         }
-
+        sendMsg(sendMessage);
     }
 
     @SneakyThrows
@@ -391,33 +413,32 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
         sendMessage.setChatId(chatId);
 
         if(userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_IMAGE)) {
+
             int attachCount = photoSizeList.size() + documentList.size();
 
-            if(attachCount < 9) {
+            if(attachCount < 7) {
                 if(Objects.nonNull(message.getPhoto())) {
                     PhotoSize photoSize1 = message.getPhoto().get(0);
                     PhotoSize photoSize2 = message.getPhoto().get(message.getPhoto().size() - 1);
                     photoSizeList.add(List.of(photoSize1, photoSize2));
-                    sendMessage.setText(attachCount + 1 + "/8 | Rasm yuklandi ✅ \n\n Yana rasm yuklang yoki 'Tugatish' tugmasini bosing");
+                    sendMessage.setText(attachCount + 1 + "/8 | Rasm yuklandi ✅ \n\nYana rasm yuklang yoki 'Tugatish' tugmasini bosing");
                     sendMessage.setReplyMarkup(InlineKeyboardUtil.finishButton());
                 }
                 else if(Objects.nonNull(message.getDocument())) {
                     documentList.add(message.getDocument());
                 }
+                sendMsg(sendMessage);
             } else {
+                userBotService.setUserState(chatId, StateEnum.FINISH);
                 sendMessage.setText("8 ta rasm yuklandi ✅");
                 finish(sendMessage, chatId);
             }
 
-            sendMsg(sendMessage);
         }
 
     }
 
     private void finish(SendMessage sendMessage, String chatId) {
-        sendMessage.setText("E'loningiz: ");
-        sendMsg(sendMessage);
-
         SendPhoto sendPhoto = new SendPhoto();
         sendPhoto.setChatId(chatId);
 
@@ -432,7 +453,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
         });
 
         sendMessage.setText(
-                "Title: " + announcementEntity.getTitle() +
+                        "E'loningiz \n\nTitle: " + announcementEntity.getTitle() +
                         "\nDescription: "+ announcementEntity.getDescription() + "\n" +
                         "Kategoriya: " + announcementEntity.getCategory().getNameUz() + "\n" +
                         "Region: " + announcementContactEntity.getRegion().getNameUz() + "\n" +
@@ -440,6 +461,92 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                         "E'lonni tasdiqlaysizmi?"
         );
         sendMessage.setReplyMarkup(InlineKeyboardUtil.yesOrNotButtons());
+        sendMsg(sendMessage);
+    }
+
+    private void getUserAnnouncements(String  chatId, int page) {
+
+        userBotRepository.getUserByChatId(chatId).ifPresent(userBotEntity -> {
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(chatId);
+
+            Long userEntityId = userBotEntity.getUserEntity().getId();
+            List<AnnouncementEntity> announcementListByUserEntity = announcementService.getAnnouncementListByUserEntity(userEntityId);
+
+            if(!announcementListByUserEntity.isEmpty()) {
+                AnnouncementEntity announcementEntity1 = announcementListByUserEntity.get(page);
+                AttachEntity attachEntity = announcementEntity1.getAttachPhotos().get(1);
+
+                SendPhoto sendPhoto = new SendPhoto();
+                sendPhoto.setChatId(chatId);
+                File file = new File("src/main/resources/images/" + attachEntity.getPath() + attachEntity.getId() + attachEntity.getContentType());
+                sendPhoto.setPhoto(new InputFile(file));
+                sendMsg(sendPhoto);
+
+                sendMessage.setParseMode("html");
+                if(announcementEntity1.getIsActive()) {
+                    sendMessage.setText(
+                                    "<strong>Aktiv ✅</strong>" +
+                                    "\n\n<i>" + announcementEntity1.getTitle() + "</i>" +
+                                    "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() +
+                                    "</b>\n\n" + announcementEntity1.getContactInfo().getRegion().getNameUz() +
+                                    "\n\n" + announcementEntity1.getCreatedDate()
+                    );
+                } else {
+                    sendMessage.setText(
+                                    "<strong>Aktiv emas ❌</strong>" +
+                                    "\n\n<i>" + announcementEntity1.getTitle() + "</i>" +
+                                    "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() +
+                                    "</b>\n\n" + announcementEntity1.getContactInfo().getRegion().getNameUz() +
+                                    "\n\n" + announcementEntity1.getCreatedDate()
+                    );
+                }
+
+                sendMessage.setReplyMarkup(InlineKeyboardUtil.actionButtonsWithPage(announcementEntity1.getId(), announcementListByUserEntity.size(), announcementEntity1.getIsActive()));
+
+            }
+            sendMsg(sendMessage);
+        });
+
+    }
+
+//    private void getUserAnnouncements(String chatId, int page, Integer messageId) {
+//        Long userId = userBotRepository.getUserByChatId(chatId).get().getUserEntity().getId();
+//        AnnouncementEntity announcementEntity1 = announcementService.getAnnouncementListByUserEntity(userId).get(page);
+//        AttachEntity attachEntity = announcementEntity1.getAttachPhotos().get(1);
+//
+//        String filePath = "src/main/resources/images/" + attachEntity.getPath() + attachEntity.getId() + attachEntity.getContentType();
+//        File file = new File(filePath);
+//
+//        // Edit message media
+//        EditMessageMedia editMessageMedia = new EditMessageMedia();
+//        editMessageMedia.setChatId(chatId);
+//        editMessageMedia.setMessageId(messageId);
+//        InputMediaPhoto inputMediaPhoto = new InputMediaPhoto();
+//        inputMediaPhoto.setMedia(file.getPath());
+//        inputMediaPhoto.setCaption(announcementEntity1.getTitle());
+//        editMessageMedia.setMedia(inputMediaPhoto);
+//        sendMsg(editMessageMedia);
+//
+//        EditMessageText editMessageText = new EditMessageText();
+//        editMessageText.setChatId(chatId);
+//        editMessageText.setMessageId(messageId);
+//        editMessageText.setParseMode("html");
+//        editMessageText.setText(
+//                "<i>" + announcementEntity1.getTitle() + "</i>" +
+//                        "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() +
+//                        "</b>\n\n" + announcementEntity1.getContactInfo().getRegion().getNameUz() +
+//                        "\n\n" + announcementEntity1.getCreatedDate()
+//        );
+//        editMessageText.setReplyMarkup(InlineKeyboardUtil.editAndDeleteButton(announcementService.getAnnouncementListByUserEntity(userBotRepository.getUserByChatId(chatId).get().getUserEntity().getId()).get(0).getId(), announcementService.getAnnouncementListByUserEntity(userId).size()));
+//        sendMsg(editMessageText);
+//    }
+
+    private void deletePreviousMessage(String chatId, Integer messageId) {
+        DeleteMessage deleteMessage = new DeleteMessage();
+        deleteMessage.setChatId(chatId);
+        deleteMessage.setMessageId(messageId);
+        sendMsg(deleteMessage);
     }
 
 }

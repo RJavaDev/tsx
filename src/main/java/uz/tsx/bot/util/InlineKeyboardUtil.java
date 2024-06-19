@@ -12,6 +12,35 @@ import java.util.List;
 
 public class InlineKeyboardUtil {
 
+    public static InlineKeyboardMarkup actionButtonsWithPage(Long ann_id, int pages, Boolean isActive) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        inlineKeyboardMarkup.setKeyboard(rows);
+
+        List<InlineKeyboardButton> row = new ArrayList<>();
+
+//        row.add(button("edit ✏",ann_id + "-edit"));
+        if(isActive) {
+            row.add(button("inActive ❌",ann_id + "-inActive"));
+        } else {
+            row.add(button("active ✅",ann_id + "-active"));
+        }
+        row.add(button("delete \uD83D\uDDD1",ann_id + "-delete"));
+        rows.add(row);
+
+        row = new ArrayList<>();
+        for (int i = 0; i < pages; i++) {
+            row.add(button(String.valueOf(i + 1),"page-" + i));
+            if ((i + 1) % 5 == 0) {
+                rows.add(row);
+                row = new ArrayList<>();
+            }
+        }
+        rows.add(row);
+
+        return inlineKeyboardMarkup;
+    }
+
     public static ReplyKeyboard yesOrNotButtons() {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();

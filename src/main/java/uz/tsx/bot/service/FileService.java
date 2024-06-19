@@ -41,7 +41,6 @@ public class FileService {
 
             return attachEntityList;
         } catch (Exception e) {
-            e.printStackTrace();
             return new ArrayList<>();
         }
 

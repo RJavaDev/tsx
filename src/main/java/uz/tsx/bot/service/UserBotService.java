@@ -3,7 +3,7 @@ package uz.tsx.bot.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import uz.tsx.bot.constantsBot.BotConstants;
+import org.springframework.transaction.annotation.Transactional;
 import uz.tsx.bot.entity.UserBotEntity;
 import uz.tsx.bot.enums.StateEnum;
 import uz.tsx.bot.repository.UserBotRepository;
@@ -30,8 +30,24 @@ public class UserBotService {
         return userBotRepository.getUserByChatId(chatId).isEmpty();
     }
 
-    public boolean isUserNotExistByPhoneNumberAndChatId(String phoneNumber, String chatId) {
-        return userRepository.getByPhoneNumberAndChatId(phoneNumber, chatId).isEmpty();
+    public boolean isUserNotExistByPhoneNumberAndChatId(String chatId) {
+        return userBotRepository.getUserByChatId(chatId)
+                .map(UserBotEntity::getUserEntity)
+                .isEmpty();
+    }
+
+    public boolean isUserExistByPhoneNumber(String phoneNumber) {
+        return userRepository.getUserByPhoneNumber(phoneNumber).isPresent();
+    }
+
+    @Transactional
+    public void mergeUserAccounts(String phoneNumber, String chatId) {
+        userRepository.getUserByPhoneNumber(phoneNumber).ifPresent(userEntity ->
+                userBotRepository.getUserByChatId(chatId).ifPresent(userBotEntity -> {
+                    userBotEntity.setUserEntity(userEntity);
+                    userBotRepository.save(userBotEntity);
+                })
+        );
     }
 
     public void setUserState(String chatId, StateEnum state) {
@@ -66,13 +82,5 @@ public class UserBotService {
             userBotRepository.save(userBotEntity);
         }
     }
-
-//    public boolean login(String chatId, String password) {
-//        String phoneNumber = String.valueOf(BotConstants.USER_PHONE_NUMBER.get(chatId));
-//        Optional<UserEntity> userEntityOptional = userRepository.getUserByPhoneNumberAndChatId(phoneNumber);
-//
-//        UserEntity userEntity = userEntityOptional.orElseThrow(() -> new IllegalArgumentException("User not found for phone number: " + phoneNumber));
-//        return passwordEncoder.matches(password, userEntity.getPassword());
-//    }
 
 }

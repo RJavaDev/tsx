@@ -72,13 +72,10 @@ public class ReplyKeyboardUtil {
         KeyboardRow row = new KeyboardRow();
 
         row.add(new KeyboardButton(BotConstants.CREATE_NEW_ANN));
-        row.add(new KeyboardButton(BotConstants.MYANNS));
-
-        KeyboardRow row1 = new KeyboardRow();
-        row1.add(new KeyboardButton(BotConstants.MAIN_MENU));
+        row.add(new KeyboardButton(BotConstants.MAIN_MENU));
 
         ReplyKeyboardMarkup keyboardMarkup=new ReplyKeyboardMarkup();
-        keyboardMarkup.setKeyboard(List.of(row, row1));
+        keyboardMarkup.setKeyboard(List.of(row));
         keyboardMarkup.setResizeKeyboard(true);
         keyboardMarkup.setSelective(true);
 

@@ -63,11 +63,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @Query(value = "SELECT u.* " +
             "FROM tsx_user u " +
-            "INNER JOIN tsx_user_bot b ON u.id = b.user_entity_id " +
-            "WHERE u.email_or_phone = :emailOrPhone AND b.chat_id = :chatId AND b.status <> 'DELETED'",
+            "WHERE u.email_or_phone = :emailOrPhone AND u.status <> 'DELETED'",
             nativeQuery = true)
-    Optional<UserEntity> getByPhoneNumberAndChatId(@Param("emailOrPhone") String emailOrPhone, @Param("chatId") String chatId);
-
+    Optional<UserEntity> getUserByPhoneNumber(@Param("emailOrPhone") String emailOrPhone);
 
     // shaxsiy method test uchun
     @Transactional
