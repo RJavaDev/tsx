@@ -22,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**")
-                .addResourceLocations("file:/absolute/path/to/images/")
+                .addResourceLocations("file:images/")
                 .setCacheControl(CacheControl.noCache());
     }
 }
