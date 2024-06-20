@@ -100,6 +100,15 @@ public class CategoryConvert {
 
     }
 
+    public CategoryDto generatorCategoryDto(String router){
+        if(Objects.nonNull(router)){
+            CategoryDto dto = new CategoryDto();
+            dto.setRouter(router);
+            return dto;
+        }
+        return null;
+    }
+
     public List<CategoryResponseDto> fromOpenData(List<CategoryEntity> categoryList){
         return categoryList.stream().map(CategoryConvert::fromOpenData)
                 .toList();
