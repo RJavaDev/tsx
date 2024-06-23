@@ -182,10 +182,10 @@ public class AttachServiceImpl implements AttachService {
             String newFileName = fileName + "." + type;
             Files.copy(inputStream, Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder ).resolve(newFileName), StandardCopyOption.REPLACE_EXISTING);
 
-            if (Objects.requireNonNull(type).startsWith("image")) {
+//            if (Objects.requireNonNull(type).startsWith("image")) {
                 String newImgHeight48File = fileName + SUFFIX_MINI_IMG_200 + "." + type;
                 Thumbnails.of(inputStream).height(200).toFile(Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder).resolve(newImgHeight48File).toAbsolutePath().toString());
-            }
+//            }
 
         } catch (IOException ignore) {}
     }

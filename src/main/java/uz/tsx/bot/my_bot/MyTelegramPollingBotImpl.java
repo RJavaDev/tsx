@@ -37,6 +37,7 @@ import uz.tsx.service.*;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -153,7 +154,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                 sendMsg(sendMessage);
             } else {
                 userBotService.setUserState(chatId, StateEnum.LOGINED);
-                sendMessage.setText("Sahifangizga xush kelibsiz \uD83C\uDF1F");
+                sendMessage.setText("Sahifangizga xush kelibsiz 🌟");
                 sendMessage.setReplyMarkup(ReplyKeyboardUtil.getUserProfileButton());
                 sendMsg(sendMessage);
                 getUserAnnouncements(chatId, 0);
@@ -192,7 +193,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
 
             userBotService.getUserByChatId(chatId).ifPresent(userByChatId -> {
                 announcementEntity.setUserEntity(userByChatId.getUserEntity());
-                announcementEntity.setUserEntityId(userByChatId.getUserEntity().getId());
+                announcementEntity.setUserId(userByChatId.getUserEntity().getId());
             });
 
             sendMessage.setReplyMarkup(new ReplyKeyboardRemove(true));
@@ -312,7 +313,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                 userBotService.getUserByChatId(chatId).ifPresent(user ->
                     announcementContactEntity.setPhone(user.getUserEntity().getEmailOrPhone())
                 );
-                sendMessage.setText("Region tanlandi✅\n\nEndi e'lon uchun tavsif kiriting");
+                sendMessage.setText("Region tanlandi✅\n\nEndi e'lon uchun batafsil ma'lumot kiriting");
             } else {
                 sendMessage.setText("Region ...");
                 sendMessage.setReplyMarkup(InlineKeyboardUtil.regionButtons(childRegionsByParentId));
@@ -418,9 +419,9 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
 
             if(attachCount < 7) {
                 if(Objects.nonNull(message.getPhoto())) {
-                    PhotoSize photoSize1 = message.getPhoto().get(0);
+//                    PhotoSize photoSize1 = message.getPhoto().get(0);
                     PhotoSize photoSize2 = message.getPhoto().get(message.getPhoto().size() - 1);
-                    photoSizeList.add(List.of(photoSize1, photoSize2));
+                    photoSizeList.add(Collections.singletonList(photoSize2));
                     sendMessage.setText(attachCount + 1 + "/8 | Rasm yuklandi ✅ \n\nYana rasm yuklang yoki 'Tugatish' tugmasini bosing");
                     sendMessage.setReplyMarkup(InlineKeyboardUtil.finishButton());
                 }
@@ -443,7 +444,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
         sendPhoto.setChatId(chatId);
 
         photoSizeList.forEach(photoSize -> {
-            sendPhoto.setPhoto(new InputFile(photoSize.get(1).getFileId()));  // 1 sifati zo'ri; 0 sifati pasti
+            sendPhoto.setPhoto(new InputFile(photoSize.get(0).getFileId()));  // 1 sifati zo'ri; 0 sifati pasti
             sendMsg(sendPhoto);
         });
 
@@ -479,7 +480,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
 
                 SendPhoto sendPhoto = new SendPhoto();
                 sendPhoto.setChatId(chatId);
-                File file = new File("src/main/resources/images/" + attachEntity.getPath() + attachEntity.getId() + attachEntity.getContentType());
+                File file = new File("images/" + attachEntity.getPath() + attachEntity.getId() + attachEntity.getContentType());
                 sendPhoto.setPhoto(new InputFile(file));
                 sendMsg(sendPhoto);
 

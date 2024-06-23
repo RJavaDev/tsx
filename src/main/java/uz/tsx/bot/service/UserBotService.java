@@ -8,9 +8,11 @@ import uz.tsx.bot.entity.UserBotEntity;
 import uz.tsx.bot.enums.StateEnum;
 import uz.tsx.bot.repository.UserBotRepository;
 import uz.tsx.entity.UserEntity;
+import uz.tsx.entity.role.RoleEnum;
 import uz.tsx.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Optional;
 
 
@@ -73,6 +75,7 @@ public class UserBotService {
         userEntity.setFirstname(firstName);
         userEntity.setCreatedDate(LocalDateTime.now());
         userEntity.setPassword(passwordEncoder.encode(password));
+        userEntity.setRoleEnumList(Collections.singletonList(RoleEnum.USER));
         UserEntity savedUser = userRepository.save(userEntity);
 
         Optional<UserBotEntity> userBotEntityOptional = getUserByChatId(chatId);

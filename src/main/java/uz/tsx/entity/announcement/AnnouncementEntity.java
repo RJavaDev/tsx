@@ -29,11 +29,11 @@ import java.util.Set;
 public class AnnouncementEntity extends BaseEntity {
     private String title;
 
-    @Column(name = "user_entity_id", nullable = false)
-    private Long userEntityId;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_entity_id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private UserEntity UserEntity;
 
     @Column(name = "category_id", nullable = false)
