@@ -45,6 +45,6 @@ public interface RegionRepository extends JpaRepository<RegionEntity,Long> {
     @Query(value = "SELECT tsxr.* FROM tsx_region tsxr WHERE tsxr.id = :regionId AND tsxr.status <> 'DELETED'", nativeQuery = true)
     Optional<RegionEntity> getRegionId(@Param("regionId") Long regionId);
 
-    @Query(value = "SELECT tsxr.* FROM tsx_region tsxr WHERE tsxr.parent_id = :regionId AND tsxr.status <> 'DELETED'", nativeQuery = true)
-    List<RegionEntity> getChildListById(@Param("regionId") Long regionId);
+    @Query(value = "SELECT tsxr.* FROM tsx_region tsxr WHERE tsxr.parent_id = :parentId AND tsxr.status <> 'DELETED'", nativeQuery = true)
+    List<RegionEntity> getChildRegionsByParentId(@Param("parentId") Long parentId);
 }

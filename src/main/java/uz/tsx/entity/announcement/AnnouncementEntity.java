@@ -15,6 +15,7 @@ import uz.tsx.dto.announcement.selector.AnnounceOptionSelector;
 import uz.tsx.dto.announcement.selector.AnnouncementInfoSelector;
 import uz.tsx.entity.AttachEntity;
 import uz.tsx.entity.CategoryEntity;
+import uz.tsx.entity.UserEntity;
 import uz.tsx.entity.base.BaseEntity;
 
 import java.util.HashSet;
@@ -27,6 +28,13 @@ import java.util.Set;
 @Table(name = TableNames.ANNOUNCEMENT)
 public class AnnouncementEntity extends BaseEntity {
     private String title;
+
+    @Column(name = "user_entity_id", nullable = false)
+    private Long userEntityId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_entity_id", insertable = false, updatable = false)
+    private UserEntity UserEntity;
 
     @Column(name = "category_id", nullable = false)
     private Long categoryId;
@@ -43,6 +51,9 @@ public class AnnouncementEntity extends BaseEntity {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @Column(name = "isActive")
+    private Boolean isActive;
 
     @Column(name = "i_saw")
     private Integer iSaw;

@@ -21,6 +21,7 @@ import ws.schild.jave.info.MultimediaInfo;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,6 +46,17 @@ public class AttachServiceImpl implements AttachService {
         AttachEntity attachEntity = AttachConvert.generateAttachEntity(file.getOriginalFilename(), file.getSize(), file.getContentType());
 
         fileSaveToSystem(file, attachEntity.getPath(), attachEntity.getId(), attachEntity.getType());
+
+        return repository.save(attachEntity);
+
+    }
+
+    @Override
+    public AttachEntity saveAttach(InputStream inputStream, String originalFilename, Long size, String type) {
+
+        AttachEntity attachEntity = AttachConvert.generateAttachEntity(originalFilename, size, type);
+
+        fileSaveToSystem(inputStream, attachEntity.getPath(), attachEntity.getId(), attachEntity.getType());
 
         return repository.save(attachEntity);
 
@@ -160,6 +172,19 @@ public class AttachServiceImpl implements AttachService {
             if (Objects.requireNonNull(file.getContentType()).startsWith("image")) {
                 String newImgHeight48File = fileName + SUFFIX_MINI_IMG_200 + "." + type;
                 Thumbnails.of(file.getInputStream()).height(200).toFile(Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder).resolve(newImgHeight48File).toAbsolutePath().toString());
+            }
+
+        } catch (IOException ignore) {}
+    }
+
+    private void fileSaveToSystem(InputStream inputStream, String pathFolder, String fileName, String type){
+        try {
+            String newFileName = fileName + "." + type;
+            Files.copy(inputStream, Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder ).resolve(newFileName), StandardCopyOption.REPLACE_EXISTING);
+
+            if (Objects.requireNonNull(type).startsWith("image")) {
+                String newImgHeight48File = fileName + SUFFIX_MINI_IMG_200 + "." + type;
+                Thumbnails.of(inputStream).height(200).toFile(Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder).resolve(newImgHeight48File).toAbsolutePath().toString());
             }
 
         } catch (IOException ignore) {}

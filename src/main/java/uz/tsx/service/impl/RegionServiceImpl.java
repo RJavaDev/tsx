@@ -161,4 +161,9 @@ public class RegionServiceImpl implements RegionService {
             }
         });
     }
+
+    @Override
+    public List<RegionEntity> getChildRegionsByParentId(Long parentId) {
+        return repository.getChildRegionsByParentId(parentId);
+    }
 }

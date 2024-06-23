@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import uz.tsx.entity.UserEntity;
 import uz.tsx.interfaces.UserInterface;
 
@@ -59,6 +60,16 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             "            WHERE tsxu.id = :userId AND tsxu.status <> 'DELETED'\n",
             nativeQuery = true)
     UserInterface getMe(@Param("userId") Long id);
-    @Query(value = "SELECT tsxu.* FROM tsx_user tsxu WHERE tsxu.email_or_phone = :phoneNumber AND tsxu.status <> 'DELETED'", nativeQuery = true)
-    Optional<UserEntity> getUserByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+
+    @Query(value = "SELECT u.* " +
+            "FROM tsx_user u " +
+            "WHERE u.email_or_phone = :emailOrPhone AND u.status <> 'DELETED'",
+            nativeQuery = true)
+    Optional<UserEntity> getUserByPhoneNumber(@Param("emailOrPhone") String emailOrPhone);
+
+    // shaxsiy method test uchun
+    @Transactional
+    @Modifying
+    @Query(value = "DELETE FROM tsx_user WHERE email_or_phone = :phoneNumber", nativeQuery = true)
+    void deleteUserByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 }
