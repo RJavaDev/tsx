@@ -14,7 +14,7 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
     @Query(value = "SELECT btsc.* FROM tsx_category btsc WHERE btsc.id=:categoryId AND btsc.status <> 'DELETED'", nativeQuery = true)
     Optional<CategoryEntity> findByCategoryId(@Param("categoryId") Long categoryId);
 
-    @Query(value = "SELECT btsc.* FROM tsx_category btsc WHERE btsc.parent_id IS NULL AND btsc.status <> 'DELETED'", nativeQuery = true)
+    @Query(value = "SELECT btsc.* FROM tsx_category btsc WHERE btsc.parent_id IS NULL AND btsc.status <> 'DELETED' ORDER BY btsc.id", nativeQuery = true)
     List<CategoryEntity> findAllCategory();
 
 
@@ -34,7 +34,7 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
     @Query(value = "SELECT btsc.* FROM tsx_category btsc WHERE (btsc.id=:parentId OR btsc.id=:childId) AND btsc.status <> 'DELETED'", nativeQuery = true)
     List<CategoryEntity> getCategoryIdParentAndChild(@Param("parentId") Long parentId, @Param("childId") Long childId);
 
-    @Query(value = "SELECT btsc.* FROM tsx_category btsc WHERE btsc.parent_id IS NULL", nativeQuery = true)
+    @Query(value = "SELECT btsc.* FROM tsx_category btsc WHERE btsc.parent_id IS NULL ORDER BY btsc.id", nativeQuery = true)
     List<CategoryEntity> getCategoryTree();
 
     @Query(value = "with recursive sub_category as (\n" +

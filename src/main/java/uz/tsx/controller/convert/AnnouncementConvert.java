@@ -3,6 +3,7 @@ package uz.tsx.controller.convert;
 import lombok.experimental.UtilityClass;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import uz.tsx.dto.CategoryDto;
 import uz.tsx.dto.CurrencyDto;
 import uz.tsx.dto.announcement.AnnouncementContactDto;
 import uz.tsx.dto.announcement.AnnouncementDto;
@@ -81,7 +82,6 @@ public class AnnouncementConvert {
         dto.setId(interfaceDB.getId());
         dto.setTitle(interfaceDB.getTitle());
         dto.setCreateDateTime(interfaceDB.getCreatedDate());
-        dto.setRouter(interfaceDB.getRouter());
         contactDto.setLongitude(interfaceDB.getLongitude());
         contactDto.setLatitude(interfaceDB.getLatitude());
         contactDto.setPhone(interfaceDB.getPhone());
@@ -98,7 +98,7 @@ public class AnnouncementConvert {
         currencyDto.setCode(interfaceDB.getCurrencyCode());
         priceDto.setCurrency(currencyDto);
 
-
+        dto.setCategory(CategoryConvert.generatorCategoryDto(interfaceDB.getRouter()));
         dto.setPriceTag(priceDto);
 
         return dto;
