@@ -13,15 +13,14 @@ import uz.tsx.dto.response.AttachDownloadDTO;
 import uz.tsx.dto.response.AttachResponseDto;
 import uz.tsx.entity.AttachEntity;
 import uz.tsx.exception.*;
+import uz.tsx.exception.FileNotFoundException;
 import uz.tsx.repository.AttachRepository;
 import uz.tsx.service.AttachService;
 import ws.schild.jave.EncoderException;
 import ws.schild.jave.MultimediaObject;
 import ws.schild.jave.info.MultimediaInfo;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -177,17 +176,27 @@ public class AttachServiceImpl implements AttachService {
         } catch (IOException ignore) {}
     }
 
-    private void fileSaveToSystem(InputStream inputStream, String pathFolder, String fileName, String type){
+    public void fileSaveToSystem(InputStream inputStream, String pathFolder, String fileName, String type) {
         try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = inputStream.read(buffer)) != -1) {
+                baos.write(buffer, 0, len);
+            }
+            byte[] fileBytes = baos.toByteArray();
+
             String newFileName = fileName + "." + type;
-            Files.copy(inputStream, Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder ).resolve(newFileName), StandardCopyOption.REPLACE_EXISTING);
+            ByteArrayInputStream originalInputStream = new ByteArrayInputStream(fileBytes);
+            Files.copy(originalInputStream, Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder).resolve(newFileName), StandardCopyOption.REPLACE_EXISTING);
+            originalInputStream.close();
 
-//            if (Objects.requireNonNull(type).startsWith("image")) {
-                String newImgHeight48File = fileName + SUFFIX_MINI_IMG_200 + "." + type;
-                Thumbnails.of(inputStream).height(200).toFile(Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder).resolve(newImgHeight48File).toAbsolutePath().toString());
-//            }
+            String newImgHeight48File = fileName + SUFFIX_MINI_IMG_200 + "." + type;
+            ByteArrayInputStream thumbnailInputStream = new ByteArrayInputStream(fileBytes);
+            Thumbnails.of(thumbnailInputStream).height(200).toFile(Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder).resolve(newImgHeight48File).toAbsolutePath().toString());
+            thumbnailInputStream.close();
 
-        } catch (IOException ignore) {}
+        } catch (IOException ignored) { }
     }
 
     @Override

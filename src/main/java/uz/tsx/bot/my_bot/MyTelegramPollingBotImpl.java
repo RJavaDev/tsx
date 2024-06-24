@@ -176,7 +176,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
         else if (userBotService.getUserState(chatId).equals(StateEnum.ENTERED_NEW_PASS)) {
             userBotService.registerUser(chatId, BotConstants.USER_PHONE_NUMBER.get(chatId), text, message.getFrom().getFirstName());
             userBotService.setUserState(chatId, StateEnum.LOGINED);
-            sendMessage.setText("Siz muvaffaqiyatli ro'yxatdan o'tdingiz ✅ \n\nSahifangizga xush kelibsiz \\uD83C\\uDF1F");
+            sendMessage.setText("Siz muvaffaqiyatli ro'yxatdan o'tdingiz ✅ \n\nSahifangizga xush kelibsiz \uD83C\uDF1F");
             sendMessage.setReplyMarkup(ReplyKeyboardUtil.getUserProfileButton());
             sendMsg(sendMessage);
         }
@@ -458,7 +458,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                         "\nDescription: "+ announcementEntity.getDescription() + "\n" +
                         "Kategoriya: " + announcementEntity.getCategory().getNameUz() + "\n" +
                         "Region: " + announcementContactEntity.getRegion().getNameUz() + "\n" +
-                        "Narxi: " + announcementPriceEntity.getPrice() + "\n\n" +
+                        "Narxi: " + announcementPriceEntity.getPrice() + " " + announcementPriceEntity.getCurrency().getName() + "\n\n" +
                         "E'lonni tasdiqlaysizmi?"
         );
         sendMessage.setReplyMarkup(InlineKeyboardUtil.yesOrNotButtons());
@@ -476,7 +476,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
 
             if(!announcementListByUserEntity.isEmpty()) {
                 AnnouncementEntity announcementEntity1 = announcementListByUserEntity.get(page);
-                AttachEntity attachEntity = announcementEntity1.getAttachPhotos().get(1);
+                AttachEntity attachEntity = announcementEntity1.getAttachPhotos().get(0);
 
                 SendPhoto sendPhoto = new SendPhoto();
                 sendPhoto.setChatId(chatId);
@@ -489,7 +489,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                     sendMessage.setText(
                                     "<strong>Aktiv ✅</strong>" +
                                     "\n\n<i>" + announcementEntity1.getTitle() + "</i>" +
-                                    "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() +
+                                    "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() + " " + announcementEntity1.getPriceTag().getCurrency().getName() +
                                     "</b>\n\n" + announcementEntity1.getContactInfo().getRegion().getNameUz() +
                                     "\n\n" + announcementEntity1.getCreatedDate()
                     );
@@ -497,7 +497,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                     sendMessage.setText(
                                     "<strong>Aktiv emas ❌</strong>" +
                                     "\n\n<i>" + announcementEntity1.getTitle() + "</i>" +
-                                    "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() +
+                                    "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() + " " + announcementEntity1.getPriceTag().getCurrency().getName() +
                                     "</b>\n\n" + announcementEntity1.getContactInfo().getRegion().getNameUz() +
                                     "\n\n" + announcementEntity1.getCreatedDate()
                     );

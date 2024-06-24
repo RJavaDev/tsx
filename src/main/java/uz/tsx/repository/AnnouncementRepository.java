@@ -277,6 +277,6 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "ORDER BY similarity(tsxa.title, :searchTitle) DESC", nativeQuery = true)
     Page<AnnouncementInterface> searchAnnouncementAndFilter(@Param("searchTitle")String searchTitle, @Param("regionId")Long regionId, @Param("categoryId")Long categoryId, @Param("startDate")Date startDate, @Param("endDate")Date endDate, Pageable pageable);
 
-    @Query(value = "SELECT tsxa FROM tsx_announcement tsxa WHERE tsxa.user_id = :userId", nativeQuery = true)
+    @Query(value = "SELECT * FROM tsx_announcement WHERE user_id = :userId", nativeQuery = true)
     List<AnnouncementEntity> getAnnouncementListByUserEntityId(@Param("userId") Long userId);
 }
