@@ -8,11 +8,14 @@ import uz.tsx.bot.entity.UserBotEntity;
 import uz.tsx.bot.enums.StateEnum;
 import uz.tsx.bot.repository.UserBotRepository;
 import uz.tsx.entity.UserEntity;
+import uz.tsx.entity.announcement.AnnouncementEntity;
 import uz.tsx.entity.role.RoleEnum;
 import uz.tsx.repository.UserRepository;
+import uz.tsx.service.AnnouncementService;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -23,6 +26,7 @@ public class UserBotService {
     private final UserBotRepository userBotRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AnnouncementService announcementService;
 
     public Optional<UserBotEntity> getUserByChatId(String chatId) {
         return userBotRepository.getUserByChatId(chatId);
@@ -67,6 +71,21 @@ public class UserBotService {
         userBotEntity.setChatId(chatId);
         userBotEntity.setCreatedDate(LocalDateTime.now());
         userBotRepository.save(userBotEntity);
+    }
+
+    public Optional<AnnouncementEntity> getUserAnnouncement(String chatId, int page) {
+        return userBotRepository.getUserByChatId(chatId)
+                .flatMap(userBotEntity -> {
+                    Long userEntityId = userBotEntity.getUserEntity().getId();
+                    List<AnnouncementEntity> announcementList = announcementService.getAnnouncementListByUserEntity(userEntityId);
+                    return (page >= 0 && page < announcementList.size()) ? Optional.of(announcementList.get(page)) : Optional.empty();
+                });
+    }
+
+    public int getUserAnnouncementCount(String chatId) {
+        return userBotRepository.getUserByChatId(chatId)
+                .map(userBotEntity -> announcementService.getAnnouncementListByUserEntity(userBotEntity.getUserEntity().getId()).size())
+                .orElse(0);
     }
 
     public void registerUser(String chatId, String phoneNumber, String password, String firstName) {
