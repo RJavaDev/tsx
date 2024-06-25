@@ -398,6 +398,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
             if(filterMap.containsKey("title")){
                 title = MapUtils.getString(filterMap, "title");
+                if(title.isEmpty()) title = null;
             }
             if(filterMap.containsKey("regionId")){
                 regionId = MapUtils.getLong(filterMap, "regionId");
