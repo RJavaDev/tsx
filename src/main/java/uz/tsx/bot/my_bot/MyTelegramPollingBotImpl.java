@@ -3,6 +3,7 @@ package uz.tsx.bot.my_bot;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
@@ -18,7 +19,6 @@ import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import uz.tsx.bot.constantsBot.BotConstants;
-import uz.tsx.bot.container.ComponentContainer;
 import uz.tsx.bot.enums.StateEnum;
 import uz.tsx.bot.repository.UserBotRepository;
 import uz.tsx.bot.service.BotService;
@@ -68,13 +68,18 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
     private final List<List<PhotoSize>> photoSizeList = new ArrayList<>();
     private final List<Document> documentList = new ArrayList<>();
 
+    @Value("${tsx.project.bot.token}")
+    private String BOT_TOKEN;
+    @Value("${tsx.project.bot.username}")
+    private String BOT_USERNAME;
+
     @Override
     public String getBotUsername() {
-        return ComponentContainer.BOT_USERNAME;
+        return BOT_USERNAME;
     }
     @Override
     public String getBotToken() {
-        return ComponentContainer.BOT_TOKEN;
+        return BOT_TOKEN;
     }
 
     @SneakyThrows

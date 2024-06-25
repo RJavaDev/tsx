@@ -1,12 +1,12 @@
 package uz.tsx.bot.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
-import uz.tsx.bot.container.ComponentContainer;
 import uz.tsx.entity.AttachEntity;
 import uz.tsx.service.AttachService;
 
@@ -23,6 +23,9 @@ import java.util.UUID;
 public class FileService {
     private final AttachService attachService;
     private final RestTemplate restTemplate;
+
+    @Value("${tsx.project.bot.token}")
+    private String BOT_TOKEN;
 
     public List<AttachEntity> savePhotos(List<List<PhotoSize>> photoSizeList, List<Document> documentList) {
         List<AttachEntity> attachEntityList = new ArrayList<>();
@@ -52,7 +55,7 @@ public class FileService {
     }
 
     private AttachEntity saveAttach(String filePath, Integer size) throws IOException {
-        String url = "https://api.telegram.org/file/bot" + ComponentContainer.BOT_TOKEN + "/" + filePath;
+        String url = "https://api.telegram.org/file/bot" + BOT_TOKEN + "/" + filePath;
         Resource resource = restTemplate.getForObject(URI.create(url), Resource.class);
 
         if (resource != null && resource.exists()) {
@@ -67,8 +70,8 @@ public class FileService {
         return null;
     }
 
-    private static String getFilePath(String fileId) throws IOException {
-        String requestUrl =  "https://api.telegram.org/bot" + ComponentContainer.BOT_TOKEN + "/getFile?file_id=" + fileId;
+    private String getFilePath(String fileId) throws IOException {
+        String requestUrl =  "https://api.telegram.org/bot" + BOT_TOKEN + "/getFile?file_id=" + fileId;
 
         URL url = new URL(requestUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -91,7 +94,7 @@ public class FileService {
         }
     }
 
-    private static String extractFilePath(String jsonResponse) {
+    private String extractFilePath(String jsonResponse) {
         String filePathKey = "\"file_path\":\"";
         int startIndex = jsonResponse.indexOf(filePathKey);
         if (startIndex != -1) {
