@@ -14,4 +14,6 @@ public interface RegionService extends BaseInterface<RegionEntity>{
 
     boolean update(RegionEntity newUpdateObject);
 
+    List<RegionEntity> getChildRegionsByParentId(Long parentId);
+
 }

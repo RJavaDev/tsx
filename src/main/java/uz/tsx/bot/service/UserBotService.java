@@ -3,13 +3,19 @@ package uz.tsx.bot.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import uz.tsx.bot.constantsBot.BotConstants;
+import org.springframework.transaction.annotation.Transactional;
 import uz.tsx.bot.entity.UserBotEntity;
+import uz.tsx.bot.enums.StateEnum;
 import uz.tsx.bot.repository.UserBotRepository;
 import uz.tsx.entity.UserEntity;
+import uz.tsx.entity.announcement.AnnouncementEntity;
+import uz.tsx.entity.role.RoleEnum;
 import uz.tsx.repository.UserRepository;
-import uz.tsx.validation.CommonSchemaValidator;
+import uz.tsx.service.AnnouncementService;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -19,67 +25,84 @@ public class UserBotService {
 
     private final UserBotRepository userBotRepository;
     private final UserRepository userRepository;
-    private final CommonSchemaValidator commonSchemaValidator;
     private final PasswordEncoder passwordEncoder;
+    private final AnnouncementService announcementService;
 
-//    public boolean add(String chatId,String phoneNumber,String fullName){
-//        try {
-//           UserEntity user= commonSchemaValidator.validateUserBotPhoneNumber(phoneNumber);
-//           UserBotEntity botEntity = userBotRepository.getUserByChatId(chatId).get();
-//           botEntity.setUserEntity(user);
-//           botEntity.forCreate();
-//           userBotRepository.save(botEntity);
-//            return false;
-//        }catch (IllegalStateException e){
-//            UserCreateRequestDto dto = UserConvert.fromBot( phoneNumber,fullName);
-//            UserEntity userEntity = UserConvert.convertToEntity(dto);
-//            Optional<UserBotEntity> botEntity = userBotRepository.getUserByChatId(chatId);
-//            if (botEntity.isPresent()){
-//                UserEntity save = repository.save(userEntity);
-//                UserBotEntity bot = botEntity.get();
-//                bot.setUserEntity(save);
-//                userEntity.forCreate();
-//                bot.forCreate();
-//                userBotRepository.save(bot);
-//            }
-//
-//            return true;
-//        }
-//    }
-//    @Transactional
-//    public void addPassword(String chatId, String passwordText) {
-//        String passwordUser = passwordEncoder.encode(passwordText);
-//        userBotRepository.userAddPassword(chatId,passwordUser);
-//    }
-
-    public boolean getUserById(String chatId) {
-        Optional<UserBotEntity> userByChatId = userBotRepository.getUserByChatId(chatId);
-        return userByChatId.isPresent();
+    public Optional<UserBotEntity> getUserByChatId(String chatId) {
+        return userBotRepository.getUserByChatId(chatId);
     }
 
     public boolean isUserNotExistByChatId(String chatId) {
         return userBotRepository.getUserByChatId(chatId).isEmpty();
     }
 
-    public boolean isUserNotExistByPhoneNumber(String phoneNumber) {
-        return userRepository.getUserByPhoneNumber(phoneNumber).isEmpty();
+    public boolean isUserNotExistByPhoneNumberAndChatId(String chatId) {
+        return userBotRepository.getUserByChatId(chatId)
+                .map(UserBotEntity::getUserEntity)
+                .isEmpty();
     }
 
-    public String getUserState(String chatId) {
-        return userBotRepository.getUserState(chatId);
+    public boolean isUserExistByPhoneNumber(String phoneNumber) {
+        return userRepository.getUserByPhoneNumber(phoneNumber).isPresent();
     }
 
-    public void registerUser(String chatId, String phoneNumber, String langCode) {
+    @Transactional
+    public void mergeUserAccounts(String phoneNumber, String chatId) {
+        userRepository.getUserByPhoneNumber(phoneNumber).ifPresent(userEntity ->
+                userBotRepository.getUserByChatId(chatId).ifPresent(userBotEntity -> {
+                    userBotEntity.setUserEntity(userEntity);
+                    userBotRepository.save(userBotEntity);
+                })
+        );
+    }
+
+    public void setUserState(String chatId, StateEnum state) {
+        userBotRepository.setUserState(chatId, String.valueOf(state));
+    }
+
+    public StateEnum getUserState(String chatId) {
+        String state = userBotRepository.getUserState(chatId);
+        return StateEnum.valueOf(state);
+    }
+
+    public void createBotUser(String chatId, String languageCode){
+        UserBotEntity userBotEntity=new UserBotEntity();
+        userBotEntity.setLanguage(languageCode);
+        userBotEntity.setChatId(chatId);
+        userBotEntity.setCreatedDate(LocalDateTime.now());
+        userBotRepository.save(userBotEntity);
+    }
+
+    public Optional<AnnouncementEntity> getUserAnnouncement(String chatId, int page) {
+        return userBotRepository.getUserByChatId(chatId)
+                .flatMap(userBotEntity -> {
+                    Long userEntityId = userBotEntity.getUserEntity().getId();
+                    List<AnnouncementEntity> announcementList = announcementService.getAnnouncementListByUserEntity(userEntityId);
+                    return (page >= 0 && page < announcementList.size()) ? Optional.of(announcementList.get(page)) : Optional.empty();
+                });
+    }
+
+    public int getUserAnnouncementCount(String chatId) {
+        return userBotRepository.getUserByChatId(chatId)
+                .map(userBotEntity -> announcementService.getAnnouncementListByUserEntity(userBotEntity.getUserEntity().getId()).size())
+                .orElse(0);
+    }
+
+    public void registerUser(String chatId, String phoneNumber, String password, String firstName) {
         UserEntity userEntity = new UserEntity();
         userEntity.setEmailOrPhone(phoneNumber);
+        userEntity.setFirstname(firstName);
+        userEntity.setCreatedDate(LocalDateTime.now());
+        userEntity.setPassword(passwordEncoder.encode(password));
+        userEntity.setRoleEnumList(Collections.singletonList(RoleEnum.USER));
         UserEntity savedUser = userRepository.save(userEntity);
 
-        UserBotEntity userBotEntity = new UserBotEntity();
-        userBotEntity.setUserEntity(savedUser);
-        userBotEntity.setState(BotConstants.SHARE_CONTACT);
-        userBotEntity.setLanguage(langCode);
-        userBotEntity.setChatId(chatId);
-        userBotRepository.save(userBotEntity);
+        Optional<UserBotEntity> userBotEntityOptional = getUserByChatId(chatId);
+        if (userBotEntityOptional.isPresent()) {
+            UserBotEntity userBotEntity = userBotEntityOptional.get();
+            userBotEntity.setUserEntity(savedUser);
+            userBotRepository.save(userBotEntity);
+        }
     }
 
 }

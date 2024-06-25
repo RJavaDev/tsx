@@ -54,4 +54,7 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
 
     @Query(value = "SELECT btsc.* FROM tsx_category btsc WHERE btsc.parent_id IS NULL AND btsc.status <> 'DELETED'", nativeQuery = true)
     List<CategoryEntity> getAllParentIsNull();
+
+    @Query(value = "SELECT tsxc.* FROM tsx_category tsxc WHERE tsxc.parent_id=:parentCategoryId AND tsxc.status<>'DELETED'", nativeQuery = true)
+    List<CategoryEntity> getChildCategoriesByParentCategoryId(@Param("parentCategoryId") Long parentCategoryId);
 }

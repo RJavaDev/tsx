@@ -13,14 +13,14 @@ import uz.tsx.dto.response.AttachDownloadDTO;
 import uz.tsx.dto.response.AttachResponseDto;
 import uz.tsx.entity.AttachEntity;
 import uz.tsx.exception.*;
+import uz.tsx.exception.FileNotFoundException;
 import uz.tsx.repository.AttachRepository;
 import uz.tsx.service.AttachService;
 import ws.schild.jave.EncoderException;
 import ws.schild.jave.MultimediaObject;
 import ws.schild.jave.info.MultimediaInfo;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,6 +45,17 @@ public class AttachServiceImpl implements AttachService {
         AttachEntity attachEntity = AttachConvert.generateAttachEntity(file.getOriginalFilename(), file.getSize(), file.getContentType());
 
         fileSaveToSystem(file, attachEntity.getPath(), attachEntity.getId(), attachEntity.getType());
+
+        return repository.save(attachEntity);
+
+    }
+
+    @Override
+    public AttachEntity saveAttach(InputStream inputStream, String originalFilename, Long size, String type) {
+
+        AttachEntity attachEntity = AttachConvert.generateAttachEntity(originalFilename, size, type);
+
+        fileSaveToSystem(inputStream, attachEntity.getPath(), attachEntity.getId(), attachEntity.getType());
 
         return repository.save(attachEntity);
 
@@ -163,6 +174,29 @@ public class AttachServiceImpl implements AttachService {
             }
 
         } catch (IOException ignore) {}
+    }
+
+    public void fileSaveToSystem(InputStream inputStream, String pathFolder, String fileName, String type) {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = inputStream.read(buffer)) != -1) {
+                baos.write(buffer, 0, len);
+            }
+            byte[] fileBytes = baos.toByteArray();
+
+            String newFileName = fileName + "." + type;
+            ByteArrayInputStream originalInputStream = new ByteArrayInputStream(fileBytes);
+            Files.copy(originalInputStream, Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder).resolve(newFileName), StandardCopyOption.REPLACE_EXISTING);
+            originalInputStream.close();
+
+            String newImgHeight48File = fileName + SUFFIX_MINI_IMG_200 + "." + type;
+            ByteArrayInputStream thumbnailInputStream = new ByteArrayInputStream(fileBytes);
+            Thumbnails.of(thumbnailInputStream).height(200).toFile(Paths.get(ATTACH_UPLOAD_FOLDER + pathFolder).resolve(newImgHeight48File).toAbsolutePath().toString());
+            thumbnailInputStream.close();
+
+        } catch (IOException ignored) { }
     }
 
     @Override

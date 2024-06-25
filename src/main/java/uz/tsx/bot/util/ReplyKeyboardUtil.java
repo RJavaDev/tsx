@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReplyKeyboardUtil {
-    public static ReplyKeyboard getMainMenuKeyboard() {
+    public static ReplyKeyboard getMainMenuButton() {
 
         KeyboardRow row1=new KeyboardRow();
         KeyboardRow row2=new KeyboardRow();
@@ -45,6 +45,7 @@ public class ReplyKeyboardUtil {
         keyboardButton.setText(BotConstants.SHARE_CONTACT);
         keyboardButton.setRequestContact(true);
         row.add(keyboardButton);
+        row.add(new KeyboardButton(BotConstants.BACK_BUTTON));
 
         ReplyKeyboardMarkup keyboardMarkup=new ReplyKeyboardMarkup();
         keyboardMarkup.setKeyboard(List.of(row));
@@ -54,4 +55,31 @@ public class ReplyKeyboardUtil {
         return keyboardMarkup;
 
     }
+
+    public static ReplyKeyboard getBackButton() {
+        KeyboardRow row = new KeyboardRow();
+        row.add(new KeyboardButton(BotConstants.BACK_BUTTON));
+        ReplyKeyboardMarkup keyboardMarkup=new ReplyKeyboardMarkup();
+        keyboardMarkup.setKeyboard(List.of(row));
+        keyboardMarkup.setResizeKeyboard(true);
+        keyboardMarkup.setSelective(true);
+
+        return keyboardMarkup;
+    }
+
+
+    public static ReplyKeyboard getUserProfileButton() {
+        KeyboardRow row = new KeyboardRow();
+
+        row.add(new KeyboardButton(BotConstants.CREATE_NEW_ANN));
+        row.add(new KeyboardButton(BotConstants.MAIN_MENU));
+
+        ReplyKeyboardMarkup keyboardMarkup=new ReplyKeyboardMarkup();
+        keyboardMarkup.setKeyboard(List.of(row));
+        keyboardMarkup.setResizeKeyboard(true);
+        keyboardMarkup.setSelective(true);
+
+        return keyboardMarkup;
+    }
+
 }

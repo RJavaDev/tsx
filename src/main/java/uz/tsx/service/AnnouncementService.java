@@ -39,4 +39,6 @@ public interface AnnouncementService {
     BigDataTable<AnnouncementInterface> getAnnouncementListByCategory(Long categoryId, PageParam pageParam);
 
     BigDataTable<AnnouncementInterface> searchAnnouncementAndFilter(FilterForm filter);
+
+    List<AnnouncementEntity> getAnnouncementListByUserEntity(Long userId);
 }

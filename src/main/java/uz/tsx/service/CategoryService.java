@@ -15,5 +15,7 @@ public interface CategoryService extends BaseInterface<CategoryEntity>{
 
     CategoryDto findTreeFromBottom(Long childId);           // find category link to its parent and so on ...
 
+    List<CategoryEntity> getChildCategoriesByParentId(Long parentId);
+
     List<CategoryEntity> getAllParentIsNull();
 }

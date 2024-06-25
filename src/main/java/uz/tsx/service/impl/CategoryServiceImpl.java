@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.tsx.common.util.SecurityUtils;
 import uz.tsx.constants.EntityStatus;
 import uz.tsx.dto.CategoryDto;
-import uz.tsx.entity.AttachEntity;
 import uz.tsx.entity.CategoryEntity;
 import uz.tsx.exception.CategoryNotFoundException;
 import uz.tsx.repository.CategoryRepository;
@@ -142,4 +141,10 @@ public class CategoryServiceImpl implements CategoryService {
             throw new CategoryNotFoundException(updateObjectName + " the category with this name already exists");
         }
     }
+
+    @Override
+    public List<CategoryEntity> getChildCategoriesByParentId(Long parentId) {
+        return repository.getChildCategoriesByParentCategoryId(parentId);
+    }
+
 }
