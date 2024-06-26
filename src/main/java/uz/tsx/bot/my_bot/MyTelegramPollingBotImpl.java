@@ -229,7 +229,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             if(text.matches("^\\d+$")) {
                 userBotService.setUserState(chatId, StateEnum.ENTERED_ANN_IMAGE);
                 announcementPriceEntity.setPrice(BigDecimal.valueOf(Long.parseLong(text)));
-                sendMessage.setText("E'lon uchun rasm yuboring \n<strong> 8 tagacha rasm yubrishingiz mumkin </strong>");
+                sendMessage.setText("E'lon uchun rasm yuboring \n<strong>8 tagacha rasm yubrishingiz mumkin </strong>");
                 sendMessage.setParseMode("html");
             } else {
                 userBotService.setUserState(chatId, StateEnum.ENTERED_ANN_PRICE);
@@ -476,8 +476,8 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                         "\nMa'lumot: "+ announcementEntity.getDescription() +
                         "\nKategoriya: " + announcementEntity.getCategory().getNameUz() +
                         "\nRegion: " + announcementContactEntity.getRegion().getNameUz() +
-                        "\n\nNarxi: " + announcementPriceEntity.getPrice() + " " + announcementPriceEntity.getCurrency().getName() +
-                        "E'lonni tasdiqlaysizmi?"
+                        "\nNarxi: " + announcementPriceEntity.getPrice() + " " + announcementPriceEntity.getCurrency().getName() +
+                        "\n\nE'lonni tasdiqlaysizmi?"
         );
         sendMessage.setReplyMarkup(InlineKeyboardUtil.yesOrNotButtons());
         sendMsg(sendMessage);

@@ -1,8 +1,5 @@
 package uz.tsx.bot.constantsBot;
 
-import uz.tsx.bot.enums.StateEnum;
-import uz.tsx.entity.announcement.AnnouncementEntity;
-
 import java.util.HashMap;
 
 public interface BotConstants {

@@ -75,15 +75,24 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         entity.setContactInfoId(contactInfoEntity.getId());
         entity.setPriceTagId(priceEntity.getId());
         entity.setPriceTag(priceEntity);
-        Long userId = SecurityUtils.getUserId();
+
         entity.setContactInfo(contactInfoEntity);
         entity.setISaw(1);
-        entity.forCreate(userId);
-        entity.setUserId(userId);
-        AnnouncementEntity save = repository.save(entity);
 
         List<Long>user=new ArrayList<>();
-        user.add(userId);
+
+        if(entity.getUserId() != null) {
+            entity.forCreate(entity.getUserId());
+            user.add(entity.getUserId());
+        } else {
+            Long userId = SecurityUtils.getUserId();
+            entity.forCreate(userId);
+            entity.setUserId(userId);
+            user.add(userId);
+        }
+
+        AnnouncementEntity save = repository.save(entity);
+
         userCount.put(save.getId(), user);
         return save;
     }
