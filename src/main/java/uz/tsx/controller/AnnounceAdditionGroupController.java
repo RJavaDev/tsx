@@ -111,7 +111,7 @@ public class AnnounceAdditionGroupController {
     @PreAuthorize("permitAll()")
     @GetMapping("/get-list/{categoryId}")
     @Operation(summary = "The category will receive yaa items", description = "give a Category ID")
-    public ApiResponse<Object> getAdditionGroupByCategoryId(@RequestParam("categoryId") Long categoryId){
+    public ApiResponse<Object> getAdditionGroupByCategoryId(@PathVariable Long categoryId){
 
 
         List<AdditionGroupEntity> list = service.additionGroupListByCategoryId(categoryId);
