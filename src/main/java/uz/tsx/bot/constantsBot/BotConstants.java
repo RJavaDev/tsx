@@ -14,5 +14,6 @@ public interface BotConstants {
    String BACK_BUTTON = "\uD83D\uDD19 Orqaga";
 
    HashMap<String, String> USER_PHONE_NUMBER = new HashMap<>();
+   HashMap<String, Integer> USER_SELECTED_PAGE = new HashMap<>();
 
 }

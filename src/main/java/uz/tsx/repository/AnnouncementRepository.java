@@ -4,8 +4,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 import uz.tsx.entity.announcement.AnnouncementEntity;
 import uz.tsx.interfaces.AnnouncementInterface;
 
@@ -277,6 +279,17 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "ORDER BY similarity(tsxa.title, :searchTitle) DESC", nativeQuery = true)
     Page<AnnouncementInterface> searchAnnouncementAndFilter(@Param("searchTitle")String searchTitle, @Param("regionId")Long regionId, @Param("categoryId")Long categoryId, @Param("startDate")Date startDate, @Param("endDate")Date endDate, Pageable pageable);
 
-    @Query(value = "SELECT * FROM tsx_announcement WHERE user_id = :userId", nativeQuery = true)
-    List<AnnouncementEntity> getAnnouncementListByUserEntityId(@Param("userId") Long userId);
+    @Query(value = "SELECT * FROM tsx_announcement WHERE user_id = :userId and status <> 'DELETED' order by id desc", nativeQuery = true)
+    List<AnnouncementEntity> getAnnouncementListByUserId(@Param("userId") Long userId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE tsx_announcement SET is_active = :isActive WHERE id = :announcementId", nativeQuery = true)
+    void changeActiveStatus(@Param("announcementId") Long announcementId, @Param("isActive") Boolean isActive);
+
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE tsx_announcement SET status = 'DELETED' WHERE id = :announcementId", nativeQuery = true)
+    void delete(@Param("announcementId") Long announcementId);
 }

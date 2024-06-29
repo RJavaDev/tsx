@@ -273,7 +273,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
         String[] split = data.split("-");
         String key = split[0];
 
-        if(key.equals("category") && userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_CATEGORY)) {
+        if (key.equals("category") && userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_CATEGORY)) {
             sendMsg(botService.deletePreviousMessage(chatId, messageId));
 
             userBotService.setUserState(chatId, StateEnum.ENTERED_ANN_CATEGORY);
@@ -299,7 +299,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             }
             sendMsg(sendMessage);
         }
-        else if(key.equals("currency") && userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_CURRENCY)) {
+        else if (key.equals("currency") && userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_CURRENCY)) {
             sendMsg(botService.deletePreviousMessage(chatId, messageId));
 
             userBotService.setUserState(chatId, StateEnum.ENTERED_ANN_PRICE);
@@ -314,7 +314,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             sendMessage.setText("Narx kiriting");
             sendMsg(sendMessage);
         }
-        else if(key.equals("region") && userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_REGION)) {
+        else if (key.equals("region") && userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_REGION)) {
             sendMsg(botService.deletePreviousMessage(chatId, messageId));
 
             userBotService.setUserState(chatId, StateEnum.ENTERED_ANN_REGION);
@@ -338,7 +338,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             }
             sendMsg(sendMessage);
         }
-        else if(key.equals("finish") && userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_IMAGE)) {
+        else if (key.equals("finish") && userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_IMAGE)) {
             sendMsg(botService.deletePreviousMessage(chatId, messageId));
 
             userBotService.setUserState(chatId, StateEnum.FINISH);
@@ -372,11 +372,12 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
 
                 sendMessage.setText("E'lon muvaffaqiyatli yaratildi ✅");
                 sendMessage.setReplyMarkup(ReplyKeyboardUtil.getUserProfileButton());
+
             } else {
                 sendMessage.setText("E'lon yaratilmadi ❌\n\n Iltimos yana urinib ko'ring.");
             }
             sendMsg(sendMessage);
-
+            getUserAnnouncements(chatId);
             photoSizeList.clear();
             documentList.clear();
         }
@@ -394,9 +395,25 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             sendMsg(sendMessage);
             getUserAnnouncements(chatId);
         }
-        else if(key.equals("page")) {
+        else if (key.equals("page") && userBotService.getUserState(chatId).equals(StateEnum.LOGINED)) {
             int page = Integer.parseInt(split[1]);
             getUserAnnouncements(chatId, page, messageId);
+        }
+        else if (key.equals("inActive") && userBotService.getUserState(chatId).equals(StateEnum.LOGINED)) {
+            Long annId = Long.valueOf(split[1]);
+            announcementService.changeActiveStatus(annId, !announcementService.getById(annId).getIsActive());
+            getUserAnnouncements(chatId, BotConstants.USER_SELECTED_PAGE.get(chatId), messageId);
+        }
+        else if (key.equals("delete") && userBotService.getUserState(chatId).equals(StateEnum.LOGINED)) {
+            Long annId = Long.valueOf(split[1]);
+            announcementService.deleteAnnouncement(annId);
+
+            sendMsg(botService.deletePreviousMessage(chatId, messageId));
+            sendMsg(botService.deletePreviousMessage(chatId, messageId - 1));
+
+            sendMessage.setText("E'lon muvaffaqiyatli o'chirildi ✅");
+            sendMsg(sendMessage);
+            getUserAnnouncements(chatId);
         }
 
     }
@@ -493,6 +510,8 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
 
                 sendMessage.setParseMode("html");
 
+                BotConstants.USER_SELECTED_PAGE.put(chatId, 0);
+
                 String status = announcementEntity1.getIsActive() ? "Aktiv ✅" : "Aktiv emas ❌";
 
                 sendMessage.setText(
@@ -524,6 +543,8 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                 sendMsg(botService.editPhotoMessage(chatId, messageId, announcementEntity1));
 
                 editMessageText.setParseMode("html");
+
+                BotConstants.USER_SELECTED_PAGE.put(chatId, page);
 
                 String status = announcementEntity1.getIsActive() ? "Aktiv ✅" : "Aktiv emas ❌";
 
