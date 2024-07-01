@@ -105,7 +105,7 @@ public class AnnounceAdditionComboValueController {
     @PreAuthorize("permitAll()")
     @GetMapping("/get-list/{groupId}")
     @Operation(summary = "The Addition Group will receive yaa items", description = "give a Addition Group ID")
-    public ApiResponse<Object> getAdditionGroupByCategoryId(@RequestParam("groupId") Long groupId){
+    public ApiResponse<Object> getAdditionGroupByCategoryId(@PathVariable Long groupId){
 
 
         List<AdditionComboValueEntity> list = service.additionComboValueListByGroupId(groupId);

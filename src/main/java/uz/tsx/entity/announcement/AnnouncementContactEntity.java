@@ -12,15 +12,10 @@ import uz.tsx.entity.base.BaseEntity;
 @Setter
 @Table(name = TableNames.ANNOUNCEMENT_CONTACT)
 public class AnnouncementContactEntity extends BaseEntity {
-    private Double longitude;
-
-    private Double latitude;
 
     private String phone;
 
     private String gmail;
-
-    private String address;
 
     @Column(name = "regionId")
     private Long regionId;
