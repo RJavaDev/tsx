@@ -3,6 +3,7 @@ package uz.tsx.bot.util;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import uz.tsx.bot.entity.UserBotEntity;
 import uz.tsx.entity.CategoryEntity;
 import uz.tsx.entity.CurrencyEntity;
 import uz.tsx.entity.RegionEntity;
@@ -111,7 +112,7 @@ public class InlineKeyboardUtil {
         return inlineKeyboardMarkup;
     }
 
-    public static ReplyKeyboard categoryButtons(List<CategoryEntity> categoryEntityList) {
+    public static ReplyKeyboard categoryButtons(List<CategoryEntity> categoryEntityList, UserBotEntity botUser) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         inlineKeyboardMarkup.setKeyboard(rows);
@@ -120,7 +121,7 @@ public class InlineKeyboardUtil {
 
         for (int i = 0; i < categoryEntityList.size(); i++) {
             CategoryEntity categoryEntity = categoryEntityList.get(i);
-            row.add(button(categoryEntity.getNameUz(), "category-" + categoryEntity.getId()));
+            row.add(button(categoryEntity.languageFilterForBot(botUser.getLanguage()), "category-" + categoryEntity.getId()));
             if ((i + 1) % 2 == 0) {
                 row = new ArrayList<>();
             } else {

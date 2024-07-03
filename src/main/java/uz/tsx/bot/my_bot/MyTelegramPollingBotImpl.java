@@ -19,9 +19,11 @@ import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import uz.tsx.bot.constantsBot.BotConstants;
+import uz.tsx.bot.entity.UserBotEntity;
 import uz.tsx.bot.enums.StateEnum;
 import uz.tsx.bot.repository.UserBotRepository;
 import uz.tsx.bot.service.BotService;
+import uz.tsx.bot.service.MessageUtils;
 import uz.tsx.bot.service.UserBotService;
 import uz.tsx.bot.service.FileService;
 import uz.tsx.bot.util.InlineKeyboardUtil;
@@ -60,6 +62,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
     private final AnnouncementService announcementService;
     private final FileService fileService;
     private final BotService botService;
+    private final MessageUtils messageUtils;
 
     //entities
     private AnnouncementEntity announcementEntity;
@@ -67,6 +70,8 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
     private AnnouncementPriceEntity announcementPriceEntity;
     private final List<List<PhotoSize>> photoSizeList = new ArrayList<>();
     private final List<Document> documentList = new ArrayList<>();
+
+    private UserBotEntity botUser;
 
     @Value("${tsx.project.bot.token}")
     private String BOT_TOKEN;
@@ -85,6 +90,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
+        botUser = userBotRepository.getUserByChatId(String.valueOf(update.getMessage().getChatId())).get();
         if (update.hasMessage()){
             Message message = update.getMessage();
             if(message.hasText()){
@@ -164,7 +170,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                 sendMsg(sendMessage);
             } else {
                 userBotService.setUserState(chatId, StateEnum.LOGINED);
-                sendMessage.setText("Sahifangizga xush kelibsiz 🌟");
+                sendMessage.setText(messageUtils.getMessage("bot.welcome.your.page", botUser.getLanguage()) + " 🌟");
                 sendMessage.setReplyMarkup(ReplyKeyboardUtil.getUserProfileButton());
                 sendMsg(sendMessage);
                 getUserAnnouncements(chatId);
@@ -213,7 +219,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             sendMsg(sendMessage);
 
             sendMessage.setText("Kategoriyalar \uD83D\uDCCB");
-            sendMessage.setReplyMarkup(InlineKeyboardUtil.categoryButtons(categoryEntityList));
+            sendMessage.setReplyMarkup(InlineKeyboardUtil.categoryButtons(categoryEntityList, botUser));
             sendMsg(sendMessage);
         }
         else if(userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_DESCRIPTION)) {
@@ -295,7 +301,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                 sendMessage.setReplyMarkup(InlineKeyboardUtil.regionButtons(regionEntityList));
             } else {
                 sendMessage.setText("Kategoriya ...");
-                sendMessage.setReplyMarkup(InlineKeyboardUtil.categoryButtons(childCategoriesByParentId));
+                sendMessage.setReplyMarkup(InlineKeyboardUtil.categoryButtons(childCategoriesByParentId, botUser));
             }
             sendMsg(sendMessage);
         }
