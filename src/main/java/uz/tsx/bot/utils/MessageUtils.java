@@ -1,14 +1,14 @@
-package uz.tsx.bot.service;
+package uz.tsx.bot.utils;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 import java.util.Objects;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class MessageUtils {
 

@@ -2,6 +2,9 @@ package uz.tsx.bot.enums;
 
 public enum StateEnum {
     START,
+    CHANGE_LANG,
+    HOME,
+    SETTINGS,
     MY_ANNS,
     GET_USER_ANNS,
     ENTERED_NEW_PASS,
