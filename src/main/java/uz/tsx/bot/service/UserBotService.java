@@ -65,12 +65,22 @@ public class UserBotService {
         return StateEnum.valueOf(state);
     }
 
-    public void createBotUser(String chatId, String languageCode){
+    public String getUserLang(String chatId) {
+       return userBotRepository.getUserLang(chatId);
+    }
+
+    public void createBotUser(String chatId){
         UserBotEntity userBotEntity=new UserBotEntity();
-        userBotEntity.setLanguage(languageCode);
         userBotEntity.setChatId(chatId);
         userBotEntity.setCreatedDate(LocalDateTime.now());
         userBotRepository.save(userBotEntity);
+    }
+
+    public void setUserLang(String chatId, String languageCode) {
+        getUserByChatId(chatId).ifPresent(userBotEntity -> {
+            userBotEntity.setLanguage(languageCode);
+            userBotRepository.save(userBotEntity);
+        });
     }
 
     public Optional<AnnouncementEntity> getUserAnnouncement(String chatId, int page) {
