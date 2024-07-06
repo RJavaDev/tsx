@@ -62,7 +62,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "        LEFT JOIN tsx_attach tsxa ON tsxa.id = aa.attach_id\n" +
             "        LEFT JOIN tsx_currency c ON ap.currency_id = c.id\n" +
             "WHERE\n" +
-            "    a.status <> 'DELETED'\n" +
+            "    a.status <> 'DELETED' AND a.is_active <> false \n" +
             "GROUP BY\n" +
             "    a.id,\n" +
             "    c.id,\n" +
@@ -123,7 +123,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "             ) AS user_address\n" +
             "    ) AS f ON f.id = a.category_id\n" +
             "WHERE\n" +
-            "    a.status <> 'DELETED'\n" +
+            "    a.status <> 'DELETED' AND a.is_active <> false \n" +
             "GROUP BY\n" +
             "    a.id, \n" +
             "    createdDate,\n" +
@@ -136,10 +136,8 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "ORDER BY\n" +
             "    a.id DESC",  countQuery = "SELECT\n" +
             "    count(a.id)\n" +
-            "\n" +
             "FROM\n" +
             "    tsx_announcement a\n" +
-            "\n" +
             "        INNER JOIN (\n" +
             "        SELECT *\n" +
             "        FROM (\n" +
@@ -170,7 +168,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "             ) AS user_address\n" +
             "    ) AS f ON f.id = a.category_id\n" +
             "WHERE\n" +
-            "    a.status <> 'DELETED'",nativeQuery = true)
+            "    a.status <> 'DELETED' AND a.is_active <> false",nativeQuery = true)
     Page<AnnouncementInterface> getAnnouncementByCategoryId(Long categoryId, PageRequest of);
 
     @Query(value = "SELECT\n" +
@@ -205,7 +203,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "         LEFT JOIN tsx_announcement_price ap ON tsxa.price_tag_id = ap.id\n" +
             "         LEFT JOIN tsx_announcement_contact tsxac ON tsxa.contact_info_id = tsxac.id\n" +
             "         LEFT JOIN tsx_currency c ON ap.currency_id = c.id\n" +
-            "WHERE\n" +
+            "WHERE tsxa.status <> 'DELETED' AND tsxa.is_active <> false AND \n" +
             "    (:categoryId IS NULL OR tsxa.category_id = (\n" +
             "        SELECT id\n" +
             "        FROM ( WITH RECURSIVE category_parentId AS (\n" +
@@ -222,7 +220,6 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "                tsx_child.parent_id\n" +
             "            FROM\n" +
             "                tsx_category tsx_child\n" +
-            "\n" +
             "                    INNER JOIN category_parentId rn ON rn.id = tsx_child.parent_id\n" +
             "        )\n" +
             "               SELECT\n" +
@@ -230,8 +227,6 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "               FROM\n" +
             "                   category_parentId\n" +
             "             ) as category where category.id = tsxa.category_id))\n" +
-            "\n" +
-            "\n" +
             "  AND (:regionId IS NULL OR tsxac.region_id = (\n" +
             "    SELECT id\n" +
             "    FROM ( WITH RECURSIVE region_parentId AS (\n" +
