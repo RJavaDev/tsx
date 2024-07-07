@@ -18,7 +18,7 @@ public class AttachConvert {
 
     private static final String ATTACH_UPLOAD_FOLDER = "images/";
 
-    private static final String ATTACH_PATH = "http://localhost:8080/images/";
+    private static final String ATTACH_PATH = "https://tez-sotish-api.uz/images/";
 
     private static final String DEFAULT_USER_IMAGE = "user/user.jpg";
 
