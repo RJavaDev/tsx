@@ -13,11 +13,8 @@ public class AnnouncementContactConvert {
     public AnnouncementContactEntity convertToEntity(AnnouncementContactCreateDto dto){
         AnnouncementContactEntity entity = new AnnouncementContactEntity();
 
-        entity.setLongitude(dto.getLongitude());
-        entity.setLatitude(dto.getLatitude());
         entity.setPhone(dto.getPhone());
         entity.setGmail(dto.getGmail());
-        entity.setAddress(dto.getAddress());
         entity.setRegionId(dto.getRegionId());
 
         return entity;
@@ -29,11 +26,8 @@ public class AnnouncementContactConvert {
         AnnouncementContactDto dto = new AnnouncementContactDto();
 
         dto.setId(contactInfo.getId());
-        dto.setLongitude(contactInfo.getLatitude());
-        dto.setLatitude(contactInfo.getLatitude());
         dto.setPhone(contactInfo.getPhone());
         dto.setGmail(contactInfo.getGmail());
-        dto.setAddress(contactInfo.getAddress());
 
         return dto;
     }

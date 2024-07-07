@@ -43,4 +43,7 @@ public interface UserBotRepository extends JpaRepository<UserBotEntity,Long> {
     @Modifying
     @Query(value = "DELETE FROM tsx_user_bot WHERE chat_id = :chatId AND status <> 'DELETED'", nativeQuery = true)
     void deleteUserByChatId(@Param("chatId") String chatId);
+
+    @Query(value = "SELECT language FROM tsx_user_bot WHERE chat_id = :chatId AND status <> 'DELETED'", nativeQuery = true)
+    String getUserLang(@Param("chatId") String chatId);
 }

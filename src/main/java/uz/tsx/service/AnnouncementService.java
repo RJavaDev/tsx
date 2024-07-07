@@ -1,7 +1,6 @@
 package uz.tsx.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 import uz.tsx.dto.announcement.AnnouncementDto;
 import uz.tsx.dto.dtoUtil.BigDataTable;
@@ -13,6 +12,7 @@ import uz.tsx.interfaces.AnnouncementInterface;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface AnnouncementService {
 
@@ -41,4 +41,9 @@ public interface AnnouncementService {
     BigDataTable<AnnouncementInterface> searchAnnouncementAndFilter(FilterForm filter);
 
     List<AnnouncementEntity> getAnnouncementListByUserEntity(Long userId);
+
+    void changeActiveStatus(Long announcementId, Boolean isActive);
+
+    void deleteAnnouncement(Long announcementId);
+
 }

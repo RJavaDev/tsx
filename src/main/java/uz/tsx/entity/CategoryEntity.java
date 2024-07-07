@@ -65,4 +65,12 @@ public class CategoryEntity extends BaseEntity {
     public CategoryDto toDto(String... ignoreProperties){
         return toDto(this, new CategoryDto(), ignoreProperties);
     }
+
+    public String languageFilterForBot(String lang){
+        return switch (lang) {
+            case "uz" -> nameUz;
+            case "ru" -> nameRu;
+            default -> nameEn;
+        };
+    }
 }

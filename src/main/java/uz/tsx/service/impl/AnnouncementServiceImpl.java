@@ -98,8 +98,18 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
+    public void changeActiveStatus(Long announcementId, Boolean isActive) {
+        repository.changeActiveStatus(announcementId, isActive);
+    }
+
+    @Override
+    public void deleteAnnouncement(Long announcementId) {
+        repository.delete(announcementId);
+    }
+
+    @Override
     public List<AnnouncementEntity> getAnnouncementListByUserEntity(Long userId) {
-        return announcementRepository.getAnnouncementListByUserEntityId(userId);
+        return announcementRepository.getAnnouncementListByUserId(userId);
     }
 
     @Override

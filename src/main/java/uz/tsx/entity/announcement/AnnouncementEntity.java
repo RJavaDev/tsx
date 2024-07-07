@@ -58,7 +58,7 @@ public class AnnouncementEntity extends BaseEntity {
     @Column(name = "i_saw")
     private Integer iSaw;
 
-    @Column(name = "price_tag_id")
+    @Column(name = "price_tag_id", columnDefinition = "boolean default true")
     private Long priceTagId;
 
     @OneToOne(fetch = FetchType.LAZY)

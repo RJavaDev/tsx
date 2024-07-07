@@ -48,4 +48,12 @@ public class RegionEntity extends BaseForParentAndChild {
     public RegionDto toDto(String... ignoreProperties) {
         return toDto(this, new RegionDto(), ignoreProperties);
     }
+
+    public String languageFilterForBot(String lang){
+        return switch (lang) {
+            case "uz" -> super.getNameUz();
+            case "ru" -> super.getNameRu();
+            default -> super.getNameEn();
+        };
+    }
 }
