@@ -52,13 +52,13 @@ public class AnnouncementEntity extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "isActive")
+    @Column(name = "isActive", columnDefinition = "boolean default true")
     private Boolean isActive;
 
     @Column(name = "i_saw")
     private Integer iSaw;
 
-    @Column(name = "price_tag_id", columnDefinition = "boolean default true")
+    @Column(name = "price_tag_id")
     private Long priceTagId;
 
     @OneToOne(fetch = FetchType.LAZY)

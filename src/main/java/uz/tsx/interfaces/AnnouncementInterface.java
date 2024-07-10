@@ -2,6 +2,7 @@ package uz.tsx.interfaces;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public interface AnnouncementInterface {
     Long getId();
@@ -23,4 +24,12 @@ public interface AnnouncementInterface {
     String getAttachType();
     String getAttachPath();
     String getRouter();
+
+    default String[] getAddressByAcceptLanguage(){
+//      en ru uz
+        if(Objects.nonNull(getAddress())){
+            return getAddress().split("\\|");
+        }
+        return getAddress().split("");
+    }
 }
