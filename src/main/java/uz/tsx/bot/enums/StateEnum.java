@@ -16,5 +16,6 @@ public enum StateEnum {
     ENTERED_ANN_CURRENCY,
     ENTERED_ANN_PRICE,
     ENTERED_ANN_IMAGE,
-    FINISH
+    FINISH,
+    EDIT_ANN
 }

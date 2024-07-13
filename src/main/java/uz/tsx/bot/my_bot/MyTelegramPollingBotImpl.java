@@ -38,6 +38,7 @@ import uz.tsx.repository.UserRepository;
 import uz.tsx.service.*;
 
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -272,7 +273,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             sendMessage.setReplyMarkup(replyKeyboardUtil.mainMenuButton(chatId));
             sendMsg(sendMessage);
         }
-        else if(userBotService.getUserState(chatId).equals(StateEnum.LOGINED) && text.equals(messageUtils.getMessage("bot.button.home_page", userBotService.getUserLang(chatId)))) {
+        else if((userBotService.getUserState(chatId).equals(StateEnum.LOGINED) || userBotService.getUserState(chatId).equals(StateEnum.EDIT_ANN)) && text.equals(messageUtils.getMessage("bot.button.home_page", userBotService.getUserLang(chatId)))) {
             sendMessage.setText(messageUtils.getMessage("bot.home_page", userBotService.getUserLang(chatId)));
             userBotService.setUserState(chatId, StateEnum.HOME);
             sendMessage.setReplyMarkup(replyKeyboardUtil.mainMenuButton(chatId));
@@ -462,6 +463,35 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             sendMessage.setText(messageUtils.getMessage("bot.ann_deleted_success", userBotService.getUserLang(chatId)));
             sendMsg(sendMessage);
             showUserAnnouncements(chatId);
+        } else if (key.equals("edit") && userBotService.getUserState(chatId).equals(StateEnum.LOGINED)) {
+            userBotService.setUserState(chatId, StateEnum.EDIT_ANN);
+            Long annId = Long.valueOf(split[1]);
+
+            AnnouncementEntity announcementEntity1 = announcementService.getById(annId);
+            EditMessageText editMessageText = new EditMessageText();
+            editMessageText.setChatId(chatId);
+            editMessageText.setMessageId(messageId);
+            editMessageText.setParseMode("html");
+
+            String status = announcementEntity1.getIsActive() ? messageUtils.getMessage("bot.active", userBotService.getUserLang(chatId)) :
+                    messageUtils.getMessage("bot.inActive", userBotService.getUserLang(chatId));
+
+            editMessageText.setText(
+                            "\n\n<strong>" + status + "</strong>" +
+                            "\n\n<i>" + announcementEntity1.getTitle() + "</i>" +
+                            "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() + " " + announcementEntity1.getPriceTag().getCurrency().getName() +
+                            "</b>\n\n" + announcementEntity1.getContactInfo().getRegion().getNameUz() +
+                            "\n\n" + announcementEntity1.getCreatedDate()
+            );
+
+            editMessageText.setReplyMarkup(inlineKeyboardUtil.annActionButtons(chatId, annId));
+
+            sendMsg(editMessageText);
+
+        } else if (key.equals("backButton") && userBotService.getUserState(chatId).equals(StateEnum.EDIT_ANN)) {
+            botService.deletePreviousMessage(chatId, messageId - 1);
+            showUserAnnouncements(chatId, BotConstants.USER_SELECTED_PAGE.get(chatId), messageId);
+            userBotService.setUserState(chatId, StateEnum.LOGINED);
         }
 
     }
@@ -564,13 +594,14 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                 String status = announcementEntity1.getIsActive() ? messageUtils.getMessage("bot.active", userBotService.getUserLang(chatId)) :
                         messageUtils.getMessage("bot.inActive", userBotService.getUserLang(chatId));
 
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                 sendMessage.setText(
                         "<strong>№" + 1 + "</strong>" +
                                 "\n\n<strong>" + status + "</strong>" +
                                 "\n\n<i>" + announcementEntity1.getTitle() + "</i>" +
                                 "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() + " " + announcementEntity1.getPriceTag().getCurrency().getName() +
                                 "</b>\n\n" + announcementEntity1.getContactInfo().getRegion().getNameUz() +
-                                "\n\n" + announcementEntity1.getCreatedDate()
+                                "\n\n" + announcementEntity1.getCreatedDate().format(formatter)
                 );
 
                 sendMessage.setReplyMarkup(inlineKeyboardUtil.actionButtonsWithPage(announcementEntity1.getId(), userBotService.getUserAnnouncementCount(chatId), announcementEntity1.getIsActive(), chatId));
@@ -599,13 +630,14 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                 String status = announcementEntity1.getIsActive() ? messageUtils.getMessage("bot.active", userBotService.getUserLang(chatId)) :
                         messageUtils.getMessage("bot.inActive", userBotService.getUserLang(chatId));
 
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                 editMessageText.setText(
                         "<strong>№" + (page + 1) + "</strong>" +
                                 "\n\n<strong>" + status + "</strong>" +
                                 "\n\n<i>" + announcementEntity1.getTitle() + "</i>" +
                                 "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() + " " + announcementEntity1.getPriceTag().getCurrency().getName() +
                                 "</b>\n\n" + announcementEntity1.getContactInfo().getRegion().getNameUz() +
-                                "\n\n" + announcementEntity1.getCreatedDate()
+                                "\n\n" + announcementEntity1.getCreatedDate().format(formatter)
                 );
 
                 editMessageText.setReplyMarkup(inlineKeyboardUtil.actionButtonsWithPage(announcementEntity1.getId(), userBotService.getUserAnnouncementCount(chatId), announcementEntity1.getIsActive(), chatId));
