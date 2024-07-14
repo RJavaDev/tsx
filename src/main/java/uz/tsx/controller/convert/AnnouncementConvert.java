@@ -111,7 +111,7 @@ public class AnnouncementConvert {
         miniInformation.setRouter(interfaceDB.getRouter());
         miniInformation.setId(interfaceDB.getId());
         miniInformation.setTitle(interfaceDB.getTitle());
-        miniInformation.setCreateDateTime(interfaceDB.getCreatedDate());
+        miniInformation.setCreatedDate(interfaceDB.getCreatedDate());
         miniInformation.setPrice(interfaceDB.getPrice());
         miniInformation.setCurrencyCode(interfaceDB.getCurrencyCode());
         miniInformation.setAddress(interfaceDB.getAddressByAcceptLanguage());
