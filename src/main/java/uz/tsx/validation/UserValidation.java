@@ -15,17 +15,17 @@ public class UserValidation {
     public void validateUsername(UserEntity user){
         String emailOrPhone = user.getEmailOrPhone();
 
-        if(isUserEmailAddress(emailOrPhone)){
+        Matcher matcherPhoneNumber = getMatcherPhoneNumber(emailOrPhone);
+        if(matcherPhoneNumber.matches()){
+            user.setEmailOrPhone(Characters.PHONE_NUMBER_PREFIX + getPhoneNumberByPattern(matcherPhoneNumber));
+            user.setByLogin(ByLoginEnumType.PHONE_NUMBER);
+        }else {
+            throw new IllegalArgumentException(emailOrPhone + "Phone number is incorrect");
+        }
+        /*if(isUserEmailAddress(emailOrPhone)){
             user.setByLogin(ByLoginEnumType.EMAIL);
         }else {
-            Matcher matcherPhoneNumber = getMatcherPhoneNumber(emailOrPhone);
-            if(matcherPhoneNumber.matches()){
-                user.setEmailOrPhone(Characters.PHONE_NUMBER_PREFIX + getPhoneNumberByPattern(matcherPhoneNumber));
-                user.setByLogin(ByLoginEnumType.PHONE_NUMBER);
-            }else {
-                throw new IllegalArgumentException(emailOrPhone + " Email or phone number is incorrect");
-            }
-        }
+        }*/
     }
 
     public boolean checkUserPhoneNumber(String phoneNumber){

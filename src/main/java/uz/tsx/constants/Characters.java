@@ -6,7 +6,7 @@ public interface Characters {
 
     String FOLDER_BOUNDARY = "/";
 
-    String PHONE_NUMBER_PREFIX = "998";
+    String PHONE_NUMBER_PREFIX = "+998";
 
         /*
         REGEX CHECK PHONE NUMBER TEM
