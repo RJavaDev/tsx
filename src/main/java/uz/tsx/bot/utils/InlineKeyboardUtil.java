@@ -18,22 +18,22 @@ public class InlineKeyboardUtil {
     private final MessageUtils messageUtils;
     private final UserBotService userBotService;
 
-    public InlineKeyboardMarkup actionButtonsWithPage(Long annId, int pages, Boolean isActive, String chatId) {
+    public InlineKeyboardMarkup actionButtonsWithPage(Long annId, int pages, Boolean isActive, String lang) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         inlineKeyboardMarkup.setKeyboard(rows);
 
         List<InlineKeyboardButton> row = new ArrayList<>();
 
-        row.add(button(messageUtils.getMessage("bot.button.edit", userBotService.getUserLang(chatId)),"edit-" + annId));
+        row.add(button(messageUtils.getMessage("bot.button.edit", lang),"edit-" + annId));
 
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         if(isActive) {
-            row1.add(button(messageUtils.getMessage("bot.button.inActive", userBotService.getUserLang(chatId)),"inActive-" + annId));
+            row1.add(button(messageUtils.getMessage("bot.button.inActive", lang),"inActive-" + annId));
         } else {
-            row1.add(button(messageUtils.getMessage("bot.button.active", userBotService.getUserLang(chatId)), "inActive-" + annId));
+            row1.add(button(messageUtils.getMessage("bot.button.active", lang), "inActive-" + annId));
         }
-        row.add(button(messageUtils.getMessage("bot.button.delete", userBotService.getUserLang(chatId)), "delete-" + annId));
+        row.add(button(messageUtils.getMessage("bot.button.delete", lang), "delete-" + annId));
         rows.add(row);
         rows.add(row1);
 
@@ -51,31 +51,31 @@ public class InlineKeyboardUtil {
         return inlineKeyboardMarkup;
     }
 
-    public InlineKeyboardMarkup annActionButtons(String chatId, Long annId) {
+    public InlineKeyboardMarkup annActionButtons(String lang, Long annId) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         inlineKeyboardMarkup.setKeyboard(rows);
 
         List<InlineKeyboardButton> row = new ArrayList<>();
-        row.add(button(messageUtils.getMessage("bot.button.edit_title", userBotService.getUserLang(chatId)),"inActive-" + annId));
+        row.add(button(messageUtils.getMessage("bot.button.edit_title", lang),"edit_title-" + annId));
 
         List<InlineKeyboardButton> row1 = new ArrayList<>();
-        row1.add(button(messageUtils.getMessage("bot.button.edit_description", userBotService.getUserLang(chatId)),"inActive-" + annId));
+        row1.add(button(messageUtils.getMessage("bot.button.edit_description", lang),"edit_description-" + annId));
 
         List<InlineKeyboardButton> row2 = new ArrayList<>();
-        row2.add(button(messageUtils.getMessage("bot.button.edit_price", userBotService.getUserLang(chatId)),"inActive-" + annId));
+        row2.add(button(messageUtils.getMessage("bot.button.edit_price", lang),"edit_price-" + annId));
 
         List<InlineKeyboardButton> row3 = new ArrayList<>();
-        row3.add(button(messageUtils.getMessage("bot.button.edit_category", userBotService.getUserLang(chatId)),"inActive-" + annId));
+        row3.add(button(messageUtils.getMessage("bot.button.edit_category", lang),"edit_category-" + annId));
 
         List<InlineKeyboardButton> row4 = new ArrayList<>();
-        row4.add(button(messageUtils.getMessage("bot.button.edit_region", userBotService.getUserLang(chatId)),"inActive-" + annId));
+        row4.add(button(messageUtils.getMessage("bot.button.edit_region", lang),"edit_region-" + annId));
 
         List<InlineKeyboardButton> row5 = new ArrayList<>();
-        row5.add(button(messageUtils.getMessage("bot.button.edit_image", userBotService.getUserLang(chatId)),"inActive-" + annId));
+        row5.add(button(messageUtils.getMessage("bot.button.edit_image", lang),"edit_image-" + annId));
 
         List<InlineKeyboardButton> backButton = new ArrayList<>();
-        backButton.add(button(messageUtils.getMessage("bot.button.back", userBotService.getUserLang(chatId)),"backButton-" + annId));
+        backButton.add(button(messageUtils.getMessage("bot.button.back", lang),"backButton-" + annId));
         rows.addAll(List.of(row, row1, row2, row3, row4, row5, backButton));
 
         return inlineKeyboardMarkup;

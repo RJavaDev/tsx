@@ -118,11 +118,16 @@ public class AttachServiceImpl implements AttachService {
     @Override
     public String deleteById(String fileName) {
         try {
-            AttachEntity entity = getAttach(fileName);
-            Path file = Paths.get(ATTACH_UPLOAD_FOLDER + entity.getPath() + "/" + fileName + "." + entity.getType());
+            AttachEntity attach = getAttach(fileName);
+            Path file1 = Paths.get(ATTACH_UPLOAD_FOLDER + attach.getPath() + "/" + attach.getId() + "." + attach.getType());
+            Path file2 = Paths.get(ATTACH_UPLOAD_FOLDER + attach.getPath() + "/" + attach.getId() + "_h200." + attach.getType());
 
-            Files.delete(file);
-            repository.delete(entity);
+            Files.delete(file1);
+            Files.delete(file2);
+
+            repository.deleteAnnouncementAttachByAttachId(attach.getId());
+
+            repository.delete(attach);
 
             return "deleted";
         } catch (IOException e) {

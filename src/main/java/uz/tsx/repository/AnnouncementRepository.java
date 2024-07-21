@@ -196,4 +196,5 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
     @Transactional
     @Query(value = "UPDATE tsx_announcement SET status = 'DELETED' WHERE id = :announcementId", nativeQuery = true)
     void delete(@Param("announcementId") Long announcementId);
+
 }

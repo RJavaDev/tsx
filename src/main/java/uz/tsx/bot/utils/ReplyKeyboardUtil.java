@@ -19,7 +19,7 @@ public class ReplyKeyboardUtil {
     private final MessageUtils messageUtils;
     private final UserBotService userBotService;
 
-    public ReplyKeyboard mainMenuButton(String chatId) {
+    public ReplyKeyboard mainMenuButton(String lang) {
 
         KeyboardRow row1=new KeyboardRow();
         KeyboardRow row2=new KeyboardRow();
@@ -28,12 +28,12 @@ public class ReplyKeyboardUtil {
         webAppInfo.setUrl("https://tsx-bot-web.netlify.app/");
 
         KeyboardButton keyboardButton = new KeyboardButton();
-        keyboardButton.setText(messageUtils.getMessage("bot.button.anns", userBotService.getUserLang(chatId)));
+        keyboardButton.setText(messageUtils.getMessage("bot.button.anns", lang));
         keyboardButton.setWebApp(webAppInfo);
 
         row1.add(keyboardButton);
-        row2.add(new KeyboardButton(messageUtils.getMessage("bot.button.settings", userBotService.getUserLang(chatId))));
-        row2.add(new KeyboardButton(messageUtils.getMessage("bot.button.my_anns", userBotService.getUserLang(chatId))));
+        row2.add(new KeyboardButton(messageUtils.getMessage("bot.button.settings", lang)));
+        row2.add(new KeyboardButton(messageUtils.getMessage("bot.button.my_anns", lang)));
         List<KeyboardRow> rows = new ArrayList<>();
         rows.add(row1);
         rows.add(row2);
@@ -46,14 +46,14 @@ public class ReplyKeyboardUtil {
         return keyboardMarkup;
     }
 
-    public ReplyKeyboard settingsButtons(String chatId) {
+    public ReplyKeyboard settingsButtons(String lang) {
         KeyboardRow row1 = new KeyboardRow();
         KeyboardRow row2 = new KeyboardRow();
 
-        row1.add(new KeyboardButton(messageUtils.getMessage("bot.button.change_lang", userBotService.getUserLang(chatId))));
-        row1.add(new KeyboardButton(messageUtils.getMessage("bot.button.feedback", userBotService.getUserLang(chatId))));
+        row1.add(new KeyboardButton(messageUtils.getMessage("bot.button.change_lang", lang)));
+        row1.add(new KeyboardButton(messageUtils.getMessage("bot.button.feedback", lang)));
 
-        row2.add(new KeyboardButton(messageUtils.getMessage("bot.button.back", userBotService.getUserLang(chatId))));
+        row2.add(new KeyboardButton(messageUtils.getMessage("bot.button.back", lang)));
         ReplyKeyboardMarkup keyboardMarkup=new ReplyKeyboardMarkup();
         keyboardMarkup.setKeyboard(List.of(row1, row2));
         keyboardMarkup.setResizeKeyboard(true);
@@ -62,14 +62,14 @@ public class ReplyKeyboardUtil {
         return keyboardMarkup;
     }
 
-    public ReplyKeyboard contactButton(String chatId) {
+    public ReplyKeyboard contactButton(String lang) {
         KeyboardRow row = new KeyboardRow();
 
         KeyboardButton keyboardButton = new KeyboardButton();
         keyboardButton.setText(BotConstants.SHARE_CONTACT);
         keyboardButton.setRequestContact(true);
         row.add(keyboardButton);
-        row.add(new KeyboardButton(messageUtils.getMessage("bot.button.back", userBotService.getUserLang(chatId))));
+        row.add(new KeyboardButton(messageUtils.getMessage("bot.button.back", lang)));
 
         ReplyKeyboardMarkup keyboardMarkup=new ReplyKeyboardMarkup();
         keyboardMarkup.setKeyboard(List.of(row));
@@ -80,9 +80,9 @@ public class ReplyKeyboardUtil {
 
     }
 
-    public ReplyKeyboard backButton(String chatId) {
+    public ReplyKeyboard backButton(String lang) {
         KeyboardRow row = new KeyboardRow();
-        row.add(new KeyboardButton(messageUtils.getMessage("bot.button.back", userBotService.getUserLang(chatId))));
+        row.add(new KeyboardButton(messageUtils.getMessage("bot.button.back", lang)));
         ReplyKeyboardMarkup keyboardMarkup=new ReplyKeyboardMarkup();
         keyboardMarkup.setKeyboard(List.of(row));
         keyboardMarkup.setResizeKeyboard(true);
@@ -92,11 +92,11 @@ public class ReplyKeyboardUtil {
     }
 
 
-    public ReplyKeyboard userProfileButton(String chatId) {
+    public ReplyKeyboard userProfileButton(String lang) {
         KeyboardRow row = new KeyboardRow();
 
-        row.add(new KeyboardButton(messageUtils.getMessage("bot.button.create_new_ann", userBotService.getUserLang(chatId))));
-        row.add(new KeyboardButton(messageUtils.getMessage("bot.button.home_page", userBotService.getUserLang(chatId))));
+        row.add(new KeyboardButton(messageUtils.getMessage("bot.button.create_new_ann", lang)));
+        row.add(new KeyboardButton(messageUtils.getMessage("bot.button.home_page", lang)));
 
         ReplyKeyboardMarkup keyboardMarkup=new ReplyKeyboardMarkup();
         keyboardMarkup.setKeyboard(List.of(row));

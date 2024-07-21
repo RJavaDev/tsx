@@ -46,4 +46,6 @@ public interface AnnouncementService {
 
     void deleteAnnouncement(Long announcementId);
 
+    void update(AnnouncementEntity announcementEntity);
+
 }
