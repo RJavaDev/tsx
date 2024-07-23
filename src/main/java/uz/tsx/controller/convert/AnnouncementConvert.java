@@ -116,11 +116,8 @@ public class AnnouncementConvert {
         miniInformation.setCurrencyCode(interfaceDB.getCurrencyCode());
         miniInformation.setAddress(interfaceDB.getAddressByAcceptLanguage());
         miniInformation.setISaw(interfaceDB.getISaw());
+        miniInformation.setAttachUrlResponses(AttachConvert.convertToAttachUrlDtoForInterface(interfaceDB.getAttachPath()));
 
-        if (Objects.nonNull(interfaceDB.getAttachId())){
-            AttachUrlResponse urlResponse = AttachConvert.convertToAttachUrlDto(interfaceDB.getAttachId(), interfaceDB.getAttachPath(), interfaceDB.getAttachType());
-            miniInformation.setAttachUrlResponses(urlResponse);
-        }
 
         return miniInformation;
     }

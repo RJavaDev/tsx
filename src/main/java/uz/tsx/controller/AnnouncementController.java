@@ -117,7 +117,7 @@ public class AnnouncementController {
                 .body(dtoList)
                 .code(ResponseCode.OK);
     }
-    @PostMapping("/get/list/{categoryId}")
+    @GetMapping("/get/list/{categoryId}")
     public ApiResponse<Object>getAnnouncementList(@PathVariable Long categoryId,@RequestBody(required = false) PageParam pageParam){
         if (pageParam == null) {
             pageParam = new PageParam();
