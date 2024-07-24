@@ -30,14 +30,18 @@ public class AnnouncementMiniInformation extends BaseDto {
 
     private Integer iSaw;
 
-    private LocalDateTime createDateTime=this.getCreatedDate();
+    private LocalDateTime createDateTime;
 
-    public String setAddress(String[] address) {
+    public LocalDateTime getCreateDateTime(){
+        return this.getCreatedDate();
+    }
+
+    public void setAddress(String[] address) {
         Locale locale = LocaleContextHolder.getLocale();
-        return switch (locale.getLanguage()) {
+        switch (locale.getLanguage()) {
             case "uz" -> this.address = address[2];
             case "ru" -> this.address = address[1];
             default -> this.address = address[0];
-        };
+        }
     }
 }
