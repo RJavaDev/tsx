@@ -677,9 +677,9 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
 
                 List<AttachEntity> attachPhotos = editableAnnouncement.getAttachPhotos();
 
-                attachPhotos.forEach(attachEntity -> {
-                    attachService.deleteById(attachEntity.getId());
-                });
+                attachPhotos.forEach(attachEntity ->
+                    attachService.deleteById(attachEntity.getId())
+                );
 
                 editableAnnouncement.setAttachPhotos(attachEntityList);
 
@@ -700,6 +700,10 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
     private void handleContact(Message message) {
         String chatId =String.valueOf(message.getChatId());
         String phoneNumber = message.getContact().getPhoneNumber();
+
+        if(!phoneNumber.startsWith("+"))  {
+            phoneNumber = "+"+phoneNumber;
+        }
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
