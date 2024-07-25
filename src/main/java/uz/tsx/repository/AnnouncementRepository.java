@@ -21,7 +21,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
     @Query(value = "from AnnouncementEntity ae where ae.status <> 'DELETED'")
     Page<AnnouncementEntity> findPage(Pageable pageable);
 
-    @Query(value = "SELECT a.id, a.created_date AS createdDate,aa.attach_id AS attachId, a.title, ac.longitude, ac.latitude, ac.phone, ac.gmail, ac.address,\n" +
+    @Query(value = "SELECT a.id, a.created_date AS createdDate,aa.attach_id AS attachId, a.title, ac.phone, ac.gmail, ac.address,\n" +
             "                     ap.price, ap.is_free AS isFree, ap.is_deal AS isDeal, ap.is_exchange AS isExchange, c.id AS currencyId, c.code AS currencyCode\n" +
             "                   FROM tsx_announcement a\n" +
             "                   LEFT JOIN tsx_announcement_price ap ON a.price_tag_id = ap.id\n" +
@@ -42,12 +42,10 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
     @Query(value = "SELECT tsxa.* FROM tsx_announcement tsxa WHERE tsxa.id = :announceId AND tsxa.status <> 'DELETE'", nativeQuery = true)
     Optional<AnnouncementEntity> getAnnouncementById(@Param("announceId") Long announceId);
 
-    @Query(value = "SELECT DISTINCT\n" +
+    @Query(value = "SELECT \n" +
             "    a.id,\n" +
             "    a.created_date AS createdDate,\n" +
-            "    MAX(tsxa.id) AS attachId,\n" +
-            "    MAX(tsxa.path) AS attachPath,\n" +
-            "    MAX(tsxa.type) AS attachType,\n" +
+            "    MIN(concat(tsxa.path, tsxa.id ||'.'|| tsxa.type)) AS attachPath,\n" +
             "    get_region_address(ac.region_id) as address,\n" +
             "    a.i_saw AS ISaw,\n" +
             "    a.title,\n" +
@@ -58,7 +56,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "    tsx_announcement a\n" +
             "        LEFT JOIN tsx_announcement_price ap ON a.price_tag_id = ap.id\n" +
             "        LEFT JOIN tsx_announcement_contact ac ON a.contact_info_id = ac.id\n" +
-            "        LEFT JOIN announcement_attach aa ON a.id = aa.announcement_id\n" +
+            "        LEFT JOIN announcement_attach aa ON a.id = aa.announcement_id \n" +
             "        LEFT JOIN tsx_attach tsxa ON tsxa.id = aa.attach_id\n" +
             "        LEFT JOIN tsx_currency c ON ap.currency_id = c.id\n" +
             "WHERE\n" +
@@ -66,19 +64,16 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "GROUP BY\n" +
             "    a.id,\n" +
             "    c.id,\n" +
-            "    ac.address,\n" +
             "    ap.price,\n" +
             "    ac.id\n" +
             "ORDER BY a.id DESC",
             nativeQuery = true)
     Page<AnnouncementInterface> getAnnouncementPage(Pageable pageable);
 
-    @Query(value = "SELECT DISTINCT\n" +
+    @Query(value = "SELECT \n" +
             "    a.id,\n" +
             "    a.created_date AS createdDate,\n" +
-            "    MAX(tsxa.id) AS attachId,  \n" +
-            "    MAX(tsxa.path) AS attachPath,\n" +
-            "    MAX(tsxa.type) AS attachType,\n" +
+            "    MIN(concat(tsxa.path, tsxa.id ||'.'|| tsxa.type)) AS attachPath,\n" +
             "    a.i_saw AS iSaw,\n" +
             "    a.title,\n" +
             "    tc.router AS router,\n" +
@@ -128,9 +123,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
     @Query(value = "SELECT\n" +
             "    tsxa.id,\n" +
             "    tsxa.created_date AS createdDate,\n" +
-            "    MAX(tsxphoto.id) AS attachId,\n" +
-            "    MAX(tsxphoto.path) AS attachPath,\n" +
-            "    MAX(tsxphoto.type) AS attachType,\n" +
+            "    MIN(concat(tsxphoto.path, tsxphoto.id ||'.'|| tsxphoto.type)) AS attachPath,\n" +
             "    tsxa.i_saw AS iSaw,\n" +
             "    tsxa.title,\n" +
             "    ap.price,\n" +

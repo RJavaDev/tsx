@@ -111,16 +111,13 @@ public class AnnouncementConvert {
         miniInformation.setRouter(interfaceDB.getRouter());
         miniInformation.setId(interfaceDB.getId());
         miniInformation.setTitle(interfaceDB.getTitle());
-        miniInformation.setCreateDateTime(interfaceDB.getCreatedDate());
+        miniInformation.setCreatedDate(interfaceDB.getCreatedDate());
         miniInformation.setPrice(interfaceDB.getPrice());
         miniInformation.setCurrencyCode(interfaceDB.getCurrencyCode());
         miniInformation.setAddress(interfaceDB.getAddressByAcceptLanguage());
         miniInformation.setISaw(interfaceDB.getISaw());
+        miniInformation.setAttachUrlResponses(AttachConvert.convertToAttachUrlDtoForInterface(interfaceDB.getAttachPath()));
 
-        if (Objects.nonNull(interfaceDB.getAttachId())){
-            AttachUrlResponse urlResponse = AttachConvert.convertToAttachUrlDto(interfaceDB.getAttachId(), interfaceDB.getAttachPath(), interfaceDB.getAttachType());
-            miniInformation.setAttachUrlResponses(urlResponse);
-        }
 
         return miniInformation;
     }

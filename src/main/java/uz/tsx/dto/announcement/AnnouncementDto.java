@@ -44,7 +44,12 @@ public class AnnouncementDto extends BaseDto {
 
     private Map<Long, List<Long>> selectedOptionsByGroup;               // 1 -> [2, 3, 4]    1 - groupId, [2,3,4] - optionIds     ## 0 mean NO-GROUP options
 
-    private LocalDateTime createDateTime=this.getCreatedDate();
+    private LocalDateTime createDateTime;
+
+    public LocalDateTime getCreateDateTime(){
+        return this.getCreatedDate();
+    }
+
     public Map<Long, List<Long>> getSelectedOptionsByGroup() {
         if(additionalOptions == null || additionalOptions.isEmpty())
             return null;

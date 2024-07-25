@@ -53,7 +53,7 @@ public class AnnouncementEntity extends BaseEntity {
     private String description;
 
     @Column(name = "isActive", columnDefinition = "boolean default true")
-    private Boolean isActive;
+    private Boolean isActive = Boolean.TRUE;
 
     @Column(name = "i_saw")
     private Integer iSaw;
