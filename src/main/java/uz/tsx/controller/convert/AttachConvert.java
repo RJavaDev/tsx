@@ -22,6 +22,9 @@ public class AttachConvert {
 
     private static final String DEFAULT_USER_IMAGE = "user/user.jpg";
 
+    private static final String DEFAULT_ANN_IMAGE = "user/elon.jpg";
+    private static final String DEFAULT_ANN_IMAGE_MIN = "user/elon-min.jpg";
+
     public List<AttachResponseDto> from(List<AttachEntity> categoryList) {
         return categoryList.stream().map(AttachConvert::from).toList();
     }
@@ -104,6 +107,18 @@ public class AttachConvert {
         return url;
     }
 
+    public AttachUrlResponse convertToAttachUrlDtoForInterface(String path) {
+        AttachUrlResponse url = new AttachUrlResponse();
+        if(!path.isEmpty()){
+            String[] split = path.split("\\.");
+            url.setOriginFile(ATTACH_PATH + path);
+            url.setMinFile(ATTACH_PATH + split[0] + SUFFIX_MINI_IMG_200 + "." + split[1]);
+            return url;
+        }else {
+            return convertToAttachUrlDtoForAnnouncement();
+        }
+    }
+
     public AttachUrlResponse convertToAttachUrlDto(AttachEntity attach) {
         if (Objects.nonNull(attach)) {
             AttachUrlResponse url = new AttachUrlResponse();
@@ -112,15 +127,16 @@ public class AttachConvert {
             url.setMinFile(ATTACH_PATH + attach.getPath() + attach.getId() + SUFFIX_MINI_IMG_200 + "." + attach.getType());
 
             return url;
+        }else {
+            return convertToAttachUrlDtoForAnnouncement();
         }
-        return null;
     }
 
     public List<AttachUrlResponse> convertToAttachUrlDto(List<AttachEntity> attachList) {
-        if (Objects.nonNull(attachList)) {
+        if (Objects.nonNull(attachList) && !attachList.isEmpty()) {
             return attachList.stream().map(AttachConvert::convertToAttachUrlDto).toList();
         }
-        return null;
+        return Collections.singletonList(convertToAttachUrlDtoForAnnouncement());
     }
     public List<String>convertToAttachUrlMiniDto(List<AttachUrlResponse> mini){
         List<String> minlist=new ArrayList<>();
@@ -151,6 +167,15 @@ public class AttachConvert {
         AttachUrlResponse url = new AttachUrlResponse();
 
         url.setOriginFile(ATTACH_PATH + defaultURL);
+
+        return url;
+    }
+
+    private AttachUrlResponse convertToAttachUrlDtoForAnnouncement() {
+        AttachUrlResponse url = new AttachUrlResponse();
+
+        url.setOriginFile(ATTACH_PATH + DEFAULT_ANN_IMAGE);
+        url.setMinFile(ATTACH_PATH + DEFAULT_ANN_IMAGE_MIN);
 
         return url;
     }

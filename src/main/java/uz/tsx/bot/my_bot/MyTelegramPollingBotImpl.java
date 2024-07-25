@@ -38,6 +38,7 @@ import uz.tsx.repository.UserRepository;
 import uz.tsx.service.*;
 
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -62,6 +63,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
     private final FileService fileService;
     private final BotService botService;
     private final MessageUtils messageUtils;
+    private final AttachService attachService;
 
     //components
     private final ReplyKeyboardUtil replyKeyboardUtil;
@@ -73,6 +75,10 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
     private AnnouncementPriceEntity announcementPriceEntity;
     private final List<List<PhotoSize>> photoSizeList = new ArrayList<>();
     private final List<Document> documentList = new ArrayList<>();
+
+    private AnnouncementPriceEntity editableAnnouncementPriceEntity = new AnnouncementPriceEntity();
+    private AnnouncementContactEntity editableAnnouncementContactEntity = new AnnouncementContactEntity();
+    private AnnouncementEntity editableAnnouncement = new AnnouncementEntity();
 
     @Value("${tsx.project.bot.token}")
     private String BOT_TOKEN;
@@ -150,7 +156,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
 
         User user = message.getFrom();
 
-        if(text.equals("/start")){
+        if (text.equals("/start")){
             if(userBotService.isUserNotExistByChatId(chatId)) {
                 userBotService.createBotUser(chatId);
             }
@@ -165,7 +171,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                 userBotService.setUserState(chatId, StateEnum.HOME);
                 String greetingMessage = messageUtils.getMessage("bot.hello", userLang) + " " + user.getFirstName() + ". " + messageUtils.getMessage("bot.welcome", userLang);
                 sendMessage.setText(greetingMessage);
-                sendMessage.setReplyMarkup(replyKeyboardUtil.mainMenuButton(chatId));
+                sendMessage.setReplyMarkup(replyKeyboardUtil.mainMenuButton(userBotService.getUserLang(chatId)));
             }
             sendMsg(sendMessage);
         }
@@ -173,12 +179,12 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             if (userBotService.isUserNotExistByPhoneNumberAndChatId(chatId)) {
                 userBotService.setUserState(chatId, StateEnum.MY_ANNS);
                 sendMessage.setText(messageUtils.getMessage("bot.share_contact", userBotService.getUserLang(chatId)));
-                sendMessage.setReplyMarkup(replyKeyboardUtil.contactButton(chatId));
+                sendMessage.setReplyMarkup(replyKeyboardUtil.contactButton(userBotService.getUserLang(chatId)));
                 sendMsg(sendMessage);
             } else {
                 userBotService.setUserState(chatId, StateEnum.LOGINED);
                 sendMessage.setText(messageUtils.getMessage("bot.welcome_your_page", userBotService.getUserLang(chatId)));
-                sendMessage.setReplyMarkup(replyKeyboardUtil.userProfileButton(chatId));
+                sendMessage.setReplyMarkup(replyKeyboardUtil.userProfileButton(userBotService.getUserLang(chatId)));
                 sendMsg(sendMessage);
                 showUserAnnouncements(chatId);
             }
@@ -186,21 +192,22 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
         else if (userBotService.getUserState(chatId).equals(StateEnum.MY_ANNS) && Objects.isNull(message.getContact()) && !text.equals(messageUtils.getMessage("bot.button.back", userBotService.getUserLang(chatId)))) {
             sendMessage.setText(messageUtils.getMessage("bot.share_contact_error", userBotService.getUserLang(chatId)));
             sendMessage.setParseMode("html");
-            sendMessage.setReplyMarkup(replyKeyboardUtil.contactButton(chatId));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.contactButton(userBotService.getUserLang(chatId)));
             sendMsg(sendMessage);
         }
         else if (userBotService.getUserState(chatId).equals(StateEnum.HOME) && text.equals(messageUtils.getMessage("bot.button.settings", userBotService.getUserLang(chatId)))) {
             userBotService.setUserState(chatId, StateEnum.SETTINGS);
             sendMessage.setText(messageUtils.getMessage("bot.button.settings", userBotService.getUserLang(chatId)));
-            sendMessage.setReplyMarkup(replyKeyboardUtil.settingsButtons(chatId));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.settingsButtons(userBotService.getUserLang(chatId)));
             sendMsg(sendMessage);
-        } else if (userBotService.getUserState(chatId).equals(StateEnum.SETTINGS) && text.equals(messageUtils.getMessage("bot.button.change_lang", userBotService.getUserLang(chatId)))) {
+        }
+        else if (userBotService.getUserState(chatId).equals(StateEnum.SETTINGS) && text.equals(messageUtils.getMessage("bot.button.change_lang", userBotService.getUserLang(chatId)))) {
             userBotService.setUserState(chatId, StateEnum.CHANGE_LANG);
             sendMessage.setText("Iltimos tilni tanlang!\n\nПожалуйста, выберите язык!\n\nPlease select a language!");
             sendMessage.setReplyMarkup(inlineKeyboardUtil.langButtons());
             sendMsg(sendMessage);
         }
-        else if(text.equals("/delete")) {
+        else if (text.equals("/delete")) {
             // shaxsiy method test uchun
             userBotRepository.deleteUserByChatId(chatId);
             userRepository.deleteUserByPhoneNumber("+998997558142");
@@ -211,13 +218,13 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             userBotService.registerUser(chatId, BotConstants.USER_PHONE_NUMBER.get(chatId), text, message.getFrom().getFirstName());
             userBotService.setUserState(chatId, StateEnum.LOGINED);
             sendMessage.setText(messageUtils.getMessage("bot.success_login", userBotService.getUserLang(chatId)));
-            sendMessage.setReplyMarkup(replyKeyboardUtil.userProfileButton(chatId));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.userProfileButton(userBotService.getUserLang(chatId)));
             sendMsg(sendMessage);
         }
-        else if (userBotService.getUserState(chatId).equals(StateEnum.LOGINED) && text.equals(messageUtils.getMessage("bot.button.create_new_ann", userBotService.getUserLang(chatId)))) {
+        else if ((userBotService.getUserState(chatId).equals(StateEnum.LOGINED) || userBotService.getUserState(chatId).equals(StateEnum.EDIT_ANN)) && text.equals(messageUtils.getMessage("bot.button.create_new_ann", userBotService.getUserLang(chatId)))) {
             userBotService.setUserState(chatId, StateEnum.ENTERED_ANN_TITLE);
             sendMessage.setText(messageUtils.getMessage("bot.enter_name_for_ann", userBotService.getUserLang(chatId)));
-            sendMessage.setReplyMarkup(replyKeyboardUtil.backButton(chatId));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.backButton(userBotService.getUserLang(chatId)));
             sendMsg(sendMessage);
         }
         else if (userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_TITLE) && !text.equals(messageUtils.getMessage("bot.button.back", userBotService.getUserLang(chatId)))) {
@@ -240,7 +247,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             sendMessage.setReplyMarkup(inlineKeyboardUtil.categoryButtons(categoryEntityList, userBotService.getUserLang(chatId)));
             sendMsg(sendMessage);
         }
-        else if(userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_DESCRIPTION)) {
+        else if (userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_DESCRIPTION)) {
             userBotService.setUserState(chatId, StateEnum.ENTERED_ANN_CURRENCY);
             announcementEntity.setDescription(text);
             sendMessage.setText(messageUtils.getMessage("bot.select_currency_for_ann", userBotService.getUserLang(chatId)));
@@ -249,9 +256,8 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             sendMessage.setReplyMarkup(inlineKeyboardUtil.currencyButtons(allCurrencies));
             sendMsg(sendMessage);
         }
-        else if(userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_PRICE)) {
+        else if (userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_PRICE)) {
             if(text.matches("^\\d+$")) {
-                userBotService.setUserState(chatId, StateEnum.ENTERED_ANN_IMAGE);
                 announcementPriceEntity.setPrice(BigDecimal.valueOf(Long.parseLong(text)));
                 sendMessage.setText(messageUtils.getMessage("bot.send_image_for_ann", userBotService.getUserLang(chatId)) + "\n" + messageUtils.getMessage("bot.send_only_eight_images", userBotService.getUserLang(chatId)));
                 sendMessage.setParseMode("html");
@@ -261,7 +267,40 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             }
             sendMsg(sendMessage);
         }
+        else if (userBotService.getUserState(chatId).equals(StateEnum.ENTER_NEW_TITLE) && !text.equals(messageUtils.getMessage("bot.button.back", userBotService.getUserLang(chatId)))) {
+            editableAnnouncement.setTitle(text);
+            announcementService.update(editableAnnouncement);
+            sendMsg(botService.deletePreviousMessage(chatId, message.getMessageId() - 1));
+            sendMsg(botService.deletePreviousMessage(chatId, message.getMessageId()));
+            editUserAnnouncement(chatId);
+        }
+        else if (userBotService.getUserState(chatId).equals(StateEnum.ENTER_NEW_DESCRIPTION) && !text.equals(messageUtils.getMessage("bot.button.back", userBotService.getUserLang(chatId)))) {
+            editableAnnouncement.setDescription(text);
+            announcementService.update(editableAnnouncement);
+            sendMsg(botService.deletePreviousMessage(chatId, message.getMessageId() - 1));
+            sendMsg(botService.deletePreviousMessage(chatId, message.getMessageId()));
+            editUserAnnouncement(chatId);
+        }
+        else if (userBotService.getUserState(chatId).equals(StateEnum.ENTER_NEW_PRICE) && !text.equals(messageUtils.getMessage("bot.button.back", userBotService.getUserLang(chatId)))) {
+            if(text.matches("^\\d+$")) {
+                editableAnnouncementPriceEntity.setPrice(BigDecimal.valueOf(Long.parseLong(text)));
 
+                AnnouncementPriceEntity editableAnnouncementPriceEntity1 = announcementPriceService.addNewAnnouncementPrice(editableAnnouncementPriceEntity);
+
+                editableAnnouncement.setPriceTagId(editableAnnouncementPriceEntity1.getId());
+                editableAnnouncement.setPriceTag(editableAnnouncementPriceEntity1);
+
+                announcementService.update(editableAnnouncement);
+
+                sendMsg(botService.deletePreviousMessage(chatId, message.getMessageId() - 1));
+                sendMsg(botService.deletePreviousMessage(chatId, message.getMessageId()));
+                editUserAnnouncement(chatId);
+            } else {
+                userBotService.setUserState(chatId, StateEnum.ENTER_NEW_PRICE);
+                sendMessage.setText(messageUtils.getLocalizedMessage("bot.enter_price_for_ann_error", userBotService.getUserLang(chatId)));
+                sendMsg(sendMessage);
+            }
+        }
         else if (
                 (userBotService.getUserState(chatId).equals(StateEnum.MY_ANNS) ||
                     userBotService.getUserState(chatId).equals(StateEnum.ENTERED_NEW_PASS) ||
@@ -269,19 +308,41 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                 ) && text.equals(messageUtils.getMessage("bot.button.back", userBotService.getUserLang(chatId)))) {
             sendMessage.setText(messageUtils.getMessage("bot.home_page", userBotService.getUserLang(chatId)));
             userBotService.setUserState(chatId, StateEnum.HOME);
-            sendMessage.setReplyMarkup(replyKeyboardUtil.mainMenuButton(chatId));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.mainMenuButton(userBotService.getUserLang(chatId)));
             sendMsg(sendMessage);
         }
-        else if(userBotService.getUserState(chatId).equals(StateEnum.LOGINED) && text.equals(messageUtils.getMessage("bot.button.home_page", userBotService.getUserLang(chatId)))) {
+        else if (
+                (userBotService.getUserState(chatId).equals(StateEnum.ENTER_NEW_TITLE) ||
+                        userBotService.getUserState(chatId).equals(StateEnum.ENTER_NEW_DESCRIPTION) ||
+                            userBotService.getUserState(chatId).equals(StateEnum.ENTER_NEW_CURRENCY) ||
+                                userBotService.getUserState(chatId).equals(StateEnum.ENTER_NEW_PRICE) ||
+                                    userBotService.getUserState(chatId).equals(StateEnum.ENTER_NEW_IMAGE) ||
+                                        userBotService.getUserState(chatId).equals(StateEnum.ENTER_NEW_REGION) ||
+                                            userBotService.getUserState(chatId).equals(StateEnum.ENTER_NEW_CATEGORY)
+                ) && text.equals(messageUtils.getMessage("bot.button.back", userBotService.getUserLang(chatId)))
+        ) {
+            sendMsg(botService.deletePreviousMessage(chatId, message.getMessageId() - 1));
+            sendMsg(botService.deletePreviousMessage(chatId, message.getMessageId()));
+            editUserAnnouncement(chatId);
+        }
+        else if(
+                (userBotService.getUserState(chatId).equals(StateEnum.LOGINED) ||
+                        userBotService.getUserState(chatId).equals(StateEnum.EDIT_ANN)) &&
+                        text.equals(messageUtils.getMessage("bot.button.home_page", userBotService.getUserLang(chatId)))
+        ) {
+            editableAnnouncementPriceEntity = null;
+            editableAnnouncementContactEntity = null;
+            editableAnnouncement = null;
             sendMessage.setText(messageUtils.getMessage("bot.home_page", userBotService.getUserLang(chatId)));
             userBotService.setUserState(chatId, StateEnum.HOME);
-            sendMessage.setReplyMarkup(replyKeyboardUtil.mainMenuButton(chatId));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.mainMenuButton(userBotService.getUserLang(chatId)));
             sendMsg(sendMessage);
         }
-        else if(userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_TITLE) && text.equals(messageUtils.getMessage("bot.button.back", userBotService.getUserLang(chatId)))) {
+        else if(userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_TITLE) &&
+                text.equals(messageUtils.getMessage("bot.button.back", userBotService.getUserLang(chatId)))) {
             userBotService.setUserState(chatId, StateEnum.LOGINED);
             sendMessage.setText(messageUtils.getMessage("bot.profile_page", userBotService.getUserLang(chatId)));
-            sendMessage.setReplyMarkup(replyKeyboardUtil.userProfileButton(chatId));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.userProfileButton(userBotService.getUserLang(chatId)));
             sendMsg(sendMessage);
             showUserAnnouncements(chatId);
         }
@@ -308,7 +369,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
 
             userBotService.setUserState(chatId, StateEnum.HOME);
             sendMessage.setText(messageUtils.getMessage("bot.hello", userBotService.getUserLang(chatId)) + " " + user.getFirstName() + ". " + messageUtils.getMessage("bot.welcome", userBotService.getUserLang(chatId)));
-            sendMessage.setReplyMarkup(replyKeyboardUtil.mainMenuButton(chatId));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.mainMenuButton(userBotService.getUserLang(chatId)));
             sendMsg(sendMessage);
         }
         else if (key.equals("lang") && userBotService.getUserState(chatId).equals(StateEnum.CHANGE_LANG)) {
@@ -318,7 +379,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
 
             userBotService.setUserState(chatId, StateEnum.SETTINGS);
             sendMessage.setText(messageUtils.getMessage("bot.lang_changed_success", userBotService.getUserLang(chatId)));
-            sendMessage.setReplyMarkup(replyKeyboardUtil.settingsButtons(chatId));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.settingsButtons(userBotService.getUserLang(chatId)));
             sendMsg(sendMessage);
         }
         else if (key.equals("category") && userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_CATEGORY)) {
@@ -386,7 +447,8 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             }
             sendMsg(sendMessage);
         }
-        else if (key.equals("finish") && userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_IMAGE)) {
+        else if (key.equals("finish") &&
+                userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_IMAGE)) {
             sendMsg(botService.deletePreviousMessage(chatId, messageId));
 
             userBotService.setUserState(chatId, StateEnum.FINISH);
@@ -419,7 +481,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                 sendMsg(botService.deletePreviousMessage(chatId, messageId + 1));
 
                 sendMessage.setText(messageUtils.getMessage("bot.ann_created_success", userBotService.getUserLang(chatId)));
-                sendMessage.setReplyMarkup(replyKeyboardUtil.userProfileButton(chatId));
+                sendMessage.setReplyMarkup(replyKeyboardUtil.userProfileButton(userBotService.getUserLang(chatId)));
 
             } else {
                 sendMessage.setText(messageUtils.getMessage("bot.ann_created_error", userBotService.getUserLang(chatId)) + "\n\n" + messageUtils.getMessage("bot.try_again", userBotService.getUserLang(chatId)));
@@ -439,7 +501,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             documentList.clear();
 
             sendMessage.setText(messageUtils.getMessage("bot.profile_page", userBotService.getUserLang(chatId)));
-            sendMessage.setReplyMarkup(replyKeyboardUtil.userProfileButton(chatId));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.userProfileButton(userBotService.getUserLang(chatId)));
             sendMsg(sendMessage);
             showUserAnnouncements(chatId);
         }
@@ -463,7 +525,176 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             sendMsg(sendMessage);
             showUserAnnouncements(chatId);
         }
+        else if (key.equals("edit") && userBotService.getUserState(chatId).equals(StateEnum.LOGINED)) {
+            Long annId = Long.valueOf(split[1]);
+            editableAnnouncement = announcementService.getById(annId);
+            editUserAnnouncement(chatId, messageId);
+        }
+        else if (key.equals("backButton") && userBotService.getUserState(chatId).equals(StateEnum.EDIT_ANN)) {
+            botService.deletePreviousMessage(chatId, messageId - 1);
+            showUserAnnouncements(chatId, BotConstants.USER_SELECTED_PAGE.get(chatId), messageId);
+            userBotService.setUserState(chatId, StateEnum.LOGINED);
+            editableAnnouncement = null;
+            editableAnnouncementContactEntity = null;
+            editableAnnouncementPriceEntity = null;
+        }
+        else if (key.equals("edit_title") && userBotService.getUserState(chatId).equals(StateEnum.EDIT_ANN)) {
+            userBotService.setUserState(chatId, StateEnum.ENTER_NEW_TITLE);
 
+            sendMsg(botService.deletePreviousMessage(chatId, messageId));
+            sendMessage.setText(messageUtils.getMessage("bot.enter_new_name", userBotService.getUserLang(chatId)));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.backButton(userBotService.getUserLang(chatId)));
+            sendMsg(sendMessage);
+        }
+        else if (key.equals("edit_description") && userBotService.getUserState(chatId).equals(StateEnum.EDIT_ANN)) {
+            userBotService.setUserState(chatId, StateEnum.ENTER_NEW_DESCRIPTION);
+
+            sendMsg(botService.deletePreviousMessage(chatId, messageId));
+            sendMessage.setText(messageUtils.getMessage("bot.enter_new_description", userBotService.getUserLang(chatId)));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.backButton(userBotService.getUserLang(chatId)));
+            sendMsg(sendMessage);
+        }
+        else if (key.equals("edit_price") && userBotService.getUserState(chatId).equals(StateEnum.EDIT_ANN)) {
+            userBotService.setUserState(chatId, StateEnum.ENTER_NEW_CURRENCY);
+
+            sendMsg(botService.deletePreviousMessage(chatId, messageId));
+            sendMessage.setText(messageUtils.getMessage("bot.select_new_currency", userBotService.getUserLang(chatId)));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.backButton(userBotService.getUserLang(chatId)));
+            sendMsg(sendMessage);
+
+            sendMessage.setText(messageUtils.getMessage("bot.select_currency_for_ann", userBotService.getUserLang(chatId)));
+
+            List<CurrencyEntity> allCurrencies = currencyService.getAllCurrencies();
+            sendMessage.setReplyMarkup(inlineKeyboardUtil.currencyButtons(allCurrencies));
+            sendMsg(sendMessage);
+        }
+        else if (key.equals("currency") && userBotService.getUserState(chatId).equals(StateEnum.ENTER_NEW_CURRENCY)) {
+            String code = split[1];
+
+            sendMsg(botService.deletePreviousMessage(chatId, messageId - 1));
+            sendMsg(botService.deletePreviousMessage(chatId, messageId));
+
+            editableAnnouncementPriceEntity.setId(announcementService.getById(editableAnnouncement.getId()).getPriceTag().getId());
+
+            currencyService.getCurrencyByCode(code).ifPresent(currency -> {
+                editableAnnouncementPriceEntity.setCurrencyId(currency.getId());
+                editableAnnouncementPriceEntity.setCurrency(currency);
+            });
+
+            sendMessage.setText(messageUtils.getMessage("bot.enter_new_price", userBotService.getUserLang(chatId)));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.backButton(userBotService.getUserLang(chatId)));
+            sendMsg(sendMessage);
+            userBotService.setUserState(chatId, StateEnum.ENTER_NEW_PRICE);
+        }
+        else if (key.equals("edit_category") && userBotService.getUserState(chatId).equals(StateEnum.EDIT_ANN)) {
+            sendMsg(botService.deletePreviousMessage(chatId, messageId));
+            List<CategoryEntity> categoryEntityList = categoryService.getAllTree();
+            sendMessage.setText(messageUtils.getMessage("bot.select_new_category", userBotService.getUserLang(chatId)));
+            sendMessage.setReplyMarkup(inlineKeyboardUtil.categoryButtons(categoryEntityList, userBotService.getUserLang(chatId)));
+            sendMsg(sendMessage);
+            userBotService.setUserState(chatId, StateEnum.ENTER_NEW_CATEGORY);
+        }
+        else if (key.equals("category") && userBotService.getUserState(chatId).equals(StateEnum.ENTER_NEW_CATEGORY)) {
+            sendMsg(botService.deletePreviousMessage(chatId, messageId));
+
+            userBotService.setUserState(chatId, StateEnum.ENTER_NEW_CATEGORY);
+
+            Long categoryId = Long.valueOf(data.split("-")[1]);
+
+            List<CategoryEntity> childCategoriesByParentId = categoryService.getChildCategoriesByParentId(categoryId);
+
+            if(childCategoriesByParentId.isEmpty()) {
+                userBotService.setUserState(chatId, StateEnum.ENTER_NEW_REGION);
+
+                editableAnnouncement.setCategoryId(categoryId);
+                editableAnnouncement.setCategory(categoryService.getById(categoryId));
+
+                announcementService.update(editableAnnouncement);
+
+                sendMsg(botService.deletePreviousMessage(chatId, message.getMessageId() - 1));
+                sendMsg(botService.deletePreviousMessage(chatId, message.getMessageId()));
+                editUserAnnouncement(chatId);
+            } else {
+                sendMessage.setText(messageUtils.getMessage("bot.categories", userBotService.getUserLang(chatId)) + " ...");
+                sendMessage.setReplyMarkup(inlineKeyboardUtil.categoryButtons(childCategoriesByParentId, userBotService.getUserLang(chatId)));
+                sendMsg(sendMessage);
+            }
+        }
+        else if (key.equals("edit_region") && userBotService.getUserState(chatId).equals(StateEnum.EDIT_ANN)) {
+            sendMsg(botService.deletePreviousMessage(chatId, messageId));
+            sendMessage.setText(messageUtils.getMessage("bot.select_new_region", userBotService.getUserLang(chatId)));
+            List<RegionEntity> regionEntityList = regionService.getAllTree();
+            sendMessage.setReplyMarkup(inlineKeyboardUtil.regionButtons(regionEntityList, userBotService.getUserLang(chatId)));
+            userBotService.setUserState(chatId, StateEnum.ENTER_NEW_REGION);
+            sendMsg(sendMessage);
+        }
+        else if (key.equals("region") && userBotService.getUserState(chatId).equals(StateEnum.ENTER_NEW_REGION)) {
+            sendMsg(botService.deletePreviousMessage(chatId, messageId));
+
+            userBotService.setUserState(chatId, StateEnum.ENTER_NEW_REGION);
+
+            Long regionId = Long.valueOf(data.split("-")[1]);
+
+            List<RegionEntity> childRegionsByParentId = regionService.getChildRegionsByParentId(regionId);
+            if(childRegionsByParentId.isEmpty()) {
+                userBotService.setUserState(chatId, StateEnum.ENTERED_ANN_DESCRIPTION);
+
+                editableAnnouncementContactEntity.setRegionId(regionId);
+                editableAnnouncementContactEntity.setRegion(regionService.getById(regionId));
+                userBotService.getUserByChatId(chatId).ifPresent(user1 ->
+                        editableAnnouncementContactEntity.setPhone(user1.getUserEntity().getEmailOrPhone())
+                );
+
+                editableAnnouncementContactEntity.setId(announcementService.getById(editableAnnouncement.getId()).getContactInfo().getId());
+
+                AnnouncementContactEntity announcementContactEntity1 = announcementContactService.addNewAnnounceContact(editableAnnouncementContactEntity);
+
+                editableAnnouncement.setContactInfoId(announcementContactEntity1.getId());
+                editableAnnouncement.setContactInfo(announcementContactEntity1);
+
+                announcementService.update(editableAnnouncement);
+                editUserAnnouncement(chatId);
+            } else {
+                sendMessage.setText(messageUtils.getMessage("bot.regions", userBotService.getUserLang(chatId)) + " ...");
+                sendMessage.setReplyMarkup(inlineKeyboardUtil.regionButtons(childRegionsByParentId, userBotService.getUserLang(chatId)));
+                sendMsg(sendMessage);
+            }
+        }
+        else if (key.equals("edit_image") && userBotService.getUserState(chatId).equals(StateEnum.EDIT_ANN)) {
+            sendMsg(botService.deletePreviousMessage(chatId, messageId));
+            sendMessage.setText(messageUtils.getMessage("bot.send_new_image", userBotService.getUserLang(chatId)) + "\n" + messageUtils.getMessage("bot.send_only_eight_images", userBotService.getUserLang(chatId)));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.backButton(userBotService.getUserLang(chatId)));
+            sendMessage.setParseMode("html");
+            userBotService.setUserState(chatId, StateEnum.ENTER_NEW_IMAGE);
+            sendMsg(sendMessage);
+        }
+        else if (key.equals("finish") && userBotService.getUserState(chatId).equals(StateEnum.ENTER_NEW_IMAGE)) {
+            sendMsg(botService.deletePreviousMessage(chatId, messageId));
+            sendMessage.setText(messageUtils.getMessage("bot.waiting", userBotService.getUserLang(chatId)));
+            sendMsg(sendMessage);
+            List<AttachEntity> attachEntityList = fileService.savePhotos(photoSizeList, documentList);
+            if(!attachEntityList.isEmpty()) {
+
+                List<AttachEntity> attachPhotos = editableAnnouncement.getAttachPhotos();
+
+                attachPhotos.forEach(attachEntity -> {
+                    attachService.deleteById(attachEntity.getId());
+                });
+
+                editableAnnouncement.setAttachPhotos(attachEntityList);
+
+                announcementService.update(editableAnnouncement);
+
+                sendMsg(botService.deletePreviousMessage(chatId, messageId + 1));
+
+            } else {
+                sendMessage.setText(messageUtils.getMessage("bot.ann_created_error", userBotService.getUserLang(chatId)) + "\n\n" + messageUtils.getMessage("bot.try_again", userBotService.getUserLang(chatId)));
+                sendMsg(sendMessage);
+            }
+            editUserAnnouncementWithImage(chatId);
+            photoSizeList.clear();
+            documentList.clear();
+        }
     }
 
     private void handleContact(Message message) {
@@ -475,7 +706,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
 
         BotConstants.USER_PHONE_NUMBER.put(chatId, phoneNumber);
 
-        sendMessage.setReplyMarkup(replyKeyboardUtil.backButton(chatId));
+        sendMessage.setReplyMarkup(replyKeyboardUtil.backButton(userBotService.getUserLang(chatId)));
 
         if(userBotService.isUserExistByPhoneNumber(phoneNumber)) {
             userBotService.setUserState(chatId, StateEnum.LOGINED);
@@ -483,7 +714,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             userBotService.mergeUserAccounts(phoneNumber, chatId);
 
             sendMessage.setText(messageUtils.getMessage("bot.welcome_your_page", userBotService.getUserLang(chatId)));
-            sendMessage.setReplyMarkup(replyKeyboardUtil.userProfileButton(chatId));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.userProfileButton(userBotService.getUserLang(chatId)));
         } else {
             userBotService.setUserState(chatId, StateEnum.ENTERED_NEW_PASS);
             sendMessage.setText(messageUtils.getMessage("bot.enter_new_pass", userBotService.getUserLang(chatId)));
@@ -497,12 +728,21 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
 
-        if(userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_IMAGE)) {
+
+        if(userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_PRICE) || userBotService.getUserState(chatId).equals(StateEnum.ENTER_NEW_IMAGE)) {
 
             int attachCount = photoSizeList.size() + documentList.size();
 
             if(attachCount < 7) {
                 if(Objects.nonNull(message.getPhoto())) {
+
+                    if(userBotService.getUserState(chatId).equals(StateEnum.ENTERED_ANN_PRICE)) {
+                        userBotService.setUserState(chatId, StateEnum.ENTERED_ANN_IMAGE);
+                    }
+                    else if (userBotService.getUserState(chatId).equals(StateEnum.ENTER_NEW_IMAGE)) {
+                        userBotService.setUserState(chatId, StateEnum.ENTER_NEW_IMAGE);
+                    }
+
                     PhotoSize photoSize = message.getPhoto().get(message.getPhoto().size() - 1); // eng sifatlisi
                     photoSizeList.add(Collections.singletonList(photoSize));
                     sendMessage.setText(attachCount + 1 + "/" + messageUtils.getMessage("bot.eight_images_uploaded", userBotService.getUserLang(chatId)) + "\n\n" + messageUtils.getMessage("bot.upload_again_image_or_stop", userBotService.getUserLang(chatId)));
@@ -564,16 +804,18 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                 String status = announcementEntity1.getIsActive() ? messageUtils.getMessage("bot.active", userBotService.getUserLang(chatId)) :
                         messageUtils.getMessage("bot.inActive", userBotService.getUserLang(chatId));
 
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                 sendMessage.setText(
                         "<strong>№" + 1 + "</strong>" +
                                 "\n\n<strong>" + status + "</strong>" +
                                 "\n\n<i>" + announcementEntity1.getTitle() + "</i>" +
+                                "\n\n<i>" + announcementEntity1.getDescription() + "</i>" +
                                 "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() + " " + announcementEntity1.getPriceTag().getCurrency().getName() +
                                 "</b>\n\n" + announcementEntity1.getContactInfo().getRegion().getNameUz() +
-                                "\n\n" + announcementEntity1.getCreatedDate()
+                                "\n\n" + announcementEntity1.getCreatedDate().format(formatter)
                 );
 
-                sendMessage.setReplyMarkup(inlineKeyboardUtil.actionButtonsWithPage(announcementEntity1.getId(), userBotService.getUserAnnouncementCount(chatId), announcementEntity1.getIsActive(), chatId));
+                sendMessage.setReplyMarkup(inlineKeyboardUtil.actionButtonsWithPage(announcementEntity1.getId(), userBotService.getUserAnnouncementCount(chatId), announcementEntity1.getIsActive(), userBotService.getUserLang(chatId)));
 
                 sendMsg(sendMessage);
             });
@@ -599,16 +841,18 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
                 String status = announcementEntity1.getIsActive() ? messageUtils.getMessage("bot.active", userBotService.getUserLang(chatId)) :
                         messageUtils.getMessage("bot.inActive", userBotService.getUserLang(chatId));
 
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                 editMessageText.setText(
                         "<strong>№" + (page + 1) + "</strong>" +
                                 "\n\n<strong>" + status + "</strong>" +
                                 "\n\n<i>" + announcementEntity1.getTitle() + "</i>" +
+                                "\n\n<i>" + announcementEntity1.getDescription() + "</i>" +
                                 "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() + " " + announcementEntity1.getPriceTag().getCurrency().getName() +
                                 "</b>\n\n" + announcementEntity1.getContactInfo().getRegion().getNameUz() +
-                                "\n\n" + announcementEntity1.getCreatedDate()
+                                "\n\n" + announcementEntity1.getCreatedDate().format(formatter)
                 );
 
-                editMessageText.setReplyMarkup(inlineKeyboardUtil.actionButtonsWithPage(announcementEntity1.getId(), userBotService.getUserAnnouncementCount(chatId), announcementEntity1.getIsActive(), chatId));
+                editMessageText.setReplyMarkup(inlineKeyboardUtil.actionButtonsWithPage(announcementEntity1.getId(), userBotService.getUserAnnouncementCount(chatId), announcementEntity1.getIsActive(), userBotService.getUserLang(chatId)));
 
                 sendMsg(editMessageText);
 
@@ -617,5 +861,80 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
         });
     }
 
+    private void editUserAnnouncement(String chatId, Integer messageId) {
+        AnnouncementEntity announcementEntity1 = announcementService.getById(editableAnnouncement.getId());
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setChatId(chatId);
+        editMessageText.setMessageId(messageId);
+        editMessageText.setParseMode("html");
 
+        String status = announcementEntity1.getIsActive() ? messageUtils.getMessage("bot.active", userBotService.getUserLang(chatId)) :
+                messageUtils.getMessage("bot.inActive", userBotService.getUserLang(chatId));
+
+        editMessageText.setText(
+                "\n\n<strong>" + status + "</strong>" +
+                        "\n\n<i>" + announcementEntity1.getTitle() + "</i>" +
+                        "\n\n<i>" + announcementEntity1.getDescription() + "</i>" +
+                        "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() + " " + announcementEntity1.getPriceTag().getCurrency().getName() +
+                        "</b>\n\n" + announcementEntity1.getContactInfo().getRegion().getNameUz() +
+                        "\n\n" + announcementEntity1.getCreatedDate()
+        );
+
+        editMessageText.setReplyMarkup(inlineKeyboardUtil.annActionButtons(userBotService.getUserLang(chatId), editableAnnouncement.getId()));
+
+        sendMsg(editMessageText);
+        userBotService.setUserState(chatId, StateEnum.EDIT_ANN);
+    }
+
+    private void editUserAnnouncement(String chatId) {
+        AnnouncementEntity announcementEntity1 = announcementService.getById(editableAnnouncement.getId());
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setParseMode("html");
+        sendMessage.setChatId(chatId);
+
+        String status = announcementEntity1.getIsActive() ? messageUtils.getMessage("bot.active", userBotService.getUserLang(chatId)) :
+                messageUtils.getMessage("bot.inActive", userBotService.getUserLang(chatId));
+
+        sendMessage.setText(
+                "\n\n<strong>" + status + "</strong>" +
+                        "\n\n<i>" + announcementEntity1.getTitle() + "</i>" +
+                        "\n\n<i>" + announcementEntity1.getDescription() + "</i>" +
+                        "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() + " " + announcementEntity1.getPriceTag().getCurrency().getName() +
+                        "</b>\n\n" + announcementEntity1.getContactInfo().getRegion().getNameUz() +
+                        "\n\n" + announcementEntity1.getCreatedDate()
+        );
+
+        sendMessage.setReplyMarkup(inlineKeyboardUtil.annActionButtons(userBotService.getUserLang(chatId), editableAnnouncement.getId()));
+
+        sendMsg(sendMessage);
+        userBotService.setUserState(chatId, StateEnum.EDIT_ANN);
+    }
+
+    private void editUserAnnouncementWithImage(String chatId) {
+        AnnouncementEntity announcementEntity1 = announcementService.getById(editableAnnouncement.getId());
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setParseMode("html");
+        sendMessage.setChatId(chatId);
+
+        sendMsg(botService.sendPhoto(chatId, announcementEntity1.getAttachPhotos().get(0)));
+
+        String status = announcementEntity1.getIsActive() ? messageUtils.getMessage("bot.active", userBotService.getUserLang(chatId)) :
+                messageUtils.getMessage("bot.inActive", userBotService.getUserLang(chatId));
+
+        sendMessage.setText(
+                "\n\n<strong>" + status + "</strong>" +
+                        "\n\n<i>" + announcementEntity1.getTitle() + "</i>" +
+                        "\n\n<i>" + announcementEntity1.getDescription() + "</i>" +
+                        "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() + " " + announcementEntity1.getPriceTag().getCurrency().getName() +
+                        "</b>\n\n" + announcementEntity1.getContactInfo().getRegion().getNameUz() +
+                        "\n\n" + announcementEntity1.getCreatedDate()
+        );
+
+        sendMessage.setReplyMarkup(inlineKeyboardUtil.annActionButtons(userBotService.getUserLang(chatId), editableAnnouncement.getId()));
+
+        sendMsg(sendMessage);
+        userBotService.setUserState(chatId, StateEnum.EDIT_ANN);
+    }
 }

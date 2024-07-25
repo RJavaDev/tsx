@@ -11,15 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.tsx.controller.convert.AnnouncementConvert;
 import uz.tsx.dto.announcement.AnnouncementDto;
+import uz.tsx.dto.announcement.AnnouncementMiniInformation;
 import uz.tsx.dto.announcement.announcementCreated.AnnouncementCreatedDto;
 import uz.tsx.dto.dtoUtil.*;
 import uz.tsx.entity.announcement.AnnouncementEntity;
 import uz.tsx.interfaces.AnnouncementInterface;
 import uz.tsx.service.AnnouncementService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1/announcement")
@@ -109,20 +108,38 @@ public class AnnouncementController {
                                                        @RequestParam(value = "size", defaultValue = "6", required = false) Integer size) {
 
         BigDataTable<AnnouncementInterface> pageHomeData = service.getPageHomeData(page, size);
-        BigDataTable<AnnouncementDto> dtoList = AnnouncementConvert.convertInterfaceToDto(pageHomeData);
+        BigDataTable<AnnouncementMiniInformation> dtoList = AnnouncementConvert.convertInterfaceToMiniDto(pageHomeData);
 
         return ApiResponse.build()
                 .message(ResponseMessage.OK)
                 .body(dtoList)
                 .code(ResponseCode.OK);
     }
-    @PostMapping("/get/list/{categoryId}")
+    @GetMapping("/get/list/{categoryId}")
     public ApiResponse<Object>getAnnouncementList(@PathVariable Long categoryId,@RequestBody(required = false) PageParam pageParam){
         if (pageParam == null) {
             pageParam = new PageParam();
         }
         BigDataTable<AnnouncementInterface> pageAnnouncementData = service.getAnnouncementListByCategory(categoryId,pageParam);
-        BigDataTable<AnnouncementDto> dtoList = AnnouncementConvert.convertInterfaceToDto(pageAnnouncementData);
+        BigDataTable<AnnouncementMiniInformation> dtoList = AnnouncementConvert.convertInterfaceToMiniDto(pageAnnouncementData);
+
+        return ApiResponse.build()
+                .message(ResponseMessage.OK)
+                .body(dtoList)
+                .code(ResponseCode.OK);
+    }
+
+    @GetMapping("/get/by-category/{categoryId}")
+    public ApiResponse<Object>getAnnouncementListByCategoryId(@PathVariable Long categoryId){
+
+        PageParam pageParam = new PageParam();
+        pageParam.setSize(12);
+
+        BigDataTable<AnnouncementInterface> pageAnnouncementData = service.getAnnouncementListByCategory(categoryId,pageParam);
+        List<AnnouncementInterface> rows = new ArrayList<>(pageAnnouncementData.getRows());
+        Collections.shuffle(rows);
+        pageAnnouncementData.setRows(rows);
+        BigDataTable<AnnouncementMiniInformation> dtoList = AnnouncementConvert.convertInterfaceToMiniDto(pageAnnouncementData);
 
         return ApiResponse.build()
                 .message(ResponseMessage.OK)
@@ -133,7 +150,7 @@ public class AnnouncementController {
     @PostMapping("/search")
     public ApiResponse<Object> searchAnnouncementAndFilter(@RequestBody FilterForm filter){
         BigDataTable<AnnouncementInterface> announcementInterfaceBigDataTable = service.searchAnnouncementAndFilter(filter);
-        BigDataTable<AnnouncementDto> dtoList = AnnouncementConvert.convertInterfaceToDto(announcementInterfaceBigDataTable);
+        BigDataTable<AnnouncementMiniInformation> dtoList = AnnouncementConvert.convertInterfaceToMiniDto(announcementInterfaceBigDataTable);
         return ApiResponse.build()
                 .message(ResponseMessage.OK)
                 .body(dtoList)
