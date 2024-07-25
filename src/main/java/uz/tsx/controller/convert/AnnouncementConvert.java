@@ -7,6 +7,7 @@ import uz.tsx.dto.CategoryDto;
 import uz.tsx.dto.CurrencyDto;
 import uz.tsx.dto.announcement.AnnouncementContactDto;
 import uz.tsx.dto.announcement.AnnouncementDto;
+import uz.tsx.dto.announcement.AnnouncementMiniInformation;
 import uz.tsx.dto.announcement.AnnouncementPriceDto;
 import uz.tsx.dto.announcement.additionInfo.AnnounceAdditionInfoDto;
 import uz.tsx.dto.announcement.announcementCreated.AnnouncementCreatedDto;
@@ -104,6 +105,23 @@ public class AnnouncementConvert {
         return dto;
     }
 
+    public AnnouncementMiniInformation convertToMiniDto(AnnouncementInterface interfaceDB){
+        AnnouncementMiniInformation miniInformation = new AnnouncementMiniInformation();
+
+        miniInformation.setRouter(interfaceDB.getRouter());
+        miniInformation.setId(interfaceDB.getId());
+        miniInformation.setTitle(interfaceDB.getTitle());
+        miniInformation.setCreatedDate(interfaceDB.getCreatedDate());
+        miniInformation.setPrice(interfaceDB.getPrice());
+        miniInformation.setCurrencyCode(interfaceDB.getCurrencyCode());
+        miniInformation.setAddress(interfaceDB.getAddressByAcceptLanguage());
+        miniInformation.setISaw(interfaceDB.getISaw());
+        miniInformation.setAttachUrlResponses(AttachConvert.convertToAttachUrlDtoForInterface(interfaceDB.getAttachPath()));
+
+
+        return miniInformation;
+    }
+
     public Set<AnnounceAdditionInfoDto> selectorToAnnounceAdditionInfoDto(Set<AnnouncementInfoSelector> additionalInfos){
         if(Objects.nonNull(additionalInfos)){
             Set<AnnounceAdditionInfoDto> announceAdditionInfos = new HashSet<>();
@@ -172,6 +190,18 @@ public class AnnouncementConvert {
 
         BigDataTable<AnnouncementDto> announcementDto= new BigDataTable<>();
         List<AnnouncementDto> list = announcementEntityList.getRows().stream().map(AnnouncementConvert::convertToDto).toList();
+
+        announcementDto.setRows(list);
+        announcementDto.setTotal(announcementEntityList.getTotal());
+        announcementDto.setTotalPage(announcementEntityList.getTotalPage());
+
+        return announcementDto;
+    }
+
+    public BigDataTable<AnnouncementMiniInformation>convertInterfaceToMiniDto(BigDataTable<AnnouncementInterface> announcementEntityList){
+
+        BigDataTable<AnnouncementMiniInformation> announcementDto= new BigDataTable<>();
+        List<AnnouncementMiniInformation> list = announcementEntityList.getRows().stream().map(AnnouncementConvert::convertToMiniDto).toList();
 
         announcementDto.setRows(list);
         announcementDto.setTotal(announcementEntityList.getTotal());

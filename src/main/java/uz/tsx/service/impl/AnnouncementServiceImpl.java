@@ -1,5 +1,10 @@
 package uz.tsx.service.impl;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaUpdate;
+import jakarta.persistence.criteria.Root;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import uz.tsx.common.util.DateUtil;
 import uz.tsx.common.util.SecurityUtils;
@@ -50,6 +56,9 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AnnouncementServiceImpl implements AnnouncementService {
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     private final AnnouncementRepository repository;
     private final AnnounceAdditionGroupRepository announceAdditionGroupRepository;
     private final OptionRepository optionRepository;
@@ -62,10 +71,14 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     private final Map<Long,List<Long>> userCount=new HashMap<>();
 
-
-
     private final CommonSchemaValidator commonValidator;
     private final AnnouncementRepository announcementRepository;
+
+    @Override
+    @Transactional
+    public void update(AnnouncementEntity editableAnnouncement) {
+        repository.save(editableAnnouncement);
+    }
 
     @Override
     public AnnouncementEntity createNewAnnouncement(AnnouncementEntity entity) {
