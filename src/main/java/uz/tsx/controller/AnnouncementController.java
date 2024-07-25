@@ -18,9 +18,7 @@ import uz.tsx.entity.announcement.AnnouncementEntity;
 import uz.tsx.interfaces.AnnouncementInterface;
 import uz.tsx.service.AnnouncementService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1/announcement")
@@ -117,12 +115,30 @@ public class AnnouncementController {
                 .body(dtoList)
                 .code(ResponseCode.OK);
     }
-    @PostMapping("/get/list/{categoryId}")
+    @GetMapping("/get/list/{categoryId}")
     public ApiResponse<Object>getAnnouncementList(@PathVariable Long categoryId,@RequestBody(required = false) PageParam pageParam){
         if (pageParam == null) {
             pageParam = new PageParam();
         }
         BigDataTable<AnnouncementInterface> pageAnnouncementData = service.getAnnouncementListByCategory(categoryId,pageParam);
+        BigDataTable<AnnouncementMiniInformation> dtoList = AnnouncementConvert.convertInterfaceToMiniDto(pageAnnouncementData);
+
+        return ApiResponse.build()
+                .message(ResponseMessage.OK)
+                .body(dtoList)
+                .code(ResponseCode.OK);
+    }
+
+    @GetMapping("/get/by-category/{categoryId}")
+    public ApiResponse<Object>getAnnouncementListByCategoryId(@PathVariable Long categoryId){
+
+        PageParam pageParam = new PageParam();
+        pageParam.setSize(12);
+
+        BigDataTable<AnnouncementInterface> pageAnnouncementData = service.getAnnouncementListByCategory(categoryId,pageParam);
+        List<AnnouncementInterface> rows = new ArrayList<>(pageAnnouncementData.getRows());
+        Collections.shuffle(rows);
+        pageAnnouncementData.setRows(rows);
         BigDataTable<AnnouncementMiniInformation> dtoList = AnnouncementConvert.convertInterfaceToMiniDto(pageAnnouncementData);
 
         return ApiResponse.build()

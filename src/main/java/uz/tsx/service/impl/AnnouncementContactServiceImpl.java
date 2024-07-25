@@ -60,6 +60,6 @@ public class AnnouncementContactServiceImpl implements AnnouncementContactServic
 
     @Override
     public void delete(Long id) {
-
+        announcementContactRepository.deleteById(id);
     }
 }
