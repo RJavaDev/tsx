@@ -91,7 +91,6 @@ public class ReplyKeyboardUtil {
         return keyboardMarkup;
     }
 
-
     public ReplyKeyboard userProfileButton(String lang) {
         KeyboardRow row = new KeyboardRow();
 

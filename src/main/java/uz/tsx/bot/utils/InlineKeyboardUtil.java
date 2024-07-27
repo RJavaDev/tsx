@@ -171,6 +171,7 @@ public class InlineKeyboardUtil {
                 rows.add(row);
             }
         }
+
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         row1.add(button(messageUtils.getMessage("bot.button.back", lang),"backButton"));
         rows.add(row1);
