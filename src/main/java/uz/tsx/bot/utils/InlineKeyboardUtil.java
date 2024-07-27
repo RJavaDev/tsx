@@ -16,7 +16,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InlineKeyboardUtil {
     private final MessageUtils messageUtils;
-    private final UserBotService userBotService;
+
+    public InlineKeyboardMarkup backButton(String lang) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        inlineKeyboardMarkup.setKeyboard(rows);
+
+        List<InlineKeyboardButton> row = new ArrayList<>();
+
+        row.add(button(messageUtils.getMessage("bot.button.back", lang),"backButton"));
+        rows.add(row);
+
+        return inlineKeyboardMarkup;
+    }
 
     public InlineKeyboardMarkup actionButtonsWithPage(Long annId, int pages, Boolean isActive, String lang) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
@@ -51,31 +63,31 @@ public class InlineKeyboardUtil {
         return inlineKeyboardMarkup;
     }
 
-    public InlineKeyboardMarkup annActionButtons(String lang, Long annId) {
+    public InlineKeyboardMarkup annActionButtons(String lang) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         inlineKeyboardMarkup.setKeyboard(rows);
 
         List<InlineKeyboardButton> row = new ArrayList<>();
-        row.add(button(messageUtils.getMessage("bot.button.edit_title", lang),"edit_title-" + annId));
+        row.add(button(messageUtils.getMessage("bot.button.edit_title", lang),"edit_title"));
 
         List<InlineKeyboardButton> row1 = new ArrayList<>();
-        row1.add(button(messageUtils.getMessage("bot.button.edit_description", lang),"edit_description-" + annId));
+        row1.add(button(messageUtils.getMessage("bot.button.edit_description", lang),"edit_description"));
 
         List<InlineKeyboardButton> row2 = new ArrayList<>();
-        row2.add(button(messageUtils.getMessage("bot.button.edit_price", lang),"edit_price-" + annId));
+        row2.add(button(messageUtils.getMessage("bot.button.edit_price", lang),"edit_price"));
 
         List<InlineKeyboardButton> row3 = new ArrayList<>();
-        row3.add(button(messageUtils.getMessage("bot.button.edit_category", lang),"edit_category-" + annId));
+        row3.add(button(messageUtils.getMessage("bot.button.edit_category", lang),"edit_category"));
 
         List<InlineKeyboardButton> row4 = new ArrayList<>();
-        row4.add(button(messageUtils.getMessage("bot.button.edit_region", lang),"edit_region-" + annId));
+        row4.add(button(messageUtils.getMessage("bot.button.edit_region", lang),"edit_region"));
 
         List<InlineKeyboardButton> row5 = new ArrayList<>();
-        row5.add(button(messageUtils.getMessage("bot.button.edit_image", lang),"edit_image-" + annId));
+        row5.add(button(messageUtils.getMessage("bot.button.edit_image", lang),"edit_image"));
 
         List<InlineKeyboardButton> backButton = new ArrayList<>();
-        backButton.add(button(messageUtils.getMessage("bot.button.back", lang),"backButton-" + annId));
+        backButton.add(button(messageUtils.getMessage("bot.button.back", lang),"backButton"));
         rows.addAll(List.of(row, row1, row2, row3, row4, row5, backButton));
 
         return inlineKeyboardMarkup;
@@ -96,28 +108,28 @@ public class InlineKeyboardUtil {
         return inlineKeyboardMarkup;
     }
 
-    public InlineKeyboardMarkup yesOrNotButtons(String chatId) {
+    public InlineKeyboardMarkup yesOrNotButtons(String lang) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         inlineKeyboardMarkup.setKeyboard(rows);
 
         List<InlineKeyboardButton> row = new ArrayList<>();
 
-        row.add(button(messageUtils.getMessage("bot.button.yes", userBotService.getUserLang(chatId)), "yes"));
-        row.add(button(messageUtils.getMessage("bot.button.no", userBotService.getUserLang(chatId)), "not"));
+        row.add(button(messageUtils.getMessage("bot.button.yes", lang), "yes"));
+        row.add(button(messageUtils.getMessage("bot.button.no", lang), "not"));
         rows.add(row);
 
         return inlineKeyboardMarkup;
     }
 
-    public InlineKeyboardMarkup finishButton(String chatId) {
+    public InlineKeyboardMarkup finishButton(String lang) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         inlineKeyboardMarkup.setKeyboard(rows);
 
         List<InlineKeyboardButton> row = new ArrayList<>();
 
-        row.add(button(messageUtils.getMessage("bot.button.completion", userBotService.getUserLang(chatId)), "finish"));
+        row.add(button(messageUtils.getMessage("bot.button.completion", lang), "finish"));
         rows.add(row);
 
         return inlineKeyboardMarkup;
@@ -143,6 +155,28 @@ public class InlineKeyboardUtil {
         return inlineKeyboardMarkup;
     }
 
+    public InlineKeyboardMarkup regionButtonsWithBackButton(List<RegionEntity> regionEntityList, String lang) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        inlineKeyboardMarkup.setKeyboard(rows);
+
+        List<InlineKeyboardButton> row = new ArrayList<>();
+
+        for (int i = 0; i < regionEntityList.size(); i++) {
+            RegionEntity regionEntity = regionEntityList.get(i);
+            row.add(button(regionEntity.languageFilterForBot(lang),"region-" + regionEntity.getId()));
+            if ((i + 1) % 2 == 0) {
+                row = new ArrayList<>();
+            } else {
+                rows.add(row);
+            }
+        }
+        List<InlineKeyboardButton> row1 = new ArrayList<>();
+        row1.add(button(messageUtils.getMessage("bot.button.back", lang),"backButton"));
+        rows.add(row1);
+        return inlineKeyboardMarkup;
+    }
+
     public InlineKeyboardMarkup currencyButtons(List<CurrencyEntity> currencyEntityList) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
@@ -163,6 +197,28 @@ public class InlineKeyboardUtil {
         return inlineKeyboardMarkup;
     }
 
+    public InlineKeyboardMarkup currencyButtonsWithBackButton(List<CurrencyEntity> currencyEntityList, String lang) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        inlineKeyboardMarkup.setKeyboard(rows);
+
+        List<InlineKeyboardButton> row = new ArrayList<>();
+
+        for (int i = 0; i < currencyEntityList.size(); i++) {
+            CurrencyEntity currencyEntity = currencyEntityList.get(i);
+            row.add(button(currencyEntity.getName(), "currency-" + currencyEntity.getCode()));
+            if ((i + 1) % 2 == 0) {
+                row = new ArrayList<>();
+            } else {
+                rows.add(row);
+            }
+        }
+        List<InlineKeyboardButton> row1 = new ArrayList<>();
+        row1.add(button(messageUtils.getMessage("bot.button.back", lang),"backButton"));
+        rows.add(row1);
+        return inlineKeyboardMarkup;
+    }
+
     public InlineKeyboardMarkup categoryButtons(List<CategoryEntity> categoryEntityList, String lang) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
@@ -179,6 +235,30 @@ public class InlineKeyboardUtil {
                 rows.add(row);
             }
         }
+
+        return inlineKeyboardMarkup;
+    }
+
+    public InlineKeyboardMarkup categoryButtonsWithBackButton(List<CategoryEntity> categoryEntityList, String lang) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        inlineKeyboardMarkup.setKeyboard(rows);
+
+        List<InlineKeyboardButton> row = new ArrayList<>();
+
+        for (int i = 0; i < categoryEntityList.size(); i++) {
+            CategoryEntity categoryEntity = categoryEntityList.get(i);
+            row.add(button(categoryEntity.languageFilterForBot(lang), "category-" + categoryEntity.getId()));
+            if ((i + 1) % 2 == 0) {
+                row = new ArrayList<>();
+            } else {
+                rows.add(row);
+            }
+        }
+
+        List<InlineKeyboardButton> row1 = new ArrayList<>();
+        row1.add(button(messageUtils.getMessage("bot.button.back", lang),"backButton"));
+        rows.add(row1);
 
         return inlineKeyboardMarkup;
     }
