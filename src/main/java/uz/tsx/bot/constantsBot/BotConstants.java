@@ -10,5 +10,5 @@ public interface BotConstants {
    HashMap<String, String> USER_PHONE_NUMBER = new HashMap<>();
    HashMap<String, Integer> USER_SELECTED_PAGE = new HashMap<>();
 
-   List<String> admins = new ArrayList<>(List.of("1359515957", "1231810507"));
+   List<String> admins = new ArrayList<>(List.of("117978850", "1231810507"));
 }
