@@ -18,6 +18,7 @@ public enum StateEnum {
     ENTERED_ANN_IMAGE,
     FINISH,
     EDIT_ANN,
+    FEEDBACK,
 
     ENTER_NEW_TITLE,
     ENTER_NEW_DESCRIPTION,

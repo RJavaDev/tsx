@@ -8,7 +8,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 import uz.tsx.bot.constantsBot.BotConstants;
-import uz.tsx.bot.service.UserBotService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReplyKeyboardUtil {
     private final MessageUtils messageUtils;
-    private final UserBotService userBotService;
 
     public ReplyKeyboard mainMenuButton(String lang) {
 

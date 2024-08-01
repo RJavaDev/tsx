@@ -358,6 +358,25 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             sendMsg(sendMessage);
             showUserAnnouncements(chatId);
         }
+        else if (text.equals(messageUtils.getMessage("bot.button.feedback", userBot.getLanguage())) && userBot.getState().equals(StateEnum.SETTINGS)) {
+            sendMessage.setText(messageUtils.getMessage("bot.feedback_message", userBot.getLanguage()));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.backButton(userBot.getLanguage()));
+            userBotService.setUserState(chatId, StateEnum.FEEDBACK);
+            sendMsg(sendMessage);
+        }
+        else if (text.equals(messageUtils.getMessage("bot.button.back", userBot.getLanguage())) && userBot.getState().equals(StateEnum.FEEDBACK)) {
+            sendMessage.setText(messageUtils.getMessage("bot.button.settings", userBot.getLanguage()));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.settingsButtons(userBot.getLanguage()));
+            userBotService.setUserState(chatId, StateEnum.SETTINGS);
+            sendMsg(sendMessage);
+        }
+        else if (userBot.getState().equals(StateEnum.FEEDBACK) && !text.equals(messageUtils.getMessage("bot.button.back", userBot.getLanguage()))) {
+            sendToAdmin(text);
+            sendMessage.setText(messageUtils.getMessage("bot.message_send_to_admin", userBot.getLanguage()));
+            sendMessage.setReplyMarkup(replyKeyboardUtil.settingsButtons(userBot.getLanguage()));
+            userBotService.setUserState(chatId, StateEnum.SETTINGS);
+            sendMsg(sendMessage);
+        }
 
     }
 
@@ -547,9 +566,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
             editUserAnnouncement(chatId, messageId);
         }
         else if (key.equals("backButton") && userBot.getState().equals(StateEnum.EDIT_ANN)) {
-            sendMsg(botService.deletePreviousMessage(chatId, messageId - 1));
-            sendMsg(botService.deletePreviousMessage(chatId, messageId));
-            showUserAnnouncements(chatId, BotConstants.USER_SELECTED_PAGE.get(chatId));
+            showUserAnnouncements(chatId, BotConstants.USER_SELECTED_PAGE.get(chatId), messageId);
             userBotService.setUserState(chatId, StateEnum.LOGINED);
             editableAnnouncement = new AnnouncementEntity();
             editableAnnouncementContactEntity = new AnnouncementContactEntity();
@@ -882,56 +899,16 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
         });
     }
 
-    private void showUserAnnouncements(String chatId, int page) {
-
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-
-        userBotRepository.getUserByChatId(chatId).flatMap(userBotEntity -> userBotService.getUserAnnouncement(chatId, page)).ifPresent(announcementEntity1 -> {
-            sendMsg(botService.sendPhoto(chatId, announcementEntity1.getAttachPhotos().get(0)));
-
-            sendMessage.setParseMode("html");
-
-            BotConstants.USER_SELECTED_PAGE.put(chatId, page);
-
-            String status = announcementEntity1.getIsActive() ? messageUtils.getMessage("bot.active", userBot.getLanguage()) :
-                    messageUtils.getMessage("bot.inActive", userBot.getLanguage());
-
-            sendMessage.setText(
-                    "<strong>№" + (page + 1) + "</strong>" +
-                            "\n\n<strong>" + status + "</strong>" +
-                            "\n\n<i>" + announcementEntity1.getTitle() + "</i>" +
-                            "\n\n<i>" + announcementEntity1.getDescription() + "</i>" +
-                            "\n\n<b>" + announcementEntity1.getPriceTag().getPrice() + " " + announcementEntity1.getPriceTag().getCurrency().getName() +
-                            "</b>\n\n" + announcementEntity1.getContactInfo().getRegion().getNameUz() +
-                            "\n\n" + announcementEntity1.getCreatedDate().format(formatter)
-            );
-
-            sendMessage.setReplyMarkup(inlineKeyboardUtil.actionButtonsWithPage(announcementEntity1.getId(), userBotService.getUserAnnouncementCount(chatId), announcementEntity1.getIsActive(), userBot.getLanguage()));
-
-            sendMsg(sendMessage);
-
-        });
-    }
 
     private void editUserAnnouncement(String chatId, Integer messageId) {
         AnnouncementEntity announcementEntity1 = announcementService.getById(editableAnnouncement.getId());
+
         EditMessageText editMessageText = new EditMessageText();
         editMessageText.setChatId(chatId);
         editMessageText.setMessageId(messageId);
         editMessageText.setParseMode("html");
 
-        String status = announcementEntity1.getIsActive() ? messageUtils.getMessage("bot.active", userBot.getLanguage()) :
-                messageUtils.getMessage("bot.inActive", userBot.getLanguage());
-
-        editMessageText.setText(
-                "\n\n<strong>" + status + "</strong>" +
-                        "\n\n<i>" + announcementEntity1.getTitle() + "</i>" +
-                        "\n\n<i>" + announcementEntity1.getDescription() + "</i>" +
-                        "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() + " " + announcementEntity1.getPriceTag().getCurrency().getName() +
-                        "</b>\n\n" + announcementEntity1.getContactInfo().getRegion().getNameUz() +
-                        "\n\n" + announcementEntity1.getCreatedDate().format(formatter)
-        );
+        editMessageText.setText(constructAnnouncementText(announcementEntity1));
 
         editMessageText.setReplyMarkup(inlineKeyboardUtil.annActionButtons(userBot.getLanguage()));
 
@@ -946,17 +923,7 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
         sendMessage.setParseMode("html");
         sendMessage.setChatId(chatId);
 
-        String status = announcementEntity1.getIsActive() ? messageUtils.getMessage("bot.active", userBot.getLanguage()) :
-                messageUtils.getMessage("bot.inActive", userBot.getLanguage());
-
-        sendMessage.setText(
-                "\n\n<strong>" + status + "</strong>" +
-                        "\n\n<i>" + announcementEntity1.getTitle() + "</i>" +
-                        "\n\n<i>" + announcementEntity1.getDescription() + "</i>" +
-                        "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() + " " + announcementEntity1.getPriceTag().getCurrency().getName() +
-                        "</b>\n\n" + announcementEntity1.getContactInfo().getRegion().getNameUz() +
-                        "\n\n" + announcementEntity1.getCreatedDate().format(formatter)
-        );
+        sendMessage.setText(constructAnnouncementText(announcementEntity1));
 
         sendMessage.setReplyMarkup(inlineKeyboardUtil.annActionButtons(userBot.getLanguage()));
 
@@ -973,21 +940,39 @@ public class MyTelegramPollingBotImpl extends TelegramLongPollingBot {
 
         sendMsg(botService.sendPhoto(chatId, announcementEntity1.getAttachPhotos().get(0)));
 
-        String status = announcementEntity1.getIsActive() ? messageUtils.getMessage("bot.active", userBot.getLanguage()) :
-                messageUtils.getMessage("bot.inActive", userBot.getLanguage());
-
-        sendMessage.setText(
-                "\n\n<strong>" + status + "</strong>" +
-                        "\n\n<i>" + announcementEntity1.getTitle() + "</i>" +
-                        "\n\n<i>" + announcementEntity1.getDescription() + "</i>" +
-                        "\n\n<b>"+ announcementEntity1.getPriceTag().getPrice() + " " + announcementEntity1.getPriceTag().getCurrency().getName() +
-                        "</b>\n\n" + announcementEntity1.getContactInfo().getRegion().getNameUz() +
-                        "\n\n" + announcementEntity1.getCreatedDate().format(formatter)
-        );
+        sendMessage.setText(constructAnnouncementText(announcementEntity1));
 
         sendMessage.setReplyMarkup(inlineKeyboardUtil.annActionButtons(userBot.getLanguage()));
 
         sendMsg(sendMessage);
         userBotService.setUserState(chatId, StateEnum.EDIT_ANN);
+    }
+
+    private String constructAnnouncementText(AnnouncementEntity announcementEntity) {
+        String status = announcementEntity.getIsActive() ?
+                messageUtils.getMessage("bot.active", userBot.getLanguage()) :
+                messageUtils.getMessage("bot.inActive", userBot.getLanguage());
+
+        return String.format(
+                "\n\n<strong>%s</strong>\n\n<i>%s</i>\n\n<i>%s</i>\n\n<b>%s %s</b>\n\n%s\n\n%s",
+                status,
+                announcementEntity.getTitle(),
+                announcementEntity.getDescription(),
+                announcementEntity.getPriceTag().getPrice(),
+                announcementEntity.getPriceTag().getCurrency().getName(),
+                announcementEntity.getContactInfo().getRegion().getNameUz(),
+                announcementEntity.getCreatedDate().format(formatter)
+        );
+    }
+
+    private void sendToAdmin(String text) {
+        SendMessage sendToAdmin = new SendMessage();
+
+        sendToAdmin.setParseMode("html");
+        BotConstants.admins.forEach(adminChatId -> {
+            sendToAdmin.setChatId(adminChatId);
+            sendToAdmin.setText("<b>\uD83D\uDCAC Feedback:</b>\n\n" + text);
+            sendMsg(sendToAdmin);
+        });
     }
 }

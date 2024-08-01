@@ -60,15 +60,6 @@ public class UserBotService {
         userBotRepository.setUserState(chatId, String.valueOf(state));
     }
 
-//    public StateEnum getUserState(String chatId) {
-//        String state = userBotRepository.getUserState(chatId);
-//        return StateEnum.valueOf(state);
-//    }
-
-    public String getUserLang(String chatId) {
-       return userBotRepository.getUserLang(chatId);
-    }
-
     public void createBotUser(String chatId){
         UserBotEntity userBotEntity=new UserBotEntity();
         userBotEntity.setChatId(chatId);

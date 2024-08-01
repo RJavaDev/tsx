@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import uz.tsx.bot.service.UserBotService;
 import uz.tsx.entity.CategoryEntity;
 import uz.tsx.entity.CurrencyEntity;
 import uz.tsx.entity.RegionEntity;
