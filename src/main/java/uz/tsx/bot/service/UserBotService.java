@@ -60,15 +60,6 @@ public class UserBotService {
         userBotRepository.setUserState(chatId, String.valueOf(state));
     }
 
-    public StateEnum getUserState(String chatId) {
-        String state = userBotRepository.getUserState(chatId);
-        return StateEnum.valueOf(state);
-    }
-
-    public String getUserLang(String chatId) {
-       return userBotRepository.getUserLang(chatId);
-    }
-
     public void createBotUser(String chatId){
         UserBotEntity userBotEntity=new UserBotEntity();
         userBotEntity.setChatId(chatId);
@@ -76,11 +67,13 @@ public class UserBotService {
         userBotRepository.save(userBotEntity);
     }
 
-    public void setUserLang(String chatId, String languageCode) {
-        getUserByChatId(chatId).ifPresent(userBotEntity -> {
-            userBotEntity.setLanguage(languageCode);
-            userBotRepository.save(userBotEntity);
-        });
+    public UserBotEntity setUserLang(String chatId, String languageCode) {
+        return getUserByChatId(chatId)
+                .map(user -> {
+                    user.setLanguage(languageCode);
+                    return userBotRepository.save(user);
+                })
+                .orElse(null);
     }
 
     public Optional<AnnouncementEntity> getUserAnnouncement(String chatId, int page) {
