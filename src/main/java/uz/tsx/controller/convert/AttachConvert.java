@@ -20,7 +20,7 @@ public class AttachConvert {
 
     private static final String ATTACH_PATH = "https://tez-sotish-api.uz/images/";
 
-    private static final String DEFAULT_USER_IMAGE = "user/user.jpg";
+    private static final String DEFAULT_USER_IMAGE = "user/user.png";
 
     private static final String DEFAULT_ANN_IMAGE = "user/elon.jpg";
     private static final String DEFAULT_ANN_IMAGE_MIN = "user/elon-min.jpg";
