@@ -45,6 +45,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
     @Query(value = "SELECT \n" +
             "    a.id,\n" +
             "    a.created_date AS createdDate,\n" +
+            "    a.category_id as categoryId,\n" +
             "    MIN(concat(tsxa.path, tsxa.id ||'.'|| tsxa.type)) AS attachPath,\n" +
             "    get_region_address(ac.region_id) as address,\n" +
             "    a.i_saw AS ISaw,\n" +
@@ -73,6 +74,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
     @Query(value = "SELECT \n" +
             "    a.id,\n" +
             "    a.created_date AS createdDate,\n" +
+            "    a.category_id  AS categoryid,\n" +
             "    MIN(concat(tsxa.path, tsxa.id ||'.'|| tsxa.type)) AS attachPath,\n" +
             "    a.i_saw AS iSaw,\n" +
             "    a.title,\n" +
@@ -123,6 +125,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
     @Query(value = "SELECT\n" +
             "    tsxa.id,\n" +
             "    tsxa.created_date AS createdDate,\n" +
+            "    tsxa.category_id  AS categoryId,\n" +
             "    MIN(concat(tsxphoto.path, tsxphoto.id ||'.'|| tsxphoto.type)) AS attachPath,\n" +
             "    tsxa.i_saw AS iSaw,\n" +
             "    tsxa.title,\n" +

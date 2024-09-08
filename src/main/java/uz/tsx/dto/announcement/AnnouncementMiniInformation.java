@@ -18,6 +18,8 @@ public class AnnouncementMiniInformation extends BaseDto {
 
     private String description;
 
+    private Long categoryId;
+
     private BigDecimal price;
 
     private String currencyCode;
