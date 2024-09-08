@@ -110,6 +110,7 @@ public class AnnouncementConvert {
 
         miniInformation.setRouter(interfaceDB.getRouter());
         miniInformation.setId(interfaceDB.getId());
+        miniInformation.setCategoryId(interfaceDB.getCategoryId());
         miniInformation.setTitle(interfaceDB.getTitle());
         miniInformation.setCreatedDate(interfaceDB.getCreatedDate());
         miniInformation.setPrice(interfaceDB.getPrice());

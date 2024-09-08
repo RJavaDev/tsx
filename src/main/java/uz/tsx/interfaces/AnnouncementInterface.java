@@ -8,6 +8,7 @@ public interface AnnouncementInterface {
     Long getId();
     String getAttachId();
     String getTitle();
+    Long getCategoryId();
     LocalDateTime getCreatedDate();
     Double getLongitude();
     Double getLatitude();
