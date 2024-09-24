@@ -23,11 +23,7 @@ public class AnnounceAdditionComboValueConvert {
     }
 
     public AdditionComboValueDto convertToDto(AdditionComboValueEntity comboValue) {
-        AdditionComboValueDto dto = comboValue.toDto("group");
-
-        dto.setGroup(AdditionGroupConvert.convertToDto(comboValue.getGroup()));
-
-        return dto;
+        return comboValue.toDto("group");
     }
 
     public AdditionComboValueEntity convertToDto(AdditionComboValueUpdate updateDto) {
