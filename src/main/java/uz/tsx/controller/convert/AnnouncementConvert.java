@@ -178,6 +178,9 @@ public class AnnouncementConvert {
     public List<AnnouncementDto> convertToDto(Page<AnnouncementEntity> pageHomeData) {
         return pageHomeData.stream().map(AnnouncementConvert::convertToDto).toList();
     }
+    public List<AnnouncementMiniInformation> convertToDto(List<AnnouncementInterface> pageHomeData) {
+        return pageHomeData.stream().map(AnnouncementConvert::convertToMiniDto).toList();
+    }
 
     public DataTable<AnnouncementDto>convertToDto(DataTable<AnnouncementEntity> announcementEntityList){
         DataTable<AnnouncementDto> announcementDto= new DataTable<>();
