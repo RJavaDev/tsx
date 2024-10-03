@@ -82,7 +82,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "    ap.price,\n" +
             "    c.id AS currencyId,\n" +
             "    c.code AS currencyCode,\n" +
-            "    get_region_address(a.category_id) as address\n" +
+            "    get_region_address(ac.region_id) as address\n" +
             "FROM\n" +
             "    tsx_announcement a\n" +
             "        LEFT JOIN tsx_announcement_price ap ON a.price_tag_id = ap.id\n" +
@@ -118,7 +118,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             "             ) AS user_address\n" +
             "    ) AS f ON f.id = a.category_id\n" +
             "WHERE a.status <> 'DELETED' AND a.is_active <> false \n" +
-            "GROUP BY a.id, tc.id,ap.id,c.id\n" +
+            "GROUP BY a.id, tc.id,ap.id,c.id, ac.id\n" +
             "ORDER BY a.id DESC" ,nativeQuery = true)
     Page<AnnouncementInterface> getAnnouncementByCategoryId(Long categoryId, PageRequest of);
 
@@ -192,5 +192,34 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
     @Transactional
     @Query(value = "UPDATE tsx_announcement SET status = 'DELETED' WHERE id = :announcementId", nativeQuery = true)
     void delete(@Param("announcementId") Long announcementId);
+
+    @Query(value = "SELECT \n" +
+            "    a.id,\n" +
+            "    a.created_date AS createdDate,\n" +
+            "    a.category_id as categoryId,\n" +
+            "    MIN(concat(tsxa.path, tsxa.id ||'.'|| tsxa.type)) AS attachPath,\n" +
+            "    get_region_address(ac.region_id) as address,\n" +
+            "    a.i_saw AS ISaw,\n" +
+            "    a.title,\n" +
+            "    ap.price,\n" +
+            "    c.id AS currencyId,\n" +
+            "    c.code AS currencyCode\n" +
+            "FROM\n" +
+            "    tsx_announcement a\n" +
+            "        LEFT JOIN tsx_announcement_price ap ON a.price_tag_id = ap.id\n" +
+            "        LEFT JOIN tsx_announcement_contact ac ON a.contact_info_id = ac.id\n" +
+            "        LEFT JOIN announcement_attach aa ON a.id = aa.announcement_id \n" +
+            "        LEFT JOIN tsx_attach tsxa ON tsxa.id = aa.attach_id\n" +
+            "        LEFT JOIN tsx_currency c ON ap.currency_id = c.id\n" +
+            "WHERE\n" +
+            "    a.user_id = :userId AND a.status <> 'DELETED'\n" +
+            "GROUP BY\n" +
+            "    a.id,\n" +
+            "    c.id,\n" +
+            "    ap.price,\n" +
+            "    ac.id\n" +
+            "ORDER BY a.id DESC",
+            nativeQuery = true)
+    List<AnnouncementInterface> getMeAnnouncement(@Param("userId") Long userId);
 
 }

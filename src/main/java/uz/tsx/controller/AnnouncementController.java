@@ -157,5 +157,18 @@ public class AnnouncementController {
                 .code(ResponseCode.OK);
     }
 
+    @PreAuthorize("permitAll()")
+    @GetMapping("/get-me")
+    @Operation(summary = "Get me announcement", description = "List for users to see their announcement")
+    public ApiResponse<Object>getMeAnnouncementList(){
+
+        List<AnnouncementInterface> pageAnnouncementData = service.getMeAnnouncementList();
+        List<AnnouncementMiniInformation> dtoList = AnnouncementConvert.convertToDto(pageAnnouncementData);
+
+        return ApiResponse.build()
+                .message(ResponseMessage.OK)
+                .body(dtoList)
+                .code(ResponseCode.OK);
+    }
 
 }

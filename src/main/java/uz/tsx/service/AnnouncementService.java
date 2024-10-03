@@ -48,4 +48,5 @@ public interface AnnouncementService {
 
     void update(AnnouncementEntity announcementEntity);
 
+    List<AnnouncementInterface> getMeAnnouncementList();
 }

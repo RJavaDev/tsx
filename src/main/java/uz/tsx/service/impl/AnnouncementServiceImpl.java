@@ -474,6 +474,12 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
+    public List<AnnouncementInterface> getMeAnnouncementList() {
+        Long userId = SecurityUtils.getUserId();
+        return repository.getMeAnnouncement(userId);
+    }
+
+    @Override
     public Integer iSaw(Long announcementId, HttpServletRequest httpServletRequest){
         UserEntity user = SecurityUtils.getUser();
         Long id=1L;
