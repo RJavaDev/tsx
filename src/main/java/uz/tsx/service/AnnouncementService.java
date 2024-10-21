@@ -49,4 +49,6 @@ public interface AnnouncementService {
     void update(AnnouncementEntity announcementEntity);
 
     List<AnnouncementInterface> getMeAnnouncementList();
+
+    void activeReverseUpdate(Long id);
 }

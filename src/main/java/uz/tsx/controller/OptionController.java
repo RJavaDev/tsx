@@ -102,8 +102,7 @@ public class OptionController {
     @PreAuthorize("permitAll()")
     @GetMapping("/get-list/{categoryId}")
     @Operation(summary = "The category will receive yaa items", description = "give a Category ID")
-    public ApiResponse<Object> getOptionByCategoryId(@RequestParam("categoryId") Long categoryId){
-
+    public ApiResponse<Object> getOptionByCategoryId(@PathVariable("categoryId") Long categoryId){
 
         List<OptionEntity> list = service.optionListByCategoryId(categoryId);
         List<OptionDto> optionDtos = OptionConvert.convertToDto(list);

@@ -41,6 +41,7 @@ import uz.tsx.entity.announcement.AnnouncementEntity;
 import uz.tsx.entity.announcement.AnnouncementPriceEntity;
 import uz.tsx.entity.announcement.additionInfo.AdditionGroupEntity;
 import uz.tsx.entity.announcement.option.OptionEntity;
+import uz.tsx.exception.NotFoundException;
 import uz.tsx.interfaces.AnnouncementInterface;
 import uz.tsx.repository.AnnounceAdditionGroupRepository;
 import uz.tsx.repository.AnnouncementRepository;
@@ -117,7 +118,11 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Override
     public void deleteAnnouncement(Long announcementId) {
-        repository.delete(announcementId);
+        if(repository.existsById(announcementId)){
+            repository.delete(announcementId);
+        }else{
+            throw new NotFoundException("Object not found!");
+        }
     }
 
     @Override
@@ -477,6 +482,15 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     public List<AnnouncementInterface> getMeAnnouncementList() {
         Long userId = SecurityUtils.getUserId();
         return repository.getMeAnnouncement(userId);
+    }
+
+    @Override
+    public void activeReverseUpdate(Long id) {
+        if(repository.existsById(id)){
+            repository.reverseActive(id);
+        }else{
+            throw new NotFoundException("Object not found!");
+        }
     }
 
     @Override

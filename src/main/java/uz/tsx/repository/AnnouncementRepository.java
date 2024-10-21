@@ -222,4 +222,8 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             nativeQuery = true)
     List<AnnouncementInterface> getMeAnnouncement(@Param("userId") Long userId);
 
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE tsx_announcement SET is_active = NOT is_active WHERE id = :id", nativeQuery = true)
+    void reverseActive(@Param("id") Long id);
 }

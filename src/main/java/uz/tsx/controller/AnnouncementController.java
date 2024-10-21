@@ -171,4 +171,28 @@ public class AnnouncementController {
                 .code(ResponseCode.OK);
     }
 
+    @PreAuthorize("permitAll()")
+    @GetMapping("/reverse-active/{id}")
+    @Operation(summary = "Update announcement is Active Reverse", description = "Deactivates ad if active API to activate if de active")
+    public ApiResponse<Object>getIsActive(@PathVariable Long id){
+
+        service.activeReverseUpdate(id);
+        return ApiResponse.build()
+                .message(ResponseMessage.OK)
+                .body("Successfully")
+                .code(ResponseCode.OK);
+    }
+
+    @PreAuthorize("permitAll()")
+    @DeleteMapping("/delete/{id}")
+    @Operation(summary = "Deleted announcement by id", description = "Serves to delete announcement by id")
+    public ApiResponse<Object> delete(@PathVariable Long id){
+
+        service.deleteAnnouncement(id);
+        return ApiResponse.build()
+                .message(ResponseMessage.OK)
+                .body("Successfully")
+                .code(ResponseCode.OK);
+    }
+
 }
