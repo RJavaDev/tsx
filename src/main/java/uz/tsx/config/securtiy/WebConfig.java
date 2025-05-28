@@ -12,7 +12,14 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000", "https://tsx-bot-web.netlify.app", "https://tezsot.vercel.app", "https://tez-sotish.uz")
+                .allowedOrigins(
+                        "http://localhost:3000",
+                        "https://tsx-bot-web.netlify.app",
+                        "https://tezsot.vercel.app",
+                        "https://tez-sotish.uz",
+                        "https://sotuvbazar.uz",
+                        "http://sotuvbazar.uz"
+                        )
                 .allowedMethods("GET", "POST", "PUT", "DELETE","PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
@@ -21,8 +28,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        String imagePath = "file:" + System.getProperty("user.dir") + "/images/";
         registry.addResourceHandler("/images/**")
-                .addResourceLocations("file:images/")
+                .addResourceLocations(imagePath)
                 .setCacheControl(CacheControl.noCache());
     }
 }

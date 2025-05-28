@@ -1,5 +1,6 @@
 package uz.tsx.service;
 
+import org.springframework.web.multipart.MultipartFile;
 import uz.tsx.entity.UserEntity;
 import uz.tsx.interfaces.UserInterface;
 
@@ -12,4 +13,6 @@ public interface UserService extends BaseInterface<UserInterface>{
     void userActive();
 
     UserInterface getMe(Long id);
+
+    UserEntity userUpdateImage(MultipartFile image);
 }

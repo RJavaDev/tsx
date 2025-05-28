@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: tsx-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: tsx
+      POSTGRES_USER: myadmin
+      POSTGRES_PASSWORD: myadmin
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  tsx-app:
+    build: .
+    container_name: tsx-app
+    depends_on:
+      - postgres
+    ports:
+      - "9090:9090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://45.138.158.149:5432/sotuvdb
+      SPRING_DATASOURCE_USERNAME: myadmin
+      SPRING_DATASOURCE_PASSWORD: myadmin
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_PROFILES_ACTIVE: dev
+
+volumes:
+  pgdata:

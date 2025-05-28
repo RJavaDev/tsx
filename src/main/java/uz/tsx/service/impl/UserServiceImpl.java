@@ -6,11 +6,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import uz.tsx.common.util.SecurityUtils;
 import uz.tsx.constants.EntityStatus;
+import uz.tsx.entity.AttachEntity;
 import uz.tsx.entity.UserEntity;
 import uz.tsx.interfaces.UserInterface;
 import uz.tsx.repository.UserRepository;
+import uz.tsx.service.AttachService;
 import uz.tsx.service.UserService;
 import uz.tsx.validation.CommonSchemaValidator;
 
@@ -24,6 +27,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
 
     private final CommonSchemaValidator commonSchemaValidator;
+    private final AttachService attachService;
 
     @Override
     @Transactional
@@ -60,6 +64,22 @@ public class UserServiceImpl implements UserService {
     public UserInterface getMe(Long id) {
         commonSchemaValidator.validateID(id);
         return repository.getMe(id);
+    }
+
+    @Override
+    public UserEntity userUpdateImage(MultipartFile image) {
+        UserEntity user = SecurityUtils.getUser();
+
+        if (image == null) {return user;}
+
+        if (user.getAttach() != null) {
+            attachService.deleteById(user.getAttach().getId());
+        }
+
+        AttachEntity attachEntity = attachService.saveAttach(image);
+        user.setAttach(attachEntity);
+        repository.save(user);
+        return user;
     }
 
     @Override

@@ -122,8 +122,8 @@ public class AttachServiceImpl implements AttachService {
             Path file1 = Paths.get(ATTACH_UPLOAD_FOLDER + attach.getPath() + "/" + attach.getId() + "." + attach.getType());
             Path file2 = Paths.get(ATTACH_UPLOAD_FOLDER + attach.getPath() + "/" + attach.getId() + "_h200." + attach.getType());
 
-            Files.delete(file1);
-            Files.delete(file2);
+            Files.deleteIfExists(file1);
+            Files.deleteIfExists(file2);
 
             repository.deleteAnnouncementAttachByAttachId(attach.getId());
 

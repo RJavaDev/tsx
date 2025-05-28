@@ -1,6 +1,7 @@
 package uz.tsx.bot.utils;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -17,13 +18,16 @@ import java.util.List;
 public class ReplyKeyboardUtil {
     private final MessageUtils messageUtils;
 
+    @Value("${application.mini.client.app}")
+    private String miniClientApp;
+
     public ReplyKeyboard mainMenuButton(String lang) {
 
         KeyboardRow row1=new KeyboardRow();
         KeyboardRow row2=new KeyboardRow();
 
         WebAppInfo webAppInfo = new WebAppInfo();
-        webAppInfo.setUrl("https://tsx-bot-web.netlify.app/");
+        webAppInfo.setUrl(miniClientApp);
 
         KeyboardButton keyboardButton = new KeyboardButton();
         keyboardButton.setText(messageUtils.getMessage("bot.button.anns", lang));

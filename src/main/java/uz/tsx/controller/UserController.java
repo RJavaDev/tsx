@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import uz.tsx.controller.convert.SecurityUtils;
 import uz.tsx.controller.convert.UserConvert;
 import uz.tsx.dto.UserDto;
@@ -19,7 +20,6 @@ import uz.tsx.interfaces.UserInterface;
 import uz.tsx.service.UserService;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @EnableMethodSecurity
@@ -136,6 +136,19 @@ public class UserController {
                 .message(ResponseMessage.OK);
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("permitAll()")
+    @PostMapping("/upload-me/image")
+    @Operation(summary = "Save user image", description = "Save image for a specific user.")
+    public ApiResponse<Object> saveAnnouncementImages(@RequestParam("image") MultipartFile image) {
 
+        UserEntity entity = service.userUpdateImage(image);
+        UserDto userDto = UserConvert.from(entity);
+
+        return ApiResponse.build()
+                .message(ResponseMessage.OK)
+                .body(userDto)
+                .code(ResponseCode.OK);
+    }
 
 }
